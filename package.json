@@ -7,10 +7,11 @@
     "vscode": "^1.71.0"
   },
   "categories": [
-    "Other"
+    "Programming Languages"
   ],
   "activationEvents": [
-    "onCommand:64tass-language.helloWorld"
+    "onCommand:64tass-language.helloWorld",
+    "onLanguage:64tass"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -19,7 +20,38 @@
         "command": "64tass-language.helloWorld",
         "title": "Hello World"
       }
-    ]
+    ],
+    "languages": [
+      {
+        "id": "64tass",
+        "aliases": ["64tass", "64tass"],
+        "extensions": [".asm",".list"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "configuration": {
+			"type": "object",
+			"title": "64Tass Config",
+			"properties": {
+				"64tass-language.maxNumberOfProblems": {
+					"scope": "resource",
+					"type": "number",
+					"default": 100,
+					"description": "Controls the maximum number of problems produced by the server."
+				},
+				"64tass-language.trace.server": {
+					"scope": "window",
+					"type": "string",
+					"enum": [
+						"off",
+						"messages",
+						"verbose"
+					],
+					"default": "off",
+					"description": "Traces the communication between VS Code and the language server."
+				}
+			}
+		}
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
