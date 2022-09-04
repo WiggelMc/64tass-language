@@ -24,6 +24,8 @@ import * as fs from "fs";
 
 import * as vscodeUri from "vscode-uri";
 
+import * as chokidar from "chokidar";
+
 import {
 	TextDocument
 } from 'vscode-languageserver-textdocument';
@@ -36,7 +38,7 @@ import { Uri } from 'vscode';
 const connection = createConnection(ProposedFeatures.all);
 
 // Create a simple text document manager.
-const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
+//const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
 
 let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
@@ -44,7 +46,7 @@ let hasDiagnosticRelatedInformationCapability = false;
 
 connection.onInitialize((params: InitializeParams) => {
 	const capabilities = params.capabilities;
-	initFSWatcher(params.workspaceFolders);
+	initFSWatcher();
 
 	// Does the client support the `workspace/configuration` request?
 	// If not, we fall back using global settings.
@@ -79,15 +81,22 @@ connection.onInitialize((params: InitializeParams) => {
 	return result;
 });
 
-function initFSWatcher(workspaceFolders: WorkspaceFolder[] | null) {
-	workspaceFolders?.forEach(folder => {
-		const folderURI = vscodeUri.URI.parse(folder.uri);
-		console.log("folder");
-		const watcher = fs.watch(folderURI.fsPath, {recursive: true}, (eventType, filename) => {
-			console.log(eventType, filename);
-			const filePath = path.join(folderURI.fsPath,filename);
-			console.log(filePath);
-		});
+// function initFSWatcher(workspaceFolders: WorkspaceFolder[] | null) {
+// 	workspaceFolders?.forEach(folder => {
+// 		const folderURI = vscodeUri.URI.parse(folder.uri);
+// 		console.log("folder");
+// 		chokidar.watch(folderURI.fsPath).on("all", (event, path) => {
+// 			console.log("ch",event, path);
+// 		});
+// 	});
+// }
+
+function initFSWatcher() {
+	chokidar.watch(".").on("all", (event, path) => {
+		// fs.readFile(path, (err, data) => {
+		// 	console.log("File Data: ", err, data?.toString());
+		// });
+		console.log("File Update: ",event, path);
 	});
 }
 
@@ -135,7 +144,7 @@ connection.onDidChangeConfiguration(change => {
 	}
 
 	// Revalidate all open text documents
-	documents.all().forEach(validateTextDocument);
+	// documents.all().forEach(validateTextDocument);
 });
 
 function getDocumentSettings(resource: string): Thenable<ExampleSettings> {
@@ -154,16 +163,16 @@ function getDocumentSettings(resource: string): Thenable<ExampleSettings> {
 }
 
 // Only keep settings for open documents
-documents.onDidClose(e => {
+/* documents.onDidClose(e => {
 	documentSettings.delete(e.document.uri);
-});
+}); */
 
 // The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
-documents.onDidChangeContent(change => {
+/* documents.onDidChangeContent(change => {
 	console.log(change);
 	validateTextDocument(change.document);
-});
+}); */
 
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	// In this simple example we get the settings for every validate run.
@@ -255,7 +264,23 @@ connection.onCompletionResolve(
 
 // Make the text document manager listen on the connection
 // for open, change and close text document events
-documents.listen(connection);
+// documents.listen(connection);
+
+connection.onDidChangeTextDocument(params => {
+	console.log("Changed: ",params);
+});
+
+connection.onDidOpenTextDocument(params => {
+	console.log("Open: ",params);
+});
+
+connection.onDidCloseTextDocument(params => {
+	console.log("Close: ",params);
+});
+
+connection.onDidSaveTextDocument(params => {
+	console.log("Save: ",params);
+});
 
 // Listen on the connection
 connection.listen();
