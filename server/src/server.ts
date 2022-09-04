@@ -14,12 +14,22 @@ import {
 	CompletionItemKind,
 	TextDocumentPositionParams,
 	TextDocumentSyncKind,
-	InitializeResult
+	InitializeResult,
+	DidChangeTextDocumentNotification,
+	Files,
+	WorkspaceFolder
 } from 'vscode-languageserver/node';
+
+import * as fs from "fs";
+
+import * as vscodeUri from "vscode-uri";
 
 import {
 	TextDocument
 } from 'vscode-languageserver-textdocument';
+import path = require('path');
+import { Uri } from 'vscode';
+
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -34,6 +44,7 @@ let hasDiagnosticRelatedInformationCapability = false;
 
 connection.onInitialize((params: InitializeParams) => {
 	const capabilities = params.capabilities;
+	initFSWatcher(params.workspaceFolders);
 
 	// Does the client support the `workspace/configuration` request?
 	// If not, we fall back using global settings.
@@ -55,7 +66,7 @@ connection.onInitialize((params: InitializeParams) => {
 			// Tell the client that this server supports code completion.
 			completionProvider: {
 				resolveProvider: true
-			}
+			},
 		}
 	};
 	if (hasWorkspaceFolderCapability) {
@@ -67,6 +78,18 @@ connection.onInitialize((params: InitializeParams) => {
 	}
 	return result;
 });
+
+function initFSWatcher(workspaceFolders: WorkspaceFolder[] | null) {
+	workspaceFolders?.forEach(folder => {
+		const folderURI = vscodeUri.URI.parse(folder.uri);
+		console.log("folder");
+		const watcher = fs.watch(folderURI.fsPath, {recursive: true}, (eventType, filename) => {
+			console.log(eventType, filename);
+			const filePath = path.join(folderURI.fsPath,filename);
+			console.log(filePath);
+		});
+	});
+}
 
 connection.onInitialized(() => {
 	if (hasConfigurationCapability) {
@@ -131,6 +154,7 @@ documents.onDidClose(e => {
 // The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent(change => {
+	console.log(change);
 	validateTextDocument(change.document);
 });
 

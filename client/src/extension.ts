@@ -5,8 +5,10 @@
 
 import * as path from 'path';
 import { workspace, ExtensionContext } from 'vscode';
+import * as vscode from "vscode";
 
 import {
+	DocumentSelector,
 	LanguageClient,
 	LanguageClientOptions,
 	ServerOptions,
@@ -40,7 +42,9 @@ export function activate(context: ExtensionContext) {
 	// Options to control the language client
 	const clientOptions: LanguageClientOptions = {
 		// Register the server for plain text documents
-		documentSelector: [{ scheme: 'file', language: '64tass' }],
+		documentSelector: [
+			{ scheme: 'file', language: '64tass' }
+		],
 		synchronize: {
 			// Notify the server about file changes to '.clientrc files contained in the workspace
 			fileEvents: workspace.createFileSystemWatcher('**/.clientrc')
@@ -57,6 +61,37 @@ export function activate(context: ExtensionContext) {
 
 	// Start the client. This will also launch the server
 	client.start();
+
+	const watcher = vscode.workspace.createFileSystemWatcher("**/*.{asm,list}", false, false, false);
+	watcher.onDidChange((uri: vscode.Uri) => {
+		let fileOpen = false;
+		for (const doc of vscode.workspace.textDocuments) {
+			if (doc.uri.path === uri.path) {
+				fileOpen = true;
+			}
+		}
+
+		if (!fileOpen) {
+			//setDirty(true);
+			console.log("CHANGE");
+			//reload file in index
+			console.log(uri);
+		} else {
+			console.log("Change detected but file is open");
+		}
+	});
+	watcher.onDidCreate((uri: vscode.Uri) => {
+		console.log("CREATE");
+		//add file to index
+		//setDirty(true);
+		console.log(uri);
+	});
+	watcher.onDidDelete((uri: vscode.Uri) => {
+		console.log("DELETE");
+		//remove file from index
+		//setDirty(true);
+		console.log(uri);
+	});
 }
 
 export function deactivate(): Thenable<void> | undefined {

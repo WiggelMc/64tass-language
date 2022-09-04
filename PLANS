@@ -1,0 +1,9 @@
+create file watcher on client
+
+client sends package to server on change, create, delete [figure out how]
+
+on start all files are sent to server
+
+-----------------------------------------
+
+incremental change processing (only needed for changes in the editor) [figure out how]
