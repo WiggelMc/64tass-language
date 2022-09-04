@@ -103,6 +103,13 @@ connection.onInitialized(() => {
 	}
 });
 
+connection.onNotification("File Deleted", params => {
+	console.log("File Deleted: ",params);
+});
+connection.onNotification("File Created", params => {
+	console.log("File Created: ",params);
+});
+
 // The example settings
 interface ExampleSettings {
 	maxNumberOfProblems: number;

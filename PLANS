@@ -4,6 +4,15 @@ client sends package to server on change, create, delete [figure out how]
 
 on start all files are sent to server
 
+
+use multiple ways to watch files (client and server) and fallback if one doesnt work
+replace fs on server with more reliable node js solution
+
+server can read files directly from file system or use TextDocument depending on whats available
+
+maybe:
+    let the server do everything thats not editor changes (maybe create a fallback where the the server can request file contents from the client)
+    let the client initialize everything (send file contents) thats open in the editor
 -----------------------------------------
 
 incremental change processing (only needed for changes in the editor) [figure out how]

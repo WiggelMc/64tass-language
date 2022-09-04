@@ -11,6 +11,7 @@ import {
 	DocumentSelector,
 	LanguageClient,
 	LanguageClientOptions,
+	ProtocolNotificationType0,
 	ServerOptions,
 	TransportKind
 } from 'vscode-languageclient/node';
@@ -74,6 +75,7 @@ export function activate(context: ExtensionContext) {
 		if (!fileOpen) {
 			//setDirty(true);
 			console.log("CHANGE");
+			vscode.workspace.openTextDocument(uri);
 			//reload file in index
 			console.log(uri);
 		} else {
@@ -82,12 +84,15 @@ export function activate(context: ExtensionContext) {
 	});
 	watcher.onDidCreate((uri: vscode.Uri) => {
 		console.log("CREATE");
+		vscode.workspace.openTextDocument(uri);
+		client.sendNotification("File Created", {path: uri.fsPath});
 		//add file to index
 		//setDirty(true);
 		console.log(uri);
 	});
 	watcher.onDidDelete((uri: vscode.Uri) => {
 		console.log("DELETE");
+		client.sendNotification("File Deleted", {path: uri.fsPath});
 		//remove file from index
 		//setDirty(true);
 		console.log(uri);
