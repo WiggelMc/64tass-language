@@ -91,8 +91,10 @@ connection.onInitialize((params: InitializeParams) => {
 // 	});
 // }
 
+let watcher;
+
 function initFSWatcher() {
-	chokidar.watch(".").on("all", (event, path) => {
+	watcher = chokidar.watch(".").on("all", (event, path) => {
 		// fs.readFile(path, (err, data) => {
 		// 	console.log("File Data: ", err, data?.toString());
 		// });
@@ -110,13 +112,6 @@ connection.onInitialized(() => {
 			connection.console.log('Workspace folder change event received.');
 		});
 	}
-});
-
-connection.onNotification("File Deleted", params => {
-	console.log("File Deleted: ",params);
-});
-connection.onNotification("File Created", params => {
-	console.log("File Created: ",params);
 });
 
 // The example settings
@@ -144,7 +139,7 @@ connection.onDidChangeConfiguration(change => {
 	}
 
 	// Revalidate all open text documents
-	// documents.all().forEach(validateTextDocument);
+	// documents.all().forEach(validateTextDocument); //TODO: fix
 });
 
 function getDocumentSettings(resource: string): Thenable<ExampleSettings> {
@@ -158,21 +153,10 @@ function getDocumentSettings(resource: string): Thenable<ExampleSettings> {
 			section: '64tass-language'
 		});
 		documentSettings.set(resource, result);
+		//use documentSettings.delete(e.document.uri) when file is untracked
 	}
 	return result;
 }
-
-// Only keep settings for open documents
-/* documents.onDidClose(e => {
-	documentSettings.delete(e.document.uri);
-}); */
-
-// The content of a text document has changed. This event is emitted
-// when the text document first opened or when its content has changed.
-/* documents.onDidChangeContent(change => {
-	console.log(change);
-	validateTextDocument(change.document);
-}); */
 
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	// In this simple example we get the settings for every validate run.
@@ -221,11 +205,6 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
 }
 
-connection.onDidChangeWatchedFiles(_change => {
-	// Monitored files have change in VSCode
-	connection.console.log('We received an file change event');
-});
-
 // This handler provides the initial list of the completion items.
 connection.onCompletion(
 	(_textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
@@ -267,7 +246,11 @@ connection.onCompletionResolve(
 // documents.listen(connection);
 
 connection.onDidChangeTextDocument(params => {
-	console.log("Changed: ",params);
+	// console.log("Changed: ",params);
+	let doc = params.textDocument;
+	let changes = params.contentChanges;
+	
+	console.log("Changed: ",doc.version, ...changes);
 });
 
 connection.onDidOpenTextDocument(params => {

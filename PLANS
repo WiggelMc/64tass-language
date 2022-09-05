@@ -1,18 +1,33 @@
-create file watcher on client
 
-client sends package to server on change, create, delete [figure out how]
+let the server do everything thats not editor changes
+let the client initialize everything (send file contents) thats open in the editor (maybe only incremental changes)
 
-on start all files are sent to server
-
-
-use multiple ways to watch files (client and server) and fallback if one doesnt work
-replace fs on server with more reliable node js solution
-
-server can read files directly from file system or use TextDocument depending on whats available
-
-maybe:
-    let the server do everything thats not editor changes
-    let the client initialize everything (send file contents) thats open in the editor (maybe only incremental changes)
 -----------------------------------------
 
 incremental change processing (only needed for changes in the editor) [figure out how]
+
+
+open files are stored in a map and will be ignored in fs updates
+
+When a file is opened, the version and lines are stored (lines into array)
+
+
+2 options:
+    always calculate syntax highlighting (faster load when opening a file, slower indexing, more memory)
+        indexing will only happen once
+            
+
+    only calculate syntax highlighting when open (slower load when opening a file, faster indexing, less memory)
+        complete file will be parsed again when opened (only definitions, includes, scopes, etc are stored)
+
+
+How to store data about a file [needs thinking]
+how much should a textmate grammar be used (if at all)
+
+
+-----------------------
+
+
+TODO
+
+Test how syntax highlighting works in git/override diff

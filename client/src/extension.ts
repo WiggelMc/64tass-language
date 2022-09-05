@@ -62,41 +62,6 @@ export function activate(context: ExtensionContext) {
 
 	// Start the client. This will also launch the server
 	client.start();
-
-	// const watcher = vscode.workspace.createFileSystemWatcher("**/*.{asm,list}", false, false, false);
-	// watcher.onDidChange((uri: vscode.Uri) => {
-	// 	let fileOpen = false;
-	// 	for (const doc of vscode.workspace.textDocuments) {
-	// 		if (doc.uri.path === uri.path) {
-	// 			fileOpen = true;
-	// 		}
-	// 	}
-
-	// 	if (!fileOpen) {
-	// 		//setDirty(true);
-	// 		console.log("CHANGE");
-	// 		// vscode.workspace.openTextDocument(uri);
-	// 		//reload file in index
-	// 		console.log(uri);
-	// 	} else {
-	// 		console.log("Change detected but file is open");
-	// 	}
-	// });
-	// watcher.onDidCreate((uri: vscode.Uri) => {
-	// 	console.log("CREATE");
-	// 	// vscode.workspace.openTextDocument(uri);
-	// 	client.sendNotification("File Created", {path: uri.fsPath});
-	// 	//add file to index
-	// 	//setDirty(true);
-	// 	console.log(uri);
-	// });
-	// watcher.onDidDelete((uri: vscode.Uri) => {
-	// 	console.log("DELETE");
-	// 	client.sendNotification("File Deleted", {path: uri.fsPath});
-	// 	//remove file from index
-	// 	//setDirty(true);
-	// 	console.log(uri);
-	// }); 
 }
 
 export function deactivate(): Thenable<void> | undefined {
