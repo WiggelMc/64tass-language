@@ -17,7 +17,10 @@ import {
 	InitializeResult,
 	DidChangeTextDocumentNotification,
 	Files,
-	WorkspaceFolder
+	WorkspaceFolder,
+	SemanticTokens,
+	SemanticTokensRangeRequest,
+	SemanticTokensBuilder
 } from 'vscode-languageserver/node';
 
 import * as fs from "fs";
@@ -31,6 +34,8 @@ import {
 } from 'vscode-languageserver-textdocument';
 import path = require('path');
 import { Uri } from 'vscode';
+import * as documentSelector from './document-selector';
+import * as semanticTokens from './semantic-tokens';
 
 
 // Create a connection for the server, using Node's IPC as a transport.
@@ -69,6 +74,14 @@ connection.onInitialize((params: InitializeParams) => {
 			completionProvider: {
 				resolveProvider: true
 			},
+			semanticTokensProvider: {
+				documentSelector: documentSelector.selector,
+				legend: semanticTokens.legend,
+				range: true,
+				full: {
+					delta: true
+				}
+			}
 		}
 	};
 	if (hasWorkspaceFolderCapability) {
@@ -264,6 +277,25 @@ connection.onDidCloseTextDocument(params => {
 connection.onDidSaveTextDocument(params => {
 	console.log("Save: ",params);
 });
+
+connection.languages.semanticTokens.on(params => {
+	console.log("Tokens Full: ",params);
+	let builder = new SemanticTokensBuilder();
+	return builder.build();
+});
+
+connection.languages.semanticTokens.onDelta(params => {
+	console.log("Tokens Delta: ",params);
+	let builder = new SemanticTokensBuilder();
+	return builder.build();
+});
+
+connection.languages.semanticTokens.onRange(params => {
+	console.log("Tokens Range: ",params);
+	let builder = new SemanticTokensBuilder();
+	return builder.build();
+});
+
 
 // Listen on the connection
 connection.listen();
