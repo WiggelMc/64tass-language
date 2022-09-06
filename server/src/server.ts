@@ -221,18 +221,9 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
 }
 
-connection.onCompletion(completionHandler.onCompletion);
-connection.onCompletionResolve(completionHandler.onCompletionResolve);
-
-connection.onDidChangeTextDocument(textDocumentHandler.onDidChangeTextDocument);
-connection.onDidOpenTextDocument(textDocumentHandler.onDidOpenTextDocument);
-connection.onDidCloseTextDocument(textDocumentHandler.onDidCloseTextDocument);
-connection.onDidSaveTextDocument(textDocumentHandler.onDidSaveTextDocument);
-
-connection.languages.semanticTokens.on(semanticTokenHandler.onSemanticTokens);
-connection.languages.semanticTokens.onDelta(semanticTokenHandler.onSemanticTokensDelta);
-connection.languages.semanticTokens.onRange(semanticTokenHandler.onSemanticTokensRange);
-
+completionHandler.register(connection);
+textDocumentHandler.register(connection);
+semanticTokenHandler.register(connection);
 
 // Listen on the connection
 connection.listen();

@@ -1,9 +1,15 @@
-import { CompletionItem, CompletionItemKind, CompletionList, CompletionParams, RequestHandler, ServerRequestHandler } from "vscode-languageserver";
+import { CompletionItem, CompletionItemKind, CompletionList, CompletionParams, RequestHandler, ServerRequestHandler, _, _Connection } from "vscode-languageserver";
+
+export function register(connection: _Connection<_, _, _, _, _, _, _>) {
+    
+    connection.onCompletion(onCompletion);
+    connection.onCompletionResolve(onCompletionResolve);
+}
 
 /**
  * This handler provides the initial list of the completion items.
  */
-export const onCompletion: ServerRequestHandler<CompletionParams, CompletionItem[] | CompletionList | undefined | null, CompletionItem[], void> =
+const onCompletion: ServerRequestHandler<CompletionParams, CompletionItem[] | CompletionList | undefined | null, CompletionItem[], void> =
 async function(params, token, workDoneProgress, resultProgress) {
     
     // The pass parameter contains the position of the text document in
@@ -28,7 +34,7 @@ async function(params, token, workDoneProgress, resultProgress) {
  * This handler resolves additional information for the item selected in
  * the completion list.
  */
-export const onCompletionResolve: RequestHandler<CompletionItem, CompletionItem, void> =
+const onCompletionResolve: RequestHandler<CompletionItem, CompletionItem, void> =
 async function(item, token) {
 
     if (item.data === 1) {

@@ -1,6 +1,14 @@
-import { DidChangeTextDocumentParams, DidCloseTextDocumentParams, DidOpenTextDocumentParams, DidSaveTextDocumentParams, NotificationHandler } from "vscode-languageserver";
+import { DidChangeTextDocumentParams, DidCloseTextDocumentParams, DidOpenTextDocumentParams, DidSaveTextDocumentParams, NotificationHandler, _, _Connection } from "vscode-languageserver";
 
-export const onDidChangeTextDocument: NotificationHandler<DidChangeTextDocumentParams> =
+export function register(connection: _Connection<_, _, _, _, _, _, _>) {
+    
+    connection.onDidChangeTextDocument(onDidChangeTextDocument);
+    connection.onDidOpenTextDocument(onDidOpenTextDocument);
+    connection.onDidCloseTextDocument(onDidCloseTextDocument);
+    connection.onDidSaveTextDocument(onDidSaveTextDocument);
+}
+
+const onDidChangeTextDocument: NotificationHandler<DidChangeTextDocumentParams> =
 async function(params) {
 
 	let doc = params.textDocument;
@@ -9,19 +17,19 @@ async function(params) {
 	console.log("Changed: ",doc.version, ...changes);
 };
 
-export const onDidOpenTextDocument: NotificationHandler<DidOpenTextDocumentParams> =
+const onDidOpenTextDocument: NotificationHandler<DidOpenTextDocumentParams> =
 async function(params) {
     
     console.log("Open: ",params);
 };
 
-export const onDidCloseTextDocument: NotificationHandler<DidCloseTextDocumentParams> =
+const onDidCloseTextDocument: NotificationHandler<DidCloseTextDocumentParams> =
 async function(params) {
     
     console.log("Close: ",params);
 };
 
-export const onDidSaveTextDocument: NotificationHandler<DidSaveTextDocumentParams> = 
+const onDidSaveTextDocument: NotificationHandler<DidSaveTextDocumentParams> = 
 async function(params) {
 
     console.log("Save: ",params);

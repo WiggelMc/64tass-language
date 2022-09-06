@@ -1,4 +1,4 @@
-import { CancellationToken, HandlerResult, ResultProgressReporter, SemanticTokens, SemanticTokensBuilder, SemanticTokensDelta, SemanticTokensDeltaParams, SemanticTokensDeltaPartialResult, SemanticTokensLegend, SemanticTokensParams, SemanticTokensPartialResult, SemanticTokensRangeParams, SemanticTokensRangeRequest, ServerRequestHandler, WorkDoneProgressReporter } from "vscode-languageserver";
+import { CancellationToken, HandlerResult, ResultProgressReporter, SemanticTokens, SemanticTokensBuilder, SemanticTokensDelta, SemanticTokensDeltaParams, SemanticTokensDeltaPartialResult, SemanticTokensLegend, SemanticTokensParams, SemanticTokensPartialResult, SemanticTokensRangeParams, SemanticTokensRangeRequest, ServerRequestHandler, WorkDoneProgressReporter, _, _Connection } from "vscode-languageserver";
 import { sleep } from "../util/sleep";
 
 const tokenTypes = new Map<string, number>();
@@ -24,10 +24,18 @@ export const legend = (function ():SemanticTokensLegend {
 	};
 })();
 
+
+export function register(connection: _Connection<_, _, _, _, _, _, _>) {
+    
+    connection.languages.semanticTokens.on(onSemanticTokens);
+	connection.languages.semanticTokens.onDelta(onSemanticTokensDelta);
+	connection.languages.semanticTokens.onRange(onSemanticTokensRange);
+}
+
 /**
  * called when a document is opened
  */
-export const onSemanticTokens: ServerRequestHandler<SemanticTokensParams, SemanticTokens, SemanticTokensPartialResult, void> = 
+const onSemanticTokens: ServerRequestHandler<SemanticTokensParams, SemanticTokens, SemanticTokensPartialResult, void> = 
 async function(params, token, workDoneProgress, resultProgress) {
 	
 	console.log("Tokens Full: ",params);
@@ -41,7 +49,7 @@ async function(params, token, workDoneProgress, resultProgress) {
 /**
  * called when the document has changed (from last full/delta)
  */
-export const onSemanticTokensDelta: ServerRequestHandler<SemanticTokensDeltaParams, SemanticTokensDelta | SemanticTokens, SemanticTokensDeltaPartialResult | SemanticTokensDeltaPartialResult, void> =
+const onSemanticTokensDelta: ServerRequestHandler<SemanticTokensDeltaParams, SemanticTokensDelta | SemanticTokens, SemanticTokensDeltaPartialResult | SemanticTokensDeltaPartialResult, void> =
 async function(params, token, workDoneProgress, resultProgress) {
 	
 	console.log("Tokens Delta: ",params);
@@ -52,7 +60,7 @@ async function(params, token, workDoneProgress, resultProgress) {
 /**
  * only used when full tokens arent available yet
  */
-export const onSemanticTokensRange: ServerRequestHandler<SemanticTokensRangeParams, SemanticTokens, SemanticTokensPartialResult, void> =
+const onSemanticTokensRange: ServerRequestHandler<SemanticTokensRangeParams, SemanticTokens, SemanticTokensPartialResult, void> =
 async function(params, token, workDoneProgress, resultProgress) {
 	
 	console.log("Tokens Range: ",params);
