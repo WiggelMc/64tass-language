@@ -23,6 +23,7 @@ When a file is opened, the version and lines are stored (lines into array)
 
 How to store data about a file [needs thinking]
 how much should a textmate grammar be used (if at all)
+how to implement different instruction sets
 
 
 -----------------------
@@ -31,3 +32,7 @@ how much should a textmate grammar be used (if at all)
 TODO
 
 Test how syntax highlighting works in git/override diff
+
+Find a way to
+    Update the Semantic Highlights for a file (open file only)
+    
