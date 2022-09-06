@@ -35,7 +35,8 @@ import {
 import path = require('path');
 import { Uri } from 'vscode';
 import * as documentSelector from './document-selector';
-import * as semanticTokens from './handler/semantic-tokens';
+import * as semanticTokenHandler from './handler/semantic-tokens';
+import * as textDocumentHandler from './handler/text-document';
 import { deflateSync } from 'zlib';
 
 
@@ -77,7 +78,7 @@ connection.onInitialize((params: InitializeParams) => {
 			},
 			semanticTokensProvider: {
 				documentSelector: documentSelector.selector,
-				legend: semanticTokens.legend,
+				legend: semanticTokenHandler.legend,
 				range: true,
 				full: {
 					delta: true
@@ -259,29 +260,14 @@ connection.onCompletionResolve(
 // for open, change and close text document events
 // documents.listen(connection);
 
-connection.onDidChangeTextDocument(params => {
-	// console.log("Changed: ",params);
-	let doc = params.textDocument;
-	let changes = params.contentChanges;
-	
-	console.log("Changed: ",doc.version, ...changes);
-});
+connection.onDidChangeTextDocument(textDocumentHandler.onDidChangeTextDocument);
+connection.onDidOpenTextDocument(textDocumentHandler.onDidOpenTextDocument);
+connection.onDidCloseTextDocument(textDocumentHandler.onDidCloseTextDocument);
+connection.onDidSaveTextDocument(textDocumentHandler.onDidSaveTextDocument);
 
-connection.onDidOpenTextDocument(params => {
-	console.log("Open: ",params);
-});
-
-connection.onDidCloseTextDocument(params => {
-	console.log("Close: ",params);
-});
-
-connection.onDidSaveTextDocument(params => {
-	console.log("Save: ",params);
-});
-
-connection.languages.semanticTokens.on(semanticTokens.onSemanticTokens);
-connection.languages.semanticTokens.onDelta(semanticTokens.onSemanticTokensDelta);
-connection.languages.semanticTokens.onRange(semanticTokens.onSemanticTokensRange);
+connection.languages.semanticTokens.on(semanticTokenHandler.onSemanticTokens);
+connection.languages.semanticTokens.onDelta(semanticTokenHandler.onSemanticTokensDelta);
+connection.languages.semanticTokens.onRange(semanticTokenHandler.onSemanticTokensRange);
 
 
 // Listen on the connection
