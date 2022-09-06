@@ -23,22 +23,19 @@ import {
 	SemanticTokensBuilder
 } from 'vscode-languageserver/node';
 
-import * as fs from "fs";
+
 
 import * as vscodeUri from "vscode-uri";
-
 import * as chokidar from "chokidar";
 
 import {
 	TextDocument
 } from 'vscode-languageserver-textdocument';
 import path = require('path');
-import { Uri } from 'vscode';
 import * as documentSelector from './document-selector';
 import * as semanticTokenHandler from './handler/semantic-tokens';
 import * as textDocumentHandler from './handler/text-document';
 import * as completionHandler from './handler/completion';
-import { deflateSync } from 'zlib';
 
 
 // Create a connection for the server, using Node's IPC as a transport.
