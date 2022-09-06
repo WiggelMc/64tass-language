@@ -35,7 +35,7 @@ import {
 import path = require('path');
 import { Uri } from 'vscode';
 import * as documentSelector from './document-selector';
-import * as semanticTokens from './semantic-tokens';
+import * as semanticTokens from './handler/semantic-tokens';
 import { deflateSync } from 'zlib';
 
 
@@ -279,37 +279,10 @@ connection.onDidSaveTextDocument(params => {
 	console.log("Save: ",params);
 });
 
-connection.languages.semanticTokens.on(async params => {
-	//called when a document is opened
-	console.log("Tokens Full: ",params);
-	await sleep(20000);
-	console.log("Tokens Full Done: ",params);
-	let builder = new SemanticTokensBuilder();
-	builder.push(0,2,10,0,0);
-	return builder.build();
-});
-
-connection.languages.semanticTokens.onDelta(params => {
-	//called when the document has changed (from last full/delta)
-	console.log("Tokens Delta: ",params);
-	let builder = new SemanticTokensBuilder();
-	return builder.build();
-});
-
-connection.languages.semanticTokens.onRange(params => {
-	//only used when full tokens arent available yet
-	console.log("Tokens Range: ",params);
-	let builder = new SemanticTokensBuilder();
-	builder.push(1,2,10,0,0);
-	return builder.build();
-});
+connection.languages.semanticTokens.on(semanticTokens.onSemanticTokens);
+connection.languages.semanticTokens.onDelta(semanticTokens.onSemanticTokensDelta);
+connection.languages.semanticTokens.onRange(semanticTokens.onSemanticTokensRange);
 
 
 // Listen on the connection
 connection.listen();
-
-function sleep(ms: number) {
-	return new Promise((resolve) => {
-	  setTimeout(resolve, ms);
-	});
-  }
