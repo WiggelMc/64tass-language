@@ -2,6 +2,7 @@ import { ServerCapabilities, _, _Connection } from "vscode-languageserver";
 import { completionHandler } from "./completion";
 import { configurationHandler } from "./configuration";
 import { fileSystemHandler } from "./file-system";
+import { hoverHandler } from "./hover";
 import { initializationHandler } from "./initialization";
 import { semanticTokensHandler } from "./semantic-tokens";
 import { textDocumentHandler } from "./text-document";
@@ -18,6 +19,7 @@ const handlers : ConnectionEventHandler[] = [
 	semanticTokensHandler,
 	textDocumentHandler,
 	completionHandler,
+    hoverHandler,
 ];
 
 export function registerHandlers(connection: _Connection<_, _, _, _, _, _, _>) {
