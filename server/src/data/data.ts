@@ -26,7 +26,7 @@ export const config = {
     globalSettings: defaultSettings
 };
 
-export const handlers : ConnectionEventHandler[] = [
+const handlers : ConnectionEventHandler[] = [
 	initializationHandler,
     configurationHandler,
     fileSystemHandler,
