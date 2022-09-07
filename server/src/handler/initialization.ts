@@ -8,7 +8,6 @@ export const initializationHandler : ConnectionEventHandler = {
         
         connection.onInitialize(onInitialize);
         connection.onInitialized(onInitialized);
-        connection.onDidChangeConfiguration(onDidChangeConfiguration);
     },
     capabilities: {
         textDocumentSync: TextDocumentSyncKind.Incremental
@@ -61,20 +60,4 @@ async function(params) {
 			connection.console.log('Workspace folder change event received.');
 		});
 	}
-};
-
-const onDidChangeConfiguration: NotificationHandler<DidChangeConfigurationParams> = 
-async function(params) {
-
-    if (config.hasConfigurationCapability) {
-		// Reset all cached document settings
-		documentSettings.clear();
-	} else {
-		config.globalSettings = <DocumentSettings>(
-			(params.settings.languageServerExample || defaultSettings)
-		);
-	}
-
-    // Revalidate all open text documents
-	// documents.all().forEach(validateTextDocument); //TODO: fix
 };

@@ -1,4 +1,5 @@
 import { completionHandler } from "../handler/completion";
+import { configurationHandler } from "../handler/configuration";
 import { fileSystemHandler } from "../handler/file-system";
 import { ConnectionEventHandler } from "../handler/handler";
 import { initializationHandler } from "../handler/initialization";
@@ -26,6 +27,7 @@ export const config = {
 
 export const handlers : ConnectionEventHandler[] = [
 	initializationHandler,
+    configurationHandler,
     fileSystemHandler,
 	semanticTokensHandler,
 	textDocumentHandler,
