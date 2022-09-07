@@ -25,25 +25,3 @@ export const config = {
     hasDiagnosticRelatedInformationCapability: false,
     globalSettings: defaultSettings
 };
-
-const handlers : ConnectionEventHandler[] = [
-	initializationHandler,
-    configurationHandler,
-    fileSystemHandler,
-	semanticTokensHandler,
-	textDocumentHandler,
-	completionHandler,
-];
-
-export function registerHandlers(connection: _Connection<_, _, _, _, _, _, _>) {
-    for (const handler of handlers) {
-        handler.register(connection);
-    }
-}
-
-export function getCapabilities(): ServerCapabilities<any> {
-    return Object.assign(
-        {},
-        ...handlers.map(h => h.capabilities)
-    );
-}

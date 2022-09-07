@@ -1,6 +1,5 @@
 import { createConnection, ProposedFeatures } from 'vscode-languageserver/node';
-
-import { registerHandlers } from './data/data';
+import { registerHandlers } from './handler/handler';
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.

@@ -1,7 +1,7 @@
 import { _Connection, _, TextDocumentSyncKind, NotificationHandler, InitializedParams, InitializeError, InitializeParams, InitializeResult, ServerRequestHandler, DidChangeConfigurationNotification } from "vscode-languageserver";
-import { config, getCapabilities } from "../data/data";
+import { config } from "../data/data";
 import { connection } from "../server";
-import { ConnectionEventHandler } from "./handler";
+import { ConnectionEventHandler, getCapabilities } from "./handler";
 
 export const initializationHandler : ConnectionEventHandler = {
     register: function (connection: _Connection<_, _, _, _, _, _, _>): void {
