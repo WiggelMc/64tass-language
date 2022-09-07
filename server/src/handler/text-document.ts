@@ -1,12 +1,18 @@
 import { DidChangeTextDocumentParams, DidCloseTextDocumentParams, DidOpenTextDocumentParams, DidSaveTextDocumentParams, NotificationHandler, _, _Connection } from "vscode-languageserver";
+import { ConnectionEventHandler } from "./handler";
 
-export function register(connection: _Connection<_, _, _, _, _, _, _>) {
-    
-    connection.onDidChangeTextDocument(onDidChangeTextDocument);
-    connection.onDidOpenTextDocument(onDidOpenTextDocument);
-    connection.onDidCloseTextDocument(onDidCloseTextDocument);
-    connection.onDidSaveTextDocument(onDidSaveTextDocument);
-}
+export const textDocumentHandler : ConnectionEventHandler = {
+    register: function (connection: _Connection<_, _, _, _, _, _, _>): void {
+        
+        connection.onDidChangeTextDocument(onDidChangeTextDocument);
+        connection.onDidOpenTextDocument(onDidOpenTextDocument);
+        connection.onDidCloseTextDocument(onDidCloseTextDocument);
+        connection.onDidSaveTextDocument(onDidSaveTextDocument);
+    },
+    capabilities: {
+
+    }
+};
 
 const onDidChangeTextDocument: NotificationHandler<DidChangeTextDocumentParams> =
 async function(params) {

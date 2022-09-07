@@ -1,10 +1,19 @@
 import { CompletionItem, CompletionItemKind, CompletionList, CompletionParams, RequestHandler, ServerRequestHandler, _, _Connection } from "vscode-languageserver";
+import { ConnectionEventHandler } from "./handler";
 
-export function register(connection: _Connection<_, _, _, _, _, _, _>) {
-    
-    connection.onCompletion(onCompletion);
-    connection.onCompletionResolve(onCompletionResolve);
-}
+export const completionHandler : ConnectionEventHandler = {
+    register: function (connection: _Connection<_, _, _, _, _, _, _>): void {
+        
+        connection.onCompletion(onCompletion);
+        connection.onCompletionResolve(onCompletionResolve);
+    },
+    capabilities: {
+
+        completionProvider: {
+            resolveProvider: true
+        }
+    }
+};
 
 /**
  * This handler provides the initial list of the completion items.

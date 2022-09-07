@@ -33,9 +33,9 @@ import {
 } from 'vscode-languageserver-textdocument';
 import path = require('path');
 import * as documentSelector from './document-selector';
-import * as semanticTokenHandler from './handler/semantic-tokens';
-import * as textDocumentHandler from './handler/text-document';
-import * as completionHandler from './handler/completion';
+import { semanticTokensHandler } from './handler/semantic-tokens';
+import { textDocumentHandler } from './handler/text-document';
+import { completionHandler } from './handler/completion';
 
 
 // Create a connection for the server, using Node's IPC as a transport.
@@ -70,18 +70,9 @@ connection.onInitialize((params: InitializeParams) => {
 	const result: InitializeResult = {
 		capabilities: {
 			textDocumentSync: TextDocumentSyncKind.Incremental,
-			// Tell the client that this server supports code completion.
-			completionProvider: {
-				resolveProvider: true
-			},
-			semanticTokensProvider: {
-				documentSelector: documentSelector.selector,
-				legend: semanticTokenHandler.legend,
-				range: true,
-				full: {
-					delta: true
-				}
-			}
+			...semanticTokensHandler.capabilities,
+			...textDocumentHandler.capabilities,
+			...completionHandler.capabilities
 		}
 	};
 	if (hasWorkspaceFolderCapability) {
@@ -220,7 +211,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 
 completionHandler.register(connection);
 textDocumentHandler.register(connection);
-semanticTokenHandler.register(connection);
+semanticTokensHandler.register(connection);
 
 // Listen on the connection
 connection.listen();

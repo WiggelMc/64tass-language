@@ -1,10 +1,12 @@
-import { CancellationToken, HandlerResult, ResultProgressReporter, SemanticTokens, SemanticTokensBuilder, SemanticTokensDelta, SemanticTokensDeltaParams, SemanticTokensDeltaPartialResult, SemanticTokensLegend, SemanticTokensParams, SemanticTokensPartialResult, SemanticTokensRangeParams, SemanticTokensRangeRequest, ServerRequestHandler, WorkDoneProgressReporter, _, _Connection } from "vscode-languageserver";
+import { CancellationToken, HandlerResult, ResultProgressReporter, SemanticTokens, SemanticTokensBuilder, SemanticTokensDelta, SemanticTokensDeltaParams, SemanticTokensDeltaPartialResult, SemanticTokensLegend, SemanticTokensParams, SemanticTokensPartialResult, SemanticTokensRangeParams, SemanticTokensRangeRequest, ServerCapabilities, ServerRequestHandler, WorkDoneProgressReporter, _, _Connection } from "vscode-languageserver";
+import { selector } from "../document-selector";
 import { sleep } from "../util/sleep";
+import { ConnectionEventHandler } from "./handler";
 
 const tokenTypes = new Map<string, number>();
 const tokenModifiers = new Map<string, number>();
 
-export const legend = (function ():SemanticTokensLegend {
+const legend = (function ():SemanticTokensLegend {
 	const tokenTypesLegend = [
 		't1', 't2', 't3', 'number', 'regexp', 'operator', 'namespace',
 		'type', 'struct', 'class', 'interface', 'enum', 'typeParameter', 'function',
@@ -24,13 +26,25 @@ export const legend = (function ():SemanticTokensLegend {
 	};
 })();
 
+export const semanticTokensHandler : ConnectionEventHandler = {
+	register: function (connection: _Connection<_, _, _, _, _, _, _>): void {
 
-export function register(connection: _Connection<_, _, _, _, _, _, _>) {
-    
-    connection.languages.semanticTokens.on(onSemanticTokens);
-	connection.languages.semanticTokens.onDelta(onSemanticTokensDelta);
-	connection.languages.semanticTokens.onRange(onSemanticTokensRange);
-}
+		connection.languages.semanticTokens.on(onSemanticTokens);
+		connection.languages.semanticTokens.onDelta(onSemanticTokensDelta);
+		connection.languages.semanticTokens.onRange(onSemanticTokensRange);
+	},
+	capabilities: {
+		
+		semanticTokensProvider: {
+			documentSelector: selector,
+			legend: legend,
+			range: true,
+			full: {
+				delta: true
+			}
+		}
+	}
+};
 
 /**
  * called when a document is opened
