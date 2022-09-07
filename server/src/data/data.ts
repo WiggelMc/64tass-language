@@ -1,3 +1,4 @@
+import { ServerCapabilities, _, _Connection } from "vscode-languageserver";
 import { completionHandler } from "../handler/completion";
 import { configurationHandler } from "../handler/configuration";
 import { fileSystemHandler } from "../handler/file-system";
@@ -33,3 +34,16 @@ export const handlers : ConnectionEventHandler[] = [
 	textDocumentHandler,
 	completionHandler,
 ];
+
+export function registerHandlers(connection: _Connection<_, _, _, _, _, _, _>) {
+    for (const handler of handlers) {
+        handler.register(connection);
+    }
+}
+
+export function getCapabilities(): ServerCapabilities<any> {
+    return Object.assign(
+        {},
+        ...handlers.map(h => h.capabilities)
+    );
+}

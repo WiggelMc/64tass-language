@@ -1,5 +1,5 @@
-import { _Connection, _, TextDocumentSyncKind, DidChangeConfigurationParams, NotificationHandler, InitializedParams, InitializeError, InitializeParams, InitializeResult, ServerRequestHandler, DidChangeConfigurationNotification } from "vscode-languageserver";
-import { documentSettings, globalSettings, defaultSettings, DocumentSettings, config, handlers } from "../data/data";
+import { _Connection, _, TextDocumentSyncKind, NotificationHandler, InitializedParams, InitializeError, InitializeParams, InitializeResult, ServerRequestHandler, DidChangeConfigurationNotification } from "vscode-languageserver";
+import { config, getCapabilities } from "../data/data";
 import { connection } from "../server";
 import { ConnectionEventHandler } from "./handler";
 
@@ -33,10 +33,7 @@ async function(params, token, workDoneProgress, resultProgress) {
 	);
 
 	const result: InitializeResult = {
-		capabilities: Object.assign(
-			{},
-			...handlers.map(h => h.capabilities)
-		)
+		capabilities: getCapabilities()
 	};
 	if (config.hasWorkspaceFolderCapability) {
 		result.capabilities.workspace = {
