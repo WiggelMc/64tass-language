@@ -1,5 +1,5 @@
 import { _Connection, _, DidChangeConfigurationParams, NotificationHandler } from "vscode-languageserver";
-import { globalCapabilities, documentSettings, DocumentSettings, defaultSettings, globalDocumentSettings } from "../data/data";
+import { globalCapabilities, documentSettings, ExtensionSettings, defaultSettings, globalDocumentSettings } from "../data/data";
 import { ConnectionEventHandler } from "./handler";
 
 export const configurationHandler : ConnectionEventHandler = {
@@ -19,7 +19,7 @@ async function(params) {
 		// Reset all cached document settings
 		documentSettings.clear();
 	} else {
-		globalDocumentSettings.settings = <DocumentSettings>(
+		globalDocumentSettings.settings = <ExtensionSettings>(
 			(params.settings.languageServerExample || defaultSettings)
 		);
 	}
