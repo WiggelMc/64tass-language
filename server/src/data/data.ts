@@ -1,11 +1,4 @@
-import { ServerCapabilities, _, _Connection } from "vscode-languageserver";
-import { completionHandler } from "../handler/completion";
-import { configurationHandler } from "../handler/configuration";
-import { fileSystemHandler } from "../handler/file-system";
-import { ConnectionEventHandler } from "../handler/handler";
-import { initializationHandler } from "../handler/initialization";
-import { semanticTokensHandler } from "../handler/semantic-tokens";
-import { textDocumentHandler } from "../handler/text-document";
+import { _, _Connection } from "vscode-languageserver";
 
 export interface DocumentSettings {
 	maxNumberOfProblems: number;
@@ -19,9 +12,12 @@ export let globalSettings: DocumentSettings = defaultSettings;
 
 export const documentSettings: Map<string, Thenable<DocumentSettings>> = new Map();
 
-export const config = {
+export const globalDocumentSettings = {
+    settings: defaultSettings
+};
+
+export const globalCapabilities = {
     hasConfigurationCapability: false,
     hasWorkspaceFolderCapability: false,
-    hasDiagnosticRelatedInformationCapability: false,
-    globalSettings: defaultSettings
+    hasDiagnosticRelatedInformationCapability: false
 };

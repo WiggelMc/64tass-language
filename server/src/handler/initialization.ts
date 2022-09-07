@@ -1,5 +1,5 @@
 import { _Connection, _, TextDocumentSyncKind, NotificationHandler, InitializedParams, InitializeError, InitializeParams, InitializeResult, ServerRequestHandler, DidChangeConfigurationNotification } from "vscode-languageserver";
-import { config } from "../data/data";
+import { globalCapabilities } from "../data/data";
 import { connection } from "../server";
 import { ConnectionEventHandler, getCapabilities } from "./handler";
 
@@ -20,13 +20,13 @@ async function(params, token, workDoneProgress, resultProgress) {
 
 	// Does the client support the `workspace/configuration` request?
 	// If not, we fall back using global settings.
-	config.hasConfigurationCapability = !!(
+	globalCapabilities.hasConfigurationCapability = !!(
 		capabilities.workspace && !!capabilities.workspace.configuration
 	);
-	config.hasWorkspaceFolderCapability = !!(
+	globalCapabilities.hasWorkspaceFolderCapability = !!(
 		capabilities.workspace && !!capabilities.workspace.workspaceFolders
 	);
-	config.hasDiagnosticRelatedInformationCapability = !!(
+	globalCapabilities.hasDiagnosticRelatedInformationCapability = !!(
 		capabilities.textDocument &&
 		capabilities.textDocument.publishDiagnostics &&
 		capabilities.textDocument.publishDiagnostics.relatedInformation
@@ -35,7 +35,7 @@ async function(params, token, workDoneProgress, resultProgress) {
 	const result: InitializeResult = {
 		capabilities: getCapabilities()
 	};
-	if (config.hasWorkspaceFolderCapability) {
+	if (globalCapabilities.hasWorkspaceFolderCapability) {
 		result.capabilities.workspace = {
 			workspaceFolders: {
 				supported: true
@@ -48,11 +48,11 @@ async function(params, token, workDoneProgress, resultProgress) {
 const onInitialized: NotificationHandler<InitializedParams> = 
 async function(params) {
 
-    if (config.hasConfigurationCapability) {
+    if (globalCapabilities.hasConfigurationCapability) {
 		// Register for all configuration changes.
 		connection.client.register(DidChangeConfigurationNotification.type, undefined);
 	}
-	if (config.hasWorkspaceFolderCapability) {
+	if (globalCapabilities.hasWorkspaceFolderCapability) {
 		connection.workspace.onDidChangeWorkspaceFolders(_event => {
 			connection.console.log('Workspace folder change event received.');
 		});

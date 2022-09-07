@@ -1,5 +1,5 @@
 import { _Connection, _, DidChangeConfigurationParams, NotificationHandler } from "vscode-languageserver";
-import { config, documentSettings, DocumentSettings, defaultSettings } from "../data/data";
+import { globalCapabilities, documentSettings, DocumentSettings, defaultSettings, globalDocumentSettings } from "../data/data";
 import { ConnectionEventHandler } from "./handler";
 
 export const configurationHandler : ConnectionEventHandler = {
@@ -15,11 +15,11 @@ export const configurationHandler : ConnectionEventHandler = {
 const onDidChangeConfiguration: NotificationHandler<DidChangeConfigurationParams> = 
 async function(params) {
 
-    if (config.hasConfigurationCapability) {
+    if (globalCapabilities.hasConfigurationCapability) {
 		// Reset all cached document settings
 		documentSettings.clear();
 	} else {
-		config.globalSettings = <DocumentSettings>(
+		globalDocumentSettings.settings = <DocumentSettings>(
 			(params.settings.languageServerExample || defaultSettings)
 		);
 	}
