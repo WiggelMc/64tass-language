@@ -36,7 +36,16 @@ import * as documentSelector from './document-selector';
 import { semanticTokensHandler } from './handler/semantic-tokens';
 import { textDocumentHandler } from './handler/text-document';
 import { completionHandler } from './handler/completion';
+import { ConnectionEventHandler } from './handler/handler';
+import { initializationHandler } from './handler/initialization';
 
+
+const handlers : ConnectionEventHandler[] = [
+	initializationHandler,
+	semanticTokensHandler,
+	textDocumentHandler,
+	completionHandler,
+];
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -68,12 +77,10 @@ connection.onInitialize((params: InitializeParams) => {
 	);
 
 	const result: InitializeResult = {
-		capabilities: {
-			textDocumentSync: TextDocumentSyncKind.Incremental,
-			...semanticTokensHandler.capabilities,
-			...textDocumentHandler.capabilities,
-			...completionHandler.capabilities
-		}
+		capabilities: Object.assign(
+			{},
+			...handlers.map(h => h.capabilities)
+		)
 	};
 	if (hasWorkspaceFolderCapability) {
 		result.capabilities.workspace = {
@@ -209,9 +216,9 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
 }
 
-completionHandler.register(connection);
-textDocumentHandler.register(connection);
-semanticTokensHandler.register(connection);
+for (const handler of handlers) {
+	handler.register(connection);
+}
 
 // Listen on the connection
 connection.listen();
