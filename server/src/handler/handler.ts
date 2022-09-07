@@ -5,6 +5,7 @@ import { fileSystemHandler } from "./file-system";
 import { hoverHandler } from "./hover";
 import { initializationHandler } from "./initialization";
 import { semanticTokensHandler } from "./semantic-tokens";
+import { symbolHandler } from "./symbol";
 import { textDocumentHandler } from "./text-document";
 
 export interface ConnectionEventHandler {
@@ -20,6 +21,7 @@ const handlers : ConnectionEventHandler[] = [
 	textDocumentHandler,
 	completionHandler,
     hoverHandler,
+    symbolHandler,
 ];
 
 export function registerHandlers(connection: _Connection<_, _, _, _, _, _, _>) {
