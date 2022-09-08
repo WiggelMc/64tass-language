@@ -68,6 +68,7 @@ async function(params, token, workDoneProgress, resultProgress) {
 	
 	console.log("Tokens Delta: ",params);
 	let builder = new SemanticTokensBuilder();
+	builder.push(2,2,10,0,0);
 	return builder.build();
 };
 

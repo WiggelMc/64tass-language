@@ -1,4 +1,6 @@
-import { DidChangeTextDocumentParams, DidCloseTextDocumentParams, DidOpenTextDocumentParams, DidSaveTextDocumentParams, NotificationHandler, _, _Connection } from "vscode-languageserver";
+import { DidChangeTextDocumentParams, DidCloseTextDocumentParams, DidOpenTextDocumentParams, DidSaveTextDocumentParams, NotificationHandler, SemanticTokensRefreshRequest, TextDocumentIdentifier, _, _Connection } from "vscode-languageserver";
+import { TextDocument } from "vscode-languageserver-textdocument";
+import { connection } from "../server";
 import { ConnectionEventHandler } from "./handler";
 
 export const textDocumentHandler : ConnectionEventHandler = {
@@ -14,6 +16,8 @@ export const textDocumentHandler : ConnectionEventHandler = {
     }
 };
 
+let savedDoc: TextDocumentIdentifier;
+
 const onDidChangeTextDocument: NotificationHandler<DidChangeTextDocumentParams> =
 async function(params) {
 
@@ -21,6 +25,14 @@ async function(params) {
 	let changes = params.contentChanges;
 	
 	console.log("Changed: ",doc.version, ...changes);
+
+    if (!savedDoc) {
+        console.log("doc saved: ",doc);
+        savedDoc = doc;
+    } else {
+        console.log("doc will reload tokens: ",savedDoc);
+        connection.sendRequest(SemanticTokensRefreshRequest.method, {});
+    }
 };
 
 const onDidOpenTextDocument: NotificationHandler<DidOpenTextDocumentParams> =
