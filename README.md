@@ -1,6 +1,7 @@
-# 64tass-language README
+# 64tass Language Server Implementation for VSCode
 
-This is the README for your extension "64tass-language". After writing up a brief description, we recommend including the following sections.
+# This extension is WIP
+# It will be released on the VSCode Marketplace upon completion
 
 ## Features
 
