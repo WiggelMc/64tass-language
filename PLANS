@@ -52,3 +52,190 @@ maybe use codeLens
     to show information from list file next to source Code
     to show scope of a function or section
     
+
+
+
+####################################################################################################################
+####################################################################################################################
+####################################################################################################################
+
+
+OLD PLANS
+
+
+####################################################################################################################
+####################################################################################################################
+####################################################################################################################
+
+
+syntax highlighting
+	good categorisation
+	multiple color schemes
+	unary / binary operator detection
+	variable highlighting (only if defined)
+
+functions labels variables macros
+	goto definition
+	definition popup
+	type inference
+		show properties of defined structs / scopes like in java 
+	show structure of file in OUTLINE tab (bottom left)
+	
+useful autocomplete
+	show adressing modes when typing instruction
+	allow toggling of instruction set in options (+allow custom instruction sets)
+		json files with instructions (adressing modes => cycles [notes], bytes [notes])
+		adressing modes are also defined in a json file
+		allow for composition of files (eg include list)
+	only autocomplete defined variables, functions, etc and show type in preview bar
+
+
+listing file support [Indexing the list file on change will make navigation easier]
+	listing file popup
+	goto line in listing file (from source)
+	goto line in source (from listing file)
+
+
+Show information beside code (cascading properties)
+	register size
+
+Add Breakpoint via click
+	and only show breakpoint dot (hide the lines [optional])
+
+Workspace setup command
+	Will set options and directories to premade Workspace
+
+
+Make every keyword and symbol configurable
+	this includes order of operations and specific behavior
+	this will make supporting later version easier
+	old configs can be kept for lagacy support (maybe add an option)
+
+Always assume global scope (one way) in functions macros, unused or multi included files
+	a comment in the format somewhere in the file or function will assume the scope (maybe only on function definition / first line of file)
+	
+	; file_scope = Bank80
+	; section_scope = Bank80.Main
+
+Scope Indexing
+	
+
+CONFIG FILES:
+
+idea 1
+	SYNTAX
+		64tass-1.56.2625.json
+	INSTRUCTIONS
+		6502.json
+		65c02.json
+		65ce02.json
+		6502i.json
+		65816.json
+		65dtv02.json
+		65el02.json
+		r65c02.json
+		w65c02.json
+		4510.json
+
+
+idea 2
+	V1-56-2625
+		syntax.json
+
+		INSTRUCTIONS
+			6502.json
+			65c02.json
+			65ce02.json
+			6502i.json
+			65816.json
+			65dtv02.json
+			65el02.json
+			r65c02.json
+			w65c02.json
+			4510.json
+
+OPTIONS:
+
+	COMPILER:
+	[9]	instruction-set: string
+		case-sensitive: bool (true) (can be on, even if the command line option is off)
+	[2]	tasm-compatible: bool (false)
+		include-search-path: string[]
+		master-file: string
+		list-file: string
+		assemble-task: string ("ASSEMBLE")
+		
+
+	INTERFACE:
+		??
+
+
+	KEYBOARD:
+		viewInList
+		assembleAndViewInList
+		viewInSource
+
+
+
+
+
+
+
+
+
+
+Properties of a single line
+
+require [variable]
+define/assign [variable]
+open/close [scope]
+set cascading property [register size]
+
+
+
+
+
+Specifics
+
+Define Variable
+
+LABEL ADC / nothing
+
+OBJ .byte / .word / .long / .dstruct <> / .dunion <> [is always a label too]
+
+TYPE .struct / .union [are scopes when named, visible otherwise]
+
+SCOPE .proc / .block / .namespace <> / .weak / .binclude  [is always a label too] [will be inaccessible if not named]
+		activate scope: .with <> / .namespace <>
+
+CONST = 
+VAR :=
+VAR .var
+.dsection SECTION
+		use section: .section
+
+MACRO .segment / .macro
+FUNCTION .function
+
+
+.if / .elsif
+.switch / .case
+
+.for /.bfor / .rept / .brept / .while / .bwhile / .break /.breakif / .continue / .continueif / ...
+
+.comment / ;
+
+
+address	Address type
+bits	Bit string type
+bool	Boolean type
+bytes	Byte string type
+code	Code type
+dict	Dictionary type
+float	Floating point type
+gap	Uninitialized memory type (? Symbol)
+int	Integer type
+list	List type
+str	Character string type
+tuple	Tuple type
+type	Type type
