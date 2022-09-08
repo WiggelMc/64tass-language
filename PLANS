@@ -36,3 +36,8 @@ Test how syntax highlighting works in git/override diff
 Find a way to
     Update the Semantic Highlights for a file (open file only)
     
+
+maybe use codeLens
+    to show information from list file next to source Code
+    to show scope of a function or section
+    
