@@ -24,6 +24,9 @@ When a file is opened, the version and lines are stored (lines into array)
 How to store data about a file [needs thinking]
 how much should a textmate grammar be used (if at all)
 how to implement different instruction sets
+    provide different language for each processor (instant highlighting / language has to be selected somehow)
+    highlight all instructions by default (instant highlighting / confusing for a second if unsupported instruction is used)
+    highlight no instructions by default ()
 
 
 -----------------------
@@ -31,10 +34,18 @@ how to implement different instruction sets
 
 TODO
 
+Find way to detect processor used (maybe use all in order)
+    manual selection
+    detect from source file (.cpu)
+    detect from task [complicated / maybe not]
+        task run
+        task files
+        
+
 Test how syntax highlighting works in git/override diff
 
 Find a way to
-    Update the Semantic Highlights for a file (open file only)
+    Update the Semantic Highlights for a file (open file only) [found for all files]
     
 
 maybe use codeLens

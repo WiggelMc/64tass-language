@@ -51,7 +51,13 @@
 					"description": "Traces the communication between VS Code and the language server."
 				}
 			}
-		}
+		},
+    "jsonValidation": [
+      {
+        "fileMatch": "64tasslang.json",
+        "url": "./schemas/64tass-schema.json"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

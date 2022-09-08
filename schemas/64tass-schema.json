@@ -1,0 +1,90 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "64tass Language Plugin Configuration File",
+    "description": "Any Property can be overridden by Configurations in Child Directories",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "cpu": {
+            "title": "Select CPU",
+            "type": "string",
+            "default": "6502",
+            "oneOf": [
+                {
+                    "const": "6502",
+                    "description": "standard 65xx"
+                },
+                {
+                    "const": "65c02",
+                    "description": "CMOS 65C02"
+                },
+                {
+                    "const": "65ce02",
+                    "description": "CSG 65CE02"
+                },
+                {
+                    "const": "6502i",
+                    "description": "NMOS 65xx"
+                },
+                {
+                    "const": "65816",
+                    "description": "W65C816"
+                },
+                {
+                    "const": "65dtv02",
+                    "description": "65dtv02"
+                },
+                {
+                    "const": "65el02",
+                    "description": "65el02"
+                },
+                {
+                    "const": "r65c02",
+                    "description": "R65C02"
+                }, 
+                {
+                    "const": "w65c02",
+                    "description": "W65C02"
+                }, 
+                {
+                    "const": "4510",
+                    "description": "CSG 4510"
+                }
+            ]
+        },
+        "case-sensitive": {
+            "title": "Selects if Symbols are matched case-sensitive",
+            "type": "boolean",
+            "default": false
+        },
+        "tasm-compatible": {
+            "title": "Enable TASM compatible operators and precedence",
+            "type": "boolean",
+            "default": false
+        },
+        "include-search-path": {
+            "title": "Specify include search path",
+            "type": "array",
+            "items": {
+                "type": "string",
+                "examples": ["dir1","./dir1","../dir0/dir1/","./dir1/"]
+            }
+        },
+        "master-file": {
+            "title": "Specify the master file of the Project",
+            "type": "string",
+            "examples": ["master.asm","./master.asm","../dir0/dir1/master.asm","./dir1/master.asm"]
+        },
+        "list-file": {
+            "title": "Specify the list file of the Project",
+            "type": "string",
+            "examples": ["out.list","./out.list","../dir0/dir1/out.list","./dir1/out.list"]
+        },
+        "assemble-task": {
+            "title": "Specify the task to assemble the Project",
+            "type": "string",
+            "default": "Assemble",
+            "examples": ["Build","Compile"]
+        }
+    }
+}
