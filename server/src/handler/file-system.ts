@@ -3,6 +3,7 @@ import { ConnectionEventHandler } from "./handler";
 import * as chokidar from "chokidar";
 import * as Path from "path";
 import * as fs from "fs";
+import { configFilename } from "../document-selector";
 
 export const fileSystemHandler : ConnectionEventHandler = {
     register: function (connection: _Connection<_, _, _, _, _, _, _>): void {
@@ -16,21 +17,38 @@ export const fileSystemHandler : ConnectionEventHandler = {
 
 const onChokidarAll: ((eventName: 'add'|'addDir'|'change'|'unlink'|'unlinkDir', path: string, stats?: fs.Stats) => void) =
 async function(event, path) {
-    
+
     // fs.readFile(path, (err, data) => {
     // 	console.log("File Data: ", err, data?.toString());
     // });
     console.log("File Update: ",event, path);
     let filename = Path.basename(path);
     
-    if ((event === "change" || event === "add") && filename === "64tasslang.json") {
+    if (filename === configFilename) {
         onConfigChange(path);
     }
 };
 
-async function onConfigChange(path: fs.PathOrFileDescriptor) {
-    const obj = JSON.parse(fs.readFileSync(path, 'utf8'));
-    console.log("Config Update: ", <ConfigJSON> obj);
+async function onConfigChange(path: fs.PathLike) {
+
+    if (!fs.existsSync(path)) {
+        // remove config
+        console.log("Config Remove: ", path);
+        return;
+    }
+    const configContents = fs.readFileSync(path, 'utf8');
+
+    let obj: ConfigJSON;
+
+    try {
+        obj = JSON.parse(configContents);
+    } catch (error) {
+        console.log("Config not Parsed: ", path, error);
+        return;
+    }
+
+    // add/update config
+    console.log("Config Update: ", path, obj);
 }
 
 interface ConfigJSON {

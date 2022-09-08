@@ -26,7 +26,13 @@
       {
         "id": "64tass",
         "aliases": ["64tass", "64tass"],
-        "extensions": [".asm",".list"],
+        "extensions": [".asm"],
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "64tasslist",
+        "aliases": ["64tass List", "64tasslist"],
+        "extensions": [".list"],
         "configuration": "./language-configuration.json"
       }
     ],

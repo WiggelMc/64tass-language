@@ -6,3 +6,5 @@ export const selector = [
         language: "64tass"
     }
 ];
+
+export const configFilename = "64tasslang.json";
