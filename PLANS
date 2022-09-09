@@ -31,7 +31,6 @@ how to implement different instruction sets
 
 -----------------------
 
-
 TODO
 
 Find way to detect processor used (maybe use all in order)
@@ -47,6 +46,8 @@ Test how syntax highlighting works in git/override diff
 Find a way to
     Update the Semantic Highlights for a file (open file only) [found for all files]
     
+
+
 
 maybe use codeLens
     to show information from list file next to source Code

@@ -8,7 +8,7 @@
         "cpu": {
             "title": "Select CPU",
             "type": "string",
-            "default": "6502",
+            "default": "inherit",
             "oneOf": [
                 {
                     "const": "6502",
@@ -49,39 +49,82 @@
                 {
                     "const": "4510",
                     "description": "CSG 4510"
+                },
+                {
+                    "const": "inherit",
+                    "description": "Inherit this property from a file in a parent directory"
                 }
             ]
         },
         "case-sensitive": {
             "title": "Selects if Symbols are matched case-sensitive",
-            "type": "boolean",
-            "default": false
+            "type": "string",
+            "default": "inherit",
+            "oneOf": [
+                {
+                    "const": "on",
+                    "description": "Enable case sensitive matching"
+                }, 
+                {
+                    "const": "off",
+                    "description": "Disable case sensitive matching"
+                },
+                {
+                    "const": "inherit",
+                    "description": "Inherit this property from a file in a parent directory"
+                }
+            ]
         },
         "tasm-compatible": {
             "title": "Enable TASM compatible operators and precedence",
-            "type": "boolean",
-            "default": false
+            "type": "string",
+            "default": "inherit",
+            "oneOf": [
+                {
+                    "const": "on",
+                    "description": "Enable TASM compatibility"
+                }, 
+                {
+                    "const": "off",
+                    "description": "Disable TASM compatibility"
+                },
+                {
+                    "const": "inherit",
+                    "description": "Inherit this property from a file in a parent directory"
+                }
+            ]
         },
         "include-search-path": {
             "title": "Specify include search path",
-            "type": "array",
-            "items": {
-                "type": "string",
-                "examples": ["dir1","./dir1","../dir0/dir1/","./dir1/"]
-            }
+            "type": "object",
+            "properties": {
+                "inherit": {
+                    "title": "Should paths be inherited",
+                    "type": "boolean",
+                    "default": true
+                },
+                "paths": {
+                    "title": "Paths to include (paths relative to this file) (will be searched before inherited paths)",
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "examples": ["dir1","./dir1","../dir0/dir1/","./dir1/"]
+                    }
+                }
+            }  
         },
         "master-file": {
-            "title": "Specify the master file of the Project",
+            "title": "Specify the master file of the Project (path relative to this file)",
             "type": "string",
             "examples": ["master.asm","./master.asm","../dir0/dir1/master.asm","./dir1/master.asm"]
         },
         "list-file": {
-            "title": "Specify the list file of the Project",
+            "title": "Specify the list file of the Project (path relative to this file)",
             "type": "string",
             "examples": ["out.list","./out.list","../dir0/dir1/out.list","./dir1/out.list"]
         },
         "assemble-task": {
-            "title": "Specify the task to assemble the Project",
+            "title": "Specify the task to assemble the Project (path relative to this file)",
             "type": "string",
             "default": "Assemble",
             "examples": ["Build","Compile"]
