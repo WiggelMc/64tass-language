@@ -23,7 +23,7 @@ async function(params, token, workDoneProgress, resultProgress) {
             scheme: "tsc",
             identifier: "test",
             unique: UniquenessLevel.document,
-            kind: MonikerKind.import
+            kind: MonikerKind.$import
         }
     ];
 };

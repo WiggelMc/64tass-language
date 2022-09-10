@@ -17,8 +17,8 @@ const onDocumentSymbol: ServerRequestHandler<DocumentSymbolParams, SymbolInforma
 async function(params, token, workDoneProgress, resultProgress) {
 
     return [
-        SymbolInformation.create("name",SymbolKind.Class, Range.create(10,0,12,0), undefined, undefined),
-        SymbolInformation.create("name2",SymbolKind.Function, Range.create(11,0,11,10), undefined, undefined)
+        SymbolInformation.create("name",SymbolKind.Class, Range.create(10,0,12,0), params.textDocument.uri, undefined),
+        SymbolInformation.create("name2",SymbolKind.Function, Range.create(11,0,11,10), params.textDocument.uri, undefined)
     ];
 };
 
