@@ -26,8 +26,20 @@ how much should a textmate grammar be used (if at all)
 how to implement different instruction sets
     provide different language for each processor (instant highlighting / language has to be selected somehow)
     highlight all instructions by default (instant highlighting / confusing for a second if unsupported instruction is used)
-    highlight no instructions by default ()
+    highlight no instructions by default (not instant highlighting / no confusion)
 
+
+TextMate
+	data (string number boolean)
+	operators (+)
+	Other (* , ?)
+Dynamic
+	Symbols
+	anonymous symbols (+)
+	INSTRUCTIONS
+	filepath/name
+	compiler directives (.scope)
+	builtin functions (ceil)
 
 -----------------------
 
@@ -53,6 +65,45 @@ maybe use codeLens
     to show information from list file next to source Code
     to show scope of a function or section
     
+
+
+
+
+How can a line look???
+
+; comment is ignored anyway
+
+definitions[
+	params:	List of (expressions|variables|assignments) (comma seperated)
+	expression: Combination of operators and value types
+]
+
+[Label] .directive [params]
+[Label] opcode [params]
+Variable assignment_operator expression
+
+
+
+
+Indexing
+
+	File Update
+		config?
+
+	Editor Update
+
+
+	Semantic Request
+
+
+
+
+
+
+
+
+
+
 
 
 
