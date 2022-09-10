@@ -1,4 +1,5 @@
 import { ServerCapabilities, _, _Connection } from "vscode-languageserver";
+import { codeLensHandler } from "./code-lens";
 import { completionHandler } from "./completion";
 import { configurationHandler } from "./configuration";
 import { fileSystemHandler } from "./file-system";
@@ -26,6 +27,7 @@ const handlers : ConnectionEventHandler[] = [
     symbolHandler,
     signatureInformationHandler,
     monikerHandler,
+    codeLensHandler,
 ];
 
 export function registerHandlers(connection: _Connection<_, _, _, _, _, _, _>) {
