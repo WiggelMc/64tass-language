@@ -65,7 +65,12 @@ export function activate(context: ExtensionContext) {
 
 	// 	const t = vscode.window.createTextEditorDecorationType({
 	// 		backgroundColor: "green",
+	// 		gutterIconPath: path.join(__dirname, '..', '..', 'resources', 'type.png')
+	// 	});
 
+	// 	const te = vscode.window.createTextEditorDecorationType({
+	// 		backgroundColor: "green",
+	// 		gutterIconPath: path.join(__dirname, '..', '..', 'resources', 'type2.png')
 	// 	});
 
 	// vscode.workspace.onDidChangeTextDocument(event => {
@@ -96,7 +101,17 @@ export function activate(context: ExtensionContext) {
 	// 			}
 	// 		]
 	// 	);
+	// 	openEditor.setDecorations(
+	// 		te,
+	// 		[
+	// 			{
+	// 				range: new vscode.Range(1,1,1,1),
+	// 				hoverMessage: "TEST123"
+	// 			}
+	// 		]
+	// 	);
 	// });
+	
 }
 
 export function deactivate(): Thenable<void> | undefined {
