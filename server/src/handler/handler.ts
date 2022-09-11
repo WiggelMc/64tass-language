@@ -5,6 +5,8 @@ import { configurationHandler } from "./configuration";
 import { fileSystemHandler } from "./file-system";
 import { hoverHandler } from "./hover";
 import { initializationHandler } from "./initialization";
+import { inlayHintHander } from "./inlay-hint";
+import { inlineValueHandler } from "./inline-value";
 import { monikerHandler } from "./moniker";
 import { semanticTokensHandler } from "./semantic-tokens";
 import { signatureInformationHandler } from "./signature-information";
@@ -28,6 +30,8 @@ const handlers : ConnectionEventHandler[] = [
     signatureInformationHandler,
     monikerHandler,
     codeLensHandler,
+    inlayHintHander,
+    inlineValueHandler,
 ];
 
 export function registerHandlers(connection: _Connection<_, _, _, _, _, _, _>) {

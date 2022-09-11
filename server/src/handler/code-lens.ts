@@ -11,7 +11,7 @@ export const codeLensHandler : ConnectionEventHandler = {
 
         codeLensProvider: {
             resolveProvider: true
-        },
+        }
     }
 };
 

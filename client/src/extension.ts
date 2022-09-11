@@ -15,6 +15,7 @@ import {
 	ServerOptions,
 	TransportKind
 } from 'vscode-languageclient/node';
+import { editor } from './test/helper';
 
 let client: LanguageClient;
 
@@ -62,6 +63,41 @@ export function activate(context: ExtensionContext) {
 
 	// Start the client. This will also launch the server
 	client.start();
+
+	// 	const t = vscode.window.createTextEditorDecorationType({
+	// 		backgroundColor: "green",
+
+	// 	});
+
+	// vscode.workspace.onDidChangeTextDocument(event => {
+	// 	const openEditor = vscode.window.visibleTextEditors.filter(
+	// 		editor => editor.document.uri === event.document.uri
+	// 	  )[0];
+	// 	console.log("SET DECO");
+	// 	openEditor.setDecorations(
+	// 		t,
+	// 		[
+	// 			{
+	// 				range: new vscode.Range(1,0,1,0),
+	// 				renderOptions: {
+	// 					before: {contentText: "Test |"},
+	// 				},
+	// 			},
+	// 			{
+	// 				range: new vscode.Range(2,0,2,0),
+	// 				renderOptions: {
+	// 					before: {contentText: "Test |"},
+	// 				},
+	// 			},
+	// 			{
+	// 				range: new vscode.Range(3,0,3,0),
+	// 				renderOptions: {
+	// 					before: {contentText: "Test |"},
+	// 				},
+	// 			}
+	// 		]
+	// 	);
+	// });
 }
 
 export function deactivate(): Thenable<void> | undefined {
