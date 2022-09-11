@@ -15,7 +15,6 @@ import {
 	ServerOptions,
 	TransportKind
 } from 'vscode-languageclient/node';
-import { editor } from './test/helper';
 
 let client: LanguageClient;
 
