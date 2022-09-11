@@ -99,9 +99,25 @@ Indexing
 
 
 
+########################################
+
+Stuff to investigate (implement)
+
+############################################
+
+selection Range
+code action
+
+document hightlight
+document formatting
+document links
+(folding ranges)
+
+rename
+execute Command
 
 
-
+definition / declaration / implementation / type definition / references
 
 
 
