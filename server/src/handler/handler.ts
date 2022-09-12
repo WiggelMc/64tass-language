@@ -3,6 +3,7 @@ import { codeActionHandler } from "./code-action";
 import { codeLensHandler } from "./code-lens";
 import { completionHandler } from "./completion";
 import { configurationHandler } from "./configuration";
+import { documentLinkHandler } from "./document-link";
 import { fileSystemHandler } from "./file-system";
 import { hoverHandler } from "./hover";
 import { initializationHandler } from "./initialization";
@@ -36,6 +37,7 @@ const handlers : ConnectionEventHandler[] = [
     inlineValueHandler,
     selectionRangeHandler,
     codeActionHandler,
+    documentLinkHandler,
 ];
 
 export function registerHandlers(connection: _Connection<_, _, _, _, _, _, _>) {
