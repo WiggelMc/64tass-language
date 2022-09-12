@@ -1,4 +1,5 @@
 import { ServerCapabilities, _, _Connection } from "vscode-languageserver";
+import { codeActionHandler } from "./code-action";
 import { codeLensHandler } from "./code-lens";
 import { completionHandler } from "./completion";
 import { configurationHandler } from "./configuration";
@@ -34,6 +35,7 @@ const handlers : ConnectionEventHandler[] = [
     inlayHintHander,
     inlineValueHandler,
     selectionRangeHandler,
+    codeActionHandler,
 ];
 
 export function registerHandlers(connection: _Connection<_, _, _, _, _, _, _>) {

@@ -7,6 +7,7 @@ export const selectionRangeHandler : ConnectionEventHandler = {
         connection.onSelectionRanges(onSelectionRanges);
     },
     capabilities: {
+        
         selectionRangeProvider: true
     }
 };
