@@ -9,6 +9,7 @@ import { hoverHandler } from "./hover";
 import { initializationHandler } from "./initialization";
 import { inlayHintHander } from "./inlay-hint";
 import { inlineValueHandler } from "./inline-value";
+import { listFileHandler } from "./list-file";
 import { monikerHandler } from "./moniker";
 import { selectionRangeHandler } from "./selection-range";
 import { semanticTokensHandler } from "./semantic-tokens";
@@ -18,7 +19,8 @@ import { textDocumentHandler } from "./text-document";
 
 export interface ConnectionEventHandler {
     register: (connection: _Connection<_, _, _, _, _, _, _>) => void;
-    capabilities: ServerCapabilities<any>;
+    capabilities?: ServerCapabilities<any>;
+    experimentalCapabilities?: any;
 }
 
 const handlers : ConnectionEventHandler[] = [
@@ -38,17 +40,39 @@ const handlers : ConnectionEventHandler[] = [
     selectionRangeHandler,
     codeActionHandler,
     documentLinkHandler,
+    listFileHandler,
 ];
 
 export function registerHandlers(connection: _Connection<_, _, _, _, _, _, _>) {
+
     for (const handler of handlers) {
         handler.register(connection);
     }
 }
 
 export function getCapabilities(): ServerCapabilities<any> {
-    return Object.assign(
+
+    const capabilities = Object.assign(
         {},
-        ...handlers.map(h => h.capabilities)
+        ...handlers.map(h => h.capabilities),
+        getExperimentalCapabilities()
     );
+
+    console.log("Capabilities: ",capabilities);
+
+    return capabilities;
+}
+
+export function getExperimentalCapabilities(): ServerCapabilities<any> {
+
+    const experimentalCapabilities = Object.assign(
+        {},
+        ...handlers.map(h => h.experimentalCapabilities)
+    );
+
+    const capabilities = {
+        experimental: experimentalCapabilities
+    };
+
+    return capabilities;
 }
