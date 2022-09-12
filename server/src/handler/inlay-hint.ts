@@ -19,9 +19,9 @@ const onInlayHint: ServerRequestHandler<InlayHintParams, InlayHint[] | undefined
 async function(params, token, workDoneProgress, resultProgress) {
     console.log("Inlay Hints: ", params);
 
-    const f = (n: number) : InlayHint => {
-        return {
-            position: Position.create(n,0),
+    return [
+        {
+            position: Position.create(10,0),
             label: [
                 {
                     value: "Label 10",
@@ -30,18 +30,8 @@ async function(params, token, workDoneProgress, resultProgress) {
             paddingLeft: true,
             paddingRight: true,
             kind: InlayHintKind.Type
-        };
-    };
-
-    const startLine = params.range.start.line;
-    const endLine = params.range.end.line;
-
-    const r = new Array();
-    for (let index = startLine; index <= endLine; index++) {
-        r.push(f(index));
-    }
-
-    return r;
+        }
+    ];
 };
 
 const onInlayHintResolve: RequestHandler<InlayHint, InlayHint, void> =
