@@ -8,9 +8,6 @@ export const initializationHandler : ConnectionEventHandler = {
         
         connection.onInitialize(onInitialize);
         connection.onInitialized(onInitialized);
-    },
-    capabilities: {
-        textDocumentSync: TextDocumentSyncKind.Incremental
     }
 };
 

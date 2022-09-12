@@ -6,9 +6,6 @@ export const configurationHandler : ConnectionEventHandler = {
     register: function (connection: _Connection<_, _, _, _, _, _, _>): void {
         
         connection.onDidChangeConfiguration(onDidChangeConfiguration);
-    },
-    capabilities: {
-
     }
 };
 

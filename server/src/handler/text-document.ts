@@ -1,4 +1,4 @@
-import { DidChangeTextDocumentParams, DidCloseTextDocumentParams, DidOpenTextDocumentParams, DidSaveTextDocumentParams, NotificationHandler, SemanticTokensRefreshRequest, TextDocumentIdentifier, _, _Connection } from "vscode-languageserver";
+import { DidChangeTextDocumentParams, DidCloseTextDocumentParams, DidOpenTextDocumentParams, DidSaveTextDocumentParams, NotificationHandler, SemanticTokensRefreshRequest, TextDocumentIdentifier, TextDocumentSyncKind, _, _Connection } from "vscode-languageserver";
 import { TextDocument } from "vscode-languageserver-textdocument";
 import { connection } from "../server";
 import { ConnectionEventHandler } from "./handler";
@@ -12,7 +12,8 @@ export const textDocumentHandler : ConnectionEventHandler = {
         connection.onDidSaveTextDocument(onDidSaveTextDocument);
     },
     capabilities: {
-
+        
+        textDocumentSync: TextDocumentSyncKind.Incremental
     }
 };
 

@@ -9,9 +9,6 @@ export const fileSystemHandler : ConnectionEventHandler = {
     register: function (connection: _Connection<_, _, _, _, _, _, _>): void {
  
         chokidar.watch(".").on("all", onChokidarAll);
-    },
-    capabilities: {
-        
     }
 };
 
