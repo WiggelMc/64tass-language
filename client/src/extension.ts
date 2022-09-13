@@ -61,6 +61,12 @@ export function activate(context: ExtensionContext) {
 		sendViewInSourceFileRequest(client, getCurrentDocumentLocation()).then(r => {
 
 			console.log("View In Source", r);
+
+			if (r === undefined || r === null) {
+				vscode.window.showErrorMessage("Could not View In Source");
+				return;
+			}
+
 			gotoDocumentLocation(r);
 		});
 	});
@@ -69,6 +75,12 @@ export function activate(context: ExtensionContext) {
 		sendViewInListFileRequest(client, getCurrentDocumentLocation()).then(r => {
 
 			console.log("View In List", r);
+
+			if (r === undefined || r === null) {
+				vscode.window.showInformationMessage("Could not View In List");
+				return;
+			}
+
 			gotoDocumentLocation(r);
 		});
 	});

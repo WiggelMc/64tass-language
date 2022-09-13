@@ -1,20 +1,24 @@
 import { LanguageClient, Range } from "vscode-languageclient/node";
 import * as vscode from "vscode";
-import { DocumentLocation, ViewInListFileRequest, ViewInSourceFileRequest } from "../common/capabilities/list-file";
+import { OptionalDocumentLocation, ViewInListFileRequest, ViewInSourceFileRequest } from "../common/capabilities/list-file";
 
-export async function sendViewInListFileRequest(client: LanguageClient, params: DocumentLocation): Promise<DocumentLocation> {
+export async function sendViewInListFileRequest(client: LanguageClient, params: OptionalDocumentLocation): Promise<OptionalDocumentLocation> {
 
     return client.sendRequest(ViewInListFileRequest.method, params);
 };
 
-export async function sendViewInSourceFileRequest(client: LanguageClient, params: DocumentLocation): Promise<DocumentLocation> {
+export async function sendViewInSourceFileRequest(client: LanguageClient, params: OptionalDocumentLocation): Promise<OptionalDocumentLocation> {
 
     return client.sendRequest(ViewInSourceFileRequest.method, params);
 };
 
-export function getCurrentDocumentLocation() {
+export function getCurrentDocumentLocation(): OptionalDocumentLocation {
     const editor = vscode.window.activeTextEditor;
 		
+    if (editor === undefined) {
+        return undefined;
+    }
+
     const params = {
         textDocument: {
             uri: editor.document.uri.toString()
@@ -25,7 +29,7 @@ export function getCurrentDocumentLocation() {
     return params;
 }
 
-export function gotoDocumentLocation(location: DocumentLocation) {
+export function gotoDocumentLocation(location: OptionalDocumentLocation) {
 
     vscode.workspace.openTextDocument(vscode.Uri.parse(location.textDocument.uri))
     .then(document => vscode.window.showTextDocument(document,vscode.ViewColumn.Active))
