@@ -56,9 +56,14 @@ export function activate(context: ExtensionContext) {
 	// Start the client. This will also launch the server
 	client.start();
 
-	vscode.commands.registerCommand("tass.viewInSource", () => {
+	vscode.commands.registerCommand("tass.viewInSource", viewInSource);
+	vscode.commands.registerCommand("tass.viewInList", viewInList);
+	vscode.commands.registerCommand("tass.assembleAndViewInList", assembleAndViewInList);
 
-		sendViewInSourceFileRequest(client, getCurrentDocumentLocation()).then(r => {
+	async function viewInSource() {
+		
+		sendViewInSourceFileRequest(client, getCurrentDocumentLocation())
+		.then(r => {
 
 			console.log("View In Source", r);
 
@@ -69,10 +74,12 @@ export function activate(context: ExtensionContext) {
 
 			gotoDocumentLocation(r);
 		});
-	});
-	vscode.commands.registerCommand("tass.viewInList", () => {
-		
-		sendViewInListFileRequest(client, getCurrentDocumentLocation()).then(r => {
+	}
+
+	async function viewInList() {
+
+		sendViewInListFileRequest(client, getCurrentDocumentLocation())
+		.then(r => {
 
 			console.log("View In List", r);
 
@@ -83,11 +90,12 @@ export function activate(context: ExtensionContext) {
 
 			gotoDocumentLocation(r);
 		});
-	});
-	vscode.commands.registerCommand("tass.assembleAndViewInList", () => {
+	}
 
-		console.log(3);
-	});
+	async function assembleAndViewInList() {
+
+		console.log("Assemble");
+	}
 
 
 	// 	const t = vscode.window.createTextEditorDecorationType({
