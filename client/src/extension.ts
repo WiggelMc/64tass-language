@@ -15,7 +15,7 @@ import {
 	ServerOptions,
 	TransportKind
 } from 'vscode-languageclient/node';
-import { ListFileLocationRequest } from './common/capabilities/list-file';
+import { ListFileLocation, ListFileLocationParams, ListFileLocationRequest } from './common/capabilities/list-file';
 
 let client: LanguageClient;
 
@@ -69,14 +69,15 @@ export function activate(context: ExtensionContext) {
 	});
 	vscode.commands.registerCommand("tass.viewInList", () => {
 		const editor = vscode.window.activeTextEditor;
-
 		
-		client.sendRequest(ListFileLocationRequest.method, {
-			document: {
+		const params: ListFileLocationParams = {
+			textDocument: {
 				uri: editor.document.uri.toString()
 			},
-			location: editor.selection.start
-		}).then((response) => {
+			range: new vscode.Range(editor.selection.start, editor.selection.end)
+		};
+		
+		client.sendRequest(ListFileLocationRequest.method, params).then((response: ListFileLocation) => {
 			console.log("BACK", response);
 		});
 	});
@@ -84,11 +85,6 @@ export function activate(context: ExtensionContext) {
 		console.log(3);
 	});
 
-
-
-	let x: ListFileLocationRequest = () => {
-		
-	};
 
 	// 	const t = vscode.window.createTextEditorDecorationType({
 	// 		backgroundColor: "green",

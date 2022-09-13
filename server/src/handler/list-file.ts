@@ -13,5 +13,8 @@ const onListFileLocation: ListFileLocationRequest =
 async function(params) {
 
     console.log("ListFile Location: ", params);
-    return {test: 1};
+    return {
+        textDocument: params.textDocument,
+        range: params.range
+    };
 };
