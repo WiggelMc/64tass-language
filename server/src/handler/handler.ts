@@ -5,6 +5,7 @@ import { completionHandler } from "./completion";
 import { configurationHandler } from "./configuration";
 import { documentLinkHandler } from "./document-link";
 import { fileSystemHandler } from "./file-system";
+import { foldingRangeHandler } from "./folding-ranges";
 import { hoverHandler } from "./hover";
 import { initializationHandler } from "./initialization";
 import { inlayHintHander } from "./inlay-hint";
@@ -43,6 +44,7 @@ const handlers : ConnectionEventHandler[] = [
     documentLinkHandler,
     listFileHandler,
     renameHandler,
+    foldingRangeHandler,
 ];
 
 export function registerHandlers(connection: _Connection<_, _, _, _, _, _, _>) {

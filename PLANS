@@ -108,18 +108,18 @@ Stuff to investigate (implement)
 selection Range			V
 code action				V
 
-document hightlight
-(document formatting)
+document hightlight			i
+(document formatting)		i
 document links			V
-(folding ranges)
-linked editing range
+(folding ranges)		V
+linked editing range		i
 
 rename					V
-execute Command
+execute Command				i
 
 custom:
 	list-file			V
-	decorations
+	decorations				i
 
 
 definition / declaration / implementation / type definition / references
