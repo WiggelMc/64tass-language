@@ -112,10 +112,10 @@ document hightlight			i
 (document formatting)		i
 document links			V
 (folding ranges)		V
-linked editing range		i
+linked editing range	V
 
 rename					V
-execute Command				i
+execute Command			V
 
 custom:
 	list-file			V

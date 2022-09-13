@@ -11,6 +11,7 @@ import { hoverHandler } from "./hover";
 import { initializationHandler } from "./initialization";
 import { inlayHintHander } from "./inlay-hint";
 import { inlineValueHandler } from "./inline-value";
+import { linkedEditingRangeHandler } from "./linked-editing-range";
 import { listFileHandler } from "./list-file";
 import { monikerHandler } from "./moniker";
 import { renameHandler } from "./rename";
@@ -47,6 +48,7 @@ const handlers : ConnectionEventHandler[] = [
     renameHandler,
     foldingRangeHandler,
     executeCommandHandler,
+    linkedEditingRangeHandler,
 ];
 
 export function registerHandlers(connection: _Connection<_, _, _, _, _, _, _>) {
@@ -69,7 +71,7 @@ export function getCapabilities(): ServerCapabilities<any> {
     return capabilities;
 }
 
-export function getExperimentalCapabilities(): ServerCapabilities<any> {
+function getExperimentalCapabilities(): ServerCapabilities<any> {
 
     const experimentalCapabilities = Object.assign(
         {},
