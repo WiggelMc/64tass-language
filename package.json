@@ -69,6 +69,7 @@
   "scripts": {
     "vscode:prepublish": "npm run compile",
 		"compile": "tsc -b",
+		"copy common": "rm -rf \"server/src/common\" && cp -r \"common/src/.\" \"server/src/common\" && rm -rf \"client/src/common\" && cp -r \"common/src/.\" \"client/src/common\"",
 		"watch": "tsc -b -w",
 		"lint": "eslint ./client/src ./server/src --ext .ts,.tsx",
 		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",

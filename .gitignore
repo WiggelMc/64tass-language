@@ -4,3 +4,5 @@ node_modules
 .vscode-test/
 *.vsix
 testing-code
+client/src/common
+server/src/common

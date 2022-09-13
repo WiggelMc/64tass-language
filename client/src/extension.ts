@@ -15,6 +15,7 @@ import {
 	ServerOptions,
 	TransportKind
 } from 'vscode-languageclient/node';
+import { ListFileLocationRequest } from './common/capabilities/list-file';
 
 let client: LanguageClient;
 
@@ -62,6 +63,10 @@ export function activate(context: ExtensionContext) {
 
 	// Start the client. This will also launch the server
 	client.start();
+
+	let x: ListFileLocationRequest = () => {
+		
+	};
 
 	// 	const t = vscode.window.createTextEditorDecorationType({
 	// 		backgroundColor: "green",
