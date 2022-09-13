@@ -17,3 +17,5 @@ async function(params, token, workDoneProgress, resultProgress) {
     console.log("inline");
     return [];
 };
+
+//seems to only work in debug mode

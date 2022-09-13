@@ -109,7 +109,7 @@ selection Range			V
 code action				V
 
 document hightlight		V
-(document formatting)		i
+(document formatting)	V
 document links			V
 (folding ranges)		V
 linked editing range	V

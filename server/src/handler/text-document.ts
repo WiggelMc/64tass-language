@@ -32,8 +32,7 @@ async function(params) {
         savedDoc = doc;
     } else {
         console.log("doc will reload tokens: ",savedDoc);
-        connection.sendRequest(SemanticTokensRefreshRequest.method, {});
-        connection.languages.inlineValue.refresh();
+        connection.languages.semanticTokens.refresh();
     }
 };
 
