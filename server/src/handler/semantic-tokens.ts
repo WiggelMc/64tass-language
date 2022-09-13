@@ -1,5 +1,5 @@
 import { SemanticTokens, SemanticTokensBuilder, SemanticTokensDelta, SemanticTokensDeltaParams, SemanticTokensDeltaPartialResult, SemanticTokensLegend, SemanticTokensParams, SemanticTokensPartialResult, SemanticTokensRangeParams, ServerRequestHandler, _, _Connection } from "vscode-languageserver";
-import { selector } from "../common/capabilities/document-selector";
+import { Selector } from "../common/capabilities/document-selector";
 import { sleep } from "../util/sleep";
 import { ConnectionEventHandler } from "./handler";
 
@@ -36,7 +36,7 @@ export const semanticTokensHandler : ConnectionEventHandler = {
 	capabilities: {
 
 		semanticTokensProvider: {
-			documentSelector: selector,
+			documentSelector: Selector.all,
 			legend: legend,
 			range: true,
 			full: {

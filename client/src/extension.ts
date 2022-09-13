@@ -9,7 +9,7 @@ import * as vscode from "vscode";
 
 import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient/node';
 import { sendViewInSourceFileRequest, getCurrentDocumentLocation, gotoDocumentLocation, sendViewInListFileRequest } from './util/list-file-utils';
-import { selector } from './common/capabilities/document-selector';
+import { Selector } from './common/capabilities/document-selector';
 
 let client: LanguageClient;
 
@@ -38,7 +38,7 @@ export function activate(context: ExtensionContext) {
 	// Options to control the language client
 	const clientOptions: LanguageClientOptions = {
 		// Register the server for plain text documents
-		documentSelector: selector,
+		documentSelector: Selector.all,
 		synchronize: {
 			// Notify the server about file changes to '.clientrc files contained in the workspace
 			fileEvents: workspace.createFileSystemWatcher('**/.clientrc')
