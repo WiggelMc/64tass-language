@@ -108,7 +108,7 @@ Stuff to investigate (implement)
 selection Range			V
 code action				V
 
-document hightlight			i
+document hightlight		V
 (document formatting)		i
 document links			V
 (folding ranges)		V
