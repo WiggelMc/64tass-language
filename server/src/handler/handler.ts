@@ -4,6 +4,7 @@ import { codeLensHandler } from "./code-lens";
 import { completionHandler } from "./completion";
 import { configurationHandler } from "./configuration";
 import { documentLinkHandler } from "./document-link";
+import { executeCommandHandler } from "./execute-command";
 import { fileSystemHandler } from "./file-system";
 import { foldingRangeHandler } from "./folding-ranges";
 import { hoverHandler } from "./hover";
@@ -45,6 +46,7 @@ const handlers : ConnectionEventHandler[] = [
     listFileHandler,
     renameHandler,
     foldingRangeHandler,
+    executeCommandHandler,
 ];
 
 export function registerHandlers(connection: _Connection<_, _, _, _, _, _, _>) {
