@@ -1,5 +1,5 @@
 import { SemanticTokens, SemanticTokensBuilder, SemanticTokensDelta, SemanticTokensDeltaParams, SemanticTokensDeltaPartialResult, SemanticTokensLegend, SemanticTokensParams, SemanticTokensPartialResult, SemanticTokensRangeParams, ServerRequestHandler, _, _Connection } from "vscode-languageserver";
-import { selector } from "../document-selector";
+import { selector } from "../common/capabilities/document-selector";
 import { sleep } from "../util/sleep";
 import { ConnectionEventHandler } from "./handler";
 

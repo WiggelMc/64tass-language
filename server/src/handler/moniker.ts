@@ -1,5 +1,5 @@
 import { _Connection, _, ServerRequestHandler, Moniker, MonikerParams, UniquenessLevel, MonikerKind } from "vscode-languageserver";
-import { selector } from "../document-selector";
+import { selector } from "../common/capabilities/document-selector";
 import { ConnectionEventHandler } from "./handler";
 
 export const monikerHandler: ConnectionEventHandler = {

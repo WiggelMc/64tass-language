@@ -3,7 +3,7 @@ import { ConnectionEventHandler } from "./handler";
 import * as chokidar from "chokidar";
 import * as Path from "path";
 import * as fs from "fs";
-import { configFilename } from "../document-selector";
+import { configFilename } from "../common/capabilities/document-selector";
 
 export const fileSystemHandler : ConnectionEventHandler = {
     register: function (connection: _Connection<_, _, _, _, _, _, _>): void {
