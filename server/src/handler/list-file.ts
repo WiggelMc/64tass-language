@@ -30,7 +30,7 @@ async function(params) {
 
     console.log("View in Source File: ", params);
 
-    if (params === undefined || params === null || params.textDocument) {
+    if (params === undefined || params === null) {
         return undefined;
     }
 
