@@ -112,9 +112,14 @@ document hightlight
 (document formatting)
 document links			V
 (folding ranges)
+linked editing range
 
-rename
+rename					V
 execute Command
+
+custom:
+	list-file			V
+	decorations
 
 
 definition / declaration / implementation / type definition / references

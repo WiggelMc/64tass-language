@@ -11,6 +11,7 @@ import { inlayHintHander } from "./inlay-hint";
 import { inlineValueHandler } from "./inline-value";
 import { listFileHandler } from "./list-file";
 import { monikerHandler } from "./moniker";
+import { renameHandler } from "./rename";
 import { selectionRangeHandler } from "./selection-range";
 import { semanticTokensHandler } from "./semantic-tokens";
 import { signatureInformationHandler } from "./signature-information";
@@ -41,6 +42,7 @@ const handlers : ConnectionEventHandler[] = [
     codeActionHandler,
     documentLinkHandler,
     listFileHandler,
+    renameHandler,
 ];
 
 export function registerHandlers(connection: _Connection<_, _, _, _, _, _, _>) {
