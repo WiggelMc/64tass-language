@@ -1,19 +1,20 @@
 import { Range, TextDocumentIdentifier } from "vscode-languageclient";
 
-export interface ListFileLocationRequest {
-    (params: ListFileLocationParams): ListFileLocation | Promise<ListFileLocation>
+export interface ViewInListFileRequest {
+    (params: DocumentLocation): DocumentLocation | Promise<DocumentLocation>
+}
+export namespace ViewInListFileRequest {
+    export const method = "64tass.ViewInListFile";
 }
 
-export namespace ListFileLocationRequest {
-    export const method = "ListFileLocation";
+export interface ViewInSourceFileRequest {
+    (params: DocumentLocation): DocumentLocation | Promise<DocumentLocation>
+}
+export namespace ViewInSourceFileRequest {
+    export const method = "64tass.ViewInSourceFile";
 }
 
-export interface ListFileLocationParams {
-    textDocument: TextDocumentIdentifier
-    range: Range
-}
-
-export interface ListFileLocation {
+export interface DocumentLocation {
     textDocument: TextDocumentIdentifier
     range: Range
 }

@@ -7,15 +7,8 @@ import * as path from 'path';
 import { workspace, ExtensionContext } from 'vscode';
 import * as vscode from "vscode";
 
-import {
-	DocumentSelector,
-	LanguageClient,
-	LanguageClientOptions,
-	ProtocolNotificationType0,
-	ServerOptions,
-	TransportKind
-} from 'vscode-languageclient/node';
-import { ListFileLocation, ListFileLocationParams, ListFileLocationRequest } from './common/capabilities/list-file';
+import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient/node';
+import { sendViewInSourceFileRequest, getCurrentDocumentLocation, gotoDocumentLocation, sendViewInListFileRequest } from './util/list-file-utils';
 
 let client: LanguageClient;
 
@@ -65,23 +58,23 @@ export function activate(context: ExtensionContext) {
 	client.start();
 
 	vscode.commands.registerCommand("tass.viewInSource", () => {
-		console.log(1);
+
+		sendViewInSourceFileRequest(client, getCurrentDocumentLocation()).then(r => {
+
+			console.log("View In Source", r);
+			gotoDocumentLocation(r);
+		});
 	});
 	vscode.commands.registerCommand("tass.viewInList", () => {
-		const editor = vscode.window.activeTextEditor;
 		
-		const params: ListFileLocationParams = {
-			textDocument: {
-				uri: editor.document.uri.toString()
-			},
-			range: new vscode.Range(editor.selection.start, editor.selection.end)
-		};
-		
-		client.sendRequest(ListFileLocationRequest.method, params).then((response: ListFileLocation) => {
-			console.log("BACK", response);
+		sendViewInListFileRequest(client, getCurrentDocumentLocation()).then(r => {
+
+			console.log("View In List", r);
+			gotoDocumentLocation(r);
 		});
 	});
 	vscode.commands.registerCommand("tass.assembleAndViewInList", () => {
+
 		console.log(3);
 	});
 

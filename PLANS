@@ -121,6 +121,11 @@ custom:
 	list-file			V
 	decorations				i
 
+Document all handlers
+
+	@ when called
+	@ use for what
+
 
 definition / declaration / implementation / type definition / references
 
