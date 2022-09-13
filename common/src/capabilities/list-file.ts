@@ -1,5 +1,5 @@
 export interface ListFileLocationRequest {
-    (params: ListFileLocationParams): void
+    (params: ListFileLocationParams): any
 }
 
 export namespace ListFileLocationRequest {
@@ -7,5 +7,6 @@ export namespace ListFileLocationRequest {
 }
 
 interface ListFileLocationParams {
-
+    textDocument: any //TextDocumentIdentifier
+    range: any //Range
 }

@@ -6,9 +6,6 @@ export const listFileHandler : ConnectionEventHandler = {
     register: function (connection: _Connection<_, _, _, _, _, _, _>): void {
         
         connection.onRequest(ListFileLocationRequest.method, onListFileLocation);
-    },
-    experimentalCapabilities: {
-        listFileProvider: true
     }
 };
 
@@ -16,4 +13,5 @@ const onListFileLocation: ListFileLocationRequest =
 async function(params) {
 
     console.log("ListFile Location: ", params);
+    return {test: 1};
 };

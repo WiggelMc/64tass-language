@@ -64,6 +64,28 @@ export function activate(context: ExtensionContext) {
 	// Start the client. This will also launch the server
 	client.start();
 
+	vscode.commands.registerCommand("tass.viewInSource", () => {
+		console.log(1);
+	});
+	vscode.commands.registerCommand("tass.viewInList", () => {
+		const editor = vscode.window.activeTextEditor;
+
+		
+		client.sendRequest(ListFileLocationRequest.method, {
+			document: {
+				uri: editor.document.uri.toString()
+			},
+			location: editor.selection.start
+		}).then((response) => {
+			console.log("BACK", response);
+		});
+	});
+	vscode.commands.registerCommand("tass.assembleAndViewInList", () => {
+		console.log(3);
+	});
+
+
+
 	let x: ListFileLocationRequest = () => {
 		
 	};

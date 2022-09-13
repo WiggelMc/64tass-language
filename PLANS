@@ -105,12 +105,12 @@ Stuff to investigate (implement)
 
 ############################################
 
-selection Range
-code action
+selection Range			V
+code action				V
 
 document hightlight
 (document formatting)
-document links
+document links			V
 (folding ranges)
 
 rename

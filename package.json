@@ -18,8 +18,16 @@
   "contributes": {
     "commands": [
       {
-        "command": "64tass-language.helloWorld",
-        "title": "Hello World"
+        "command": "tass.viewInList",
+        "title": "View in List"
+      },
+      {
+        "command": "tass.assembleAndViewInList",
+        "title": "Assemble and View in List"
+      },
+      {
+        "command": "tass.viewInSource",
+        "title": "View in Source"
       }
     ],
     "languages": [
@@ -63,6 +71,42 @@
       {
         "fileMatch": "64tasslang.json",
         "url": "./schemas/64tass-schema.json"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorLangId == 64tass",
+          "command": "tass.viewInList",
+          "group": "navigation@1"
+        },
+        {
+          "when": "editorLangId == 64tass",
+          "command": "tass.assembleAndViewInList",
+          "group": "navigation@1.1"
+        },
+        {
+          "when": "editorLangId == 64tasslist",
+          "command": "tass.viewInSource",
+          "group": "navigation@1"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "when": "editorLangId == 64tass",
+        "command": "tass.viewInList",
+        "key": "f4"
+      },
+      {
+        "when": "editorLangId == 64tass",
+        "command": "tass.assembleAndViewInList",
+        "key": "shift+f4"
+      },
+      {
+        "when": "editorLangId == 64tasslist",
+        "command": "tass.viewInSource",
+        "key": "f4"
       }
     ]
   },
