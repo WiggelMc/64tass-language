@@ -12,7 +12,8 @@ export const codeActionHandler : ConnectionEventHandler = {
         codeActionProvider: {
             codeActionKinds: [
                 CodeActionKind.Source,
-                CodeActionKind.Refactor
+                CodeActionKind.Refactor,
+                CodeActionKind.QuickFix
             ],
             resolveProvider: true
         }
