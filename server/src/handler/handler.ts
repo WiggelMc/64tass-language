@@ -3,6 +3,7 @@ import { codeActionHandler } from "./code-action";
 import { codeLensHandler } from "./code-lens";
 import { completionHandler } from "./completion";
 import { configurationHandler } from "./configuration";
+import { definitionHandler } from "./definition";
 import { documentFormattingHandler } from "./document-formatting";
 import { documentHighlightHandler } from "./document-highlight";
 import { documentLinkHandler } from "./document-link";
@@ -53,6 +54,7 @@ const handlers : ConnectionEventHandler[] = [
     linkedEditingRangeHandler,
     documentHighlightHandler,
     documentFormattingHandler,
+    definitionHandler,
 ];
 
 export function registerHandlers(connection: _Connection<_, _, _, _, _, _, _>) {

@@ -117,7 +117,9 @@ linked editing range	V
 rename					V
 execute Command			V
 
-definition / declaration / implementation / type definition / references (??????)
+definition (type definition / references) V
+
+declaration / implementation (??????)
 
 custom:
 	list-file			V
