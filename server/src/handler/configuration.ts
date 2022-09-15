@@ -9,7 +9,7 @@ export const configurationHandler : ConnectionEventHandler = {
     }
 };
 
-export const onDidChangeConfiguration: NotificationHandler<DidChangeConfigurationParams> = 
+const onDidChangeConfiguration: NotificationHandler<DidChangeConfigurationParams> = 
 async function(params) {
 
 	console.log("VSCode Config Change: ", params);
