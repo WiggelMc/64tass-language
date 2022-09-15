@@ -135,8 +135,9 @@ Document all handlers
 TODO
 
 	organize client code
-	find read only support
+	find read only support	(might be a deep rabbit hole)
 	find good way to run a user selectable task (and detect if an element from a list of them is run [eg. fresh compilation])
+	implement OnWillAssemble OnDidAssemble ShouldAssemble/OnContitionalAssembly request to Server [some way to link the versions of assembly to files reliably (server and client)]
 	organize server handlers into multiple folders
 	test if workspace folders support is nessessary
 
