@@ -9,8 +9,10 @@ export const configurationHandler : ConnectionEventHandler = {
     }
 };
 
-const onDidChangeConfiguration: NotificationHandler<DidChangeConfigurationParams> = 
+export const onDidChangeConfiguration: NotificationHandler<DidChangeConfigurationParams> = 
 async function(params) {
+
+	console.log("VSCode Config Change: ", params);
 
     if (globalCapabilities.hasConfigurationCapability) {
 		// Reset all cached document settings

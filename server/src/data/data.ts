@@ -16,6 +16,5 @@ export const globalDocumentSettings = {
 
 export const globalCapabilities = {
     hasConfigurationCapability: false,
-    hasWorkspaceFolderCapability: false,
-    hasDiagnosticRelatedInformationCapability: false
+    hasWorkspaceFolderCapability: false
 };

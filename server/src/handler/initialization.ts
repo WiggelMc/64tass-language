@@ -1,4 +1,4 @@
-import { _Connection, _, TextDocumentSyncKind, NotificationHandler, InitializedParams, InitializeError, InitializeParams, InitializeResult, ServerRequestHandler, DidChangeConfigurationNotification } from "vscode-languageserver";
+import { _Connection, _, TextDocumentSyncKind, NotificationHandler, InitializedParams, InitializeError, InitializeParams, InitializeResult, ServerRequestHandler, DidChangeConfigurationNotification, WorkspaceFoldersChangeEvent } from "vscode-languageserver";
 import { globalCapabilities } from "../data/data";
 import { connection } from "../server";
 import { ConnectionEventHandler, getCapabilities } from "./handler";
@@ -23,11 +23,6 @@ async function(params, token, workDoneProgress, resultProgress) {
 	globalCapabilities.hasWorkspaceFolderCapability = !!(
 		capabilities.workspace && !!capabilities.workspace.workspaceFolders
 	);
-	globalCapabilities.hasDiagnosticRelatedInformationCapability = !!(
-		capabilities.textDocument &&
-		capabilities.textDocument.publishDiagnostics &&
-		capabilities.textDocument.publishDiagnostics.relatedInformation
-	);
 
 	const result: InitializeResult = {
 		capabilities: getCapabilities()
@@ -35,7 +30,8 @@ async function(params, token, workDoneProgress, resultProgress) {
 	if (globalCapabilities.hasWorkspaceFolderCapability) {
 		result.capabilities.workspace = {
 			workspaceFolders: {
-				supported: true
+				supported: true,
+				changeNotifications: true
 			}
 		};
 	}
@@ -45,13 +41,20 @@ async function(params, token, workDoneProgress, resultProgress) {
 const onInitialized: NotificationHandler<InitializedParams> = 
 async function(params) {
 
+	console.log("GLOBAL CAPABILITIES: ", globalCapabilities);
+
     if (globalCapabilities.hasConfigurationCapability) {
 		// Register for all configuration changes.
 		connection.client.register(DidChangeConfigurationNotification.type, undefined);
 	}
 	if (globalCapabilities.hasWorkspaceFolderCapability) {
-		connection.workspace.onDidChangeWorkspaceFolders(_event => {
-			connection.console.log('Workspace folder change event received.');
-		});
+		
+		connection.workspace.onDidChangeWorkspaceFolders(onDidChangeWorkspaceFolders);
 	}
+};
+
+const onDidChangeWorkspaceFolders: (e: WorkspaceFoldersChangeEvent) => any =
+async function(e) {
+    
+    console.log("Change folders: ", e);
 };

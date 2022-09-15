@@ -40,12 +40,12 @@ async function onConfigChange(path: fs.PathLike) {
     try {
         obj = JSON.parse(configContents);
     } catch (error) {
-        console.log("Config not Parsed: ", path, error);
+        console.log("64tass Config not Parsed: ", path, error);
         return;
     }
 
     // add/update config
-    console.log("Config Update: ", path, obj);
+    console.log("64tass Config Update: ", path, obj);
 }
 
 interface ConfigJSON {
