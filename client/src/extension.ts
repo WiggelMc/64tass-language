@@ -96,56 +96,6 @@ export function activate(context: ExtensionContext) {
 
 		console.log("Assemble");
 	}
-
-
-	// 	const t = vscode.window.createTextEditorDecorationType({
-	// 		backgroundColor: "green",
-	// 		gutterIconPath: path.join(__dirname, '..', '..', 'resources', 'type.png')
-	// 	});
-
-	// 	const te = vscode.window.createTextEditorDecorationType({
-	// 		backgroundColor: "green",
-	// 		gutterIconPath: path.join(__dirname, '..', '..', 'resources', 'type2.png')
-	// 	});
-
-	// vscode.workspace.onDidChangeTextDocument(event => {
-	// 	const openEditor = vscode.window.visibleTextEditors.filter(
-	// 		editor => editor.document.uri === event.document.uri
-	// 	  )[0];
-	// 	console.log("SET DECO");
-	// 	openEditor.setDecorations(
-	// 		t,
-	// 		[
-	// 			{
-	// 				range: new vscode.Range(1,0,1,0),
-	// 				renderOptions: {
-	// 					before: {contentText: "Test |"},
-	// 				},
-	// 			},
-	// 			{
-	// 				range: new vscode.Range(2,0,2,0),
-	// 				renderOptions: {
-	// 					before: {contentText: "Test |"},
-	// 				},
-	// 			},
-	// 			{
-	// 				range: new vscode.Range(3,0,3,0),
-	// 				renderOptions: {
-	// 					before: {contentText: "Test |"},
-	// 				},
-	// 			}
-	// 		]
-	// 	);
-	// 	openEditor.setDecorations(
-	// 		te,
-	// 		[
-	// 			{
-	// 				range: new vscode.Range(1,1,1,1),
-	// 				hoverMessage: "TEST123"
-	// 			}
-	// 		]
-	// 	);
-	// });
 	
 }
 

@@ -123,7 +123,7 @@ declaration / implementation (??????)
 
 custom:
 	list-file			V
-	decorations				i
+	decorations				i (will probably not be done)
 
 Document all handlers
 
@@ -138,6 +138,7 @@ TODO
 	find read only support
 	find good way to run a user selectable task (and detect if an element from a list of them is run [eg. fresh compilation])
 	organize server handlers into multiple folders
+	test if workspace folders support is nessessary
 
 
 
