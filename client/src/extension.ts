@@ -10,9 +10,10 @@ import * as vscode from "vscode";
 import { DidChangeConfigurationSignature, LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient/node';
 import { sendViewInSourceFileRequest, getCurrentDocumentLocation, gotoDocumentLocation, sendViewInListFileRequest } from './util/list-file-utils';
 import { Selector } from './common/capabilities/document-selector';
-import { runTask, TaskMap } from './tasks';
+import { runTask, sendAssembleTaskRequest, TaskMap } from './tasks';
 import { TaskEndNotification, TaskParams, TaskStartNotification } from './common/capabilities/task';
 import { AssembleTaskParams, AssembleTaskRequest, AssembleTaskResult } from './common/capabilities/assemble';
+import { DocumentLocation } from './common/capabilities/list-file';
 
 let client: LanguageClient;
 
@@ -98,73 +99,81 @@ async function(e) {
 
 async function viewInSource() {
 		
-	sendViewInSourceFileRequest(client, getCurrentDocumentLocation())
-	.then(r => {
+	let location: DocumentLocation;
+	try {
+		location = getCurrentDocumentLocation();
+	} catch (error) {
+		vscode.window.showErrorMessage("No Open Editor");
+		return;
+	}
 
-		console.log("View In Source", r);
-
-		if (r === undefined || r === null) {
-			vscode.window.showErrorMessage("Could not View In Source");
-			return;
+	sendViewInSourceFileRequest(client, location)
+	.then(gotoDocumentLocation)
+	.catch(reason => {
+		switch (reason?.message) {
+			case "Source File not Found":
+				vscode.window.showErrorMessage("Could not find Source File");
+				break;
+			default:
+				vscode.window.showErrorMessage(`Error while running Command`);
 		}
-
-		gotoDocumentLocation(r);
 	});
 }
 
 async function viewInList() {
 
-	sendViewInListFileRequest(client, getCurrentDocumentLocation())
-	.then(r => {
+	let location: DocumentLocation;
+	try {
+		location = getCurrentDocumentLocation();
+	} catch (error) {
+		vscode.window.showErrorMessage("No Open Editor");
+		return;
+	}
 
-		console.log("View In List", r);
-
-		if (r === undefined || r === null) {
-			vscode.window.showInformationMessage("Could not View In List");
-			return;
+	sendViewInListFileRequest(client, location)
+	.then(gotoDocumentLocation)
+	.catch(reason => {
+		switch (reason?.message) {
+			case "List File not Found":
+				vscode.window.showErrorMessage("Could not find List File");
+				break;
+			default:
+				vscode.window.showErrorMessage(`Error while running Command`);
 		}
-
-		gotoDocumentLocation(r);
 	});
 }
 
 async function assembleAndViewInList() {
 
-	const location = getCurrentDocumentLocation();
- 
-	const params: AssembleTaskParams = {
-		textDocument: {
-			uri: location.textDocument.uri
-		}
-	};
-
-	const r: AssembleTaskResult = await client.sendRequest(AssembleTaskRequest.method, params);
-
-	console.log("Result:", r);
-
-	const taskName = r.task;
-
-	const task = await TaskMap.getTask(taskName);
-
-	console.log("Task:", task);
-
-	if (task === undefined) {
-		vscode.window.showErrorMessage(`Task '${taskName}' not found`);
+	let location: DocumentLocation;
+	try {
+		location = getCurrentDocumentLocation();
+	} catch (error) {
+		vscode.window.showErrorMessage("No Open Editor");
 		return;
 	}
+	
 
-	runTask(task)
+	const params: AssembleTaskParams = {
+		textDocument: location.textDocument
+	};
+
+	sendAssembleTaskRequest(client, params)
+	.then(r => TaskMap.getTask(r.task))
+	.then(runTask)
 	.then(() => sendViewInListFileRequest(client, location))
-	.then(r => {
-
-		console.log("View In List (Assemble)", r);
-
-		if (r === undefined || r === null) {
-			vscode.window.showInformationMessage("Could not View In List");
-			return;
+	.then(gotoDocumentLocation)
+	.catch(reason => {
+		switch (reason?.message) {
+			case "Task not Found":
+				vscode.window.showErrorMessage(`Could not find Assemble Task`);
+				break;
+			case "List File not Found":
+				vscode.window.showErrorMessage("Could not find List File");
+				break;
+			default:
+				vscode.window.showErrorMessage(`Error while running Command`);
 		}
-
-		gotoDocumentLocation(r);
 	});
 }
 

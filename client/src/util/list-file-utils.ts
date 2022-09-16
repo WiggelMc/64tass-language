@@ -1,22 +1,34 @@
-import { LanguageClient, Range } from "vscode-languageclient/node";
+import { LanguageClient, Range, uinteger } from "vscode-languageclient/node";
 import * as vscode from "vscode";
-import { OptionalDocumentLocation, ViewInListFileRequest, ViewInSourceFileRequest } from "../common/capabilities/list-file";
+import { DocumentLocation, OptionalDocumentLocation, ViewInListFileRequest, ViewInSourceFileRequest } from "../common/capabilities/list-file";
 
-export async function sendViewInListFileRequest(client: LanguageClient, params: OptionalDocumentLocation): Promise<OptionalDocumentLocation> {
+export async function sendViewInListFileRequest(client: LanguageClient, params: DocumentLocation): Promise<DocumentLocation> {
 
-    return client.sendRequest(ViewInListFileRequest.method, params);
+    const r: OptionalDocumentLocation = await client.sendRequest(ViewInListFileRequest.method, params);
+
+    if (r === undefined || r === null) {
+        throw new Error("List File not Found");
+    }
+
+    return r;
 };
 
-export async function sendViewInSourceFileRequest(client: LanguageClient, params: OptionalDocumentLocation): Promise<OptionalDocumentLocation> {
+export async function sendViewInSourceFileRequest(client: LanguageClient, params: DocumentLocation): Promise<DocumentLocation> {
 
-    return client.sendRequest(ViewInSourceFileRequest.method, params);
+    const r: OptionalDocumentLocation = await client.sendRequest(ViewInSourceFileRequest.method, params);
+
+    if (r === undefined || r === null) {
+        throw new Error("Source File not Found");
+    }
+
+    return r;
 };
 
-export function getCurrentDocumentLocation(): OptionalDocumentLocation {
+export function getCurrentDocumentLocation(): DocumentLocation {
     const editor = vscode.window.activeTextEditor;
 		
     if (editor === undefined) {
-        return undefined;
+        throw new Error("No Open Editor");
     }
 
     const params = {
@@ -29,7 +41,7 @@ export function getCurrentDocumentLocation(): OptionalDocumentLocation {
     return params;
 }
 
-export function gotoDocumentLocation(location: OptionalDocumentLocation) {
+export function gotoDocumentLocation(location: DocumentLocation) {
 
     vscode.workspace.openTextDocument(vscode.Uri.parse(location.textDocument.uri))
     .then(document => vscode.window.showTextDocument(document,vscode.ViewColumn.Active))
@@ -41,6 +53,16 @@ export function gotoDocumentLocation(location: OptionalDocumentLocation) {
         const pos2 = new vscode.Position(range.end.line, range.end.character);
 
         editor.selection = new vscode.Selection(pos1, pos2);
-        editor.revealRange(new vscode.Range(pos1.translate(-7),pos2.translate(7)), vscode.TextEditorRevealType.Default);
+        editor.revealRange(new vscode.Range(safeTranslate(pos1, -7), safeTranslate(pos2, 7)), vscode.TextEditorRevealType.Default);
     });
+}
+
+function safeTranslate(pos: vscode.Position, lineDelta?: number, characterDelta?: number) {
+    lineDelta ??= 0;
+    characterDelta ??= 0;
+
+    const line = Math.max(0, pos.line + lineDelta);
+    const character = Math.max(0, pos.character + characterDelta);
+
+    return new vscode.Position(line, character);
 }

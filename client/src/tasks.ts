@@ -1,5 +1,7 @@
 import { resolve } from "path";
 import { Disposable, Task, tasks } from "vscode";
+import { LanguageClient } from "vscode-languageclient/node";
+import { AssembleTaskParams, AssembleTaskRequest, AssembleTaskResult } from "./common/capabilities/assemble";
 
 export class TaskMap {
     private static map: Map<string, Task> = new Map();
@@ -9,13 +11,18 @@ export class TaskMap {
         this.isDirty = true;
     }
 
-    public static async getTask(task: string): Promise<Task | undefined> {
+    public static async getTask(task: string): Promise<Task> {
 
         if (this.isDirty) {
             await this.reloadTasks();
             this.isDirty = false;
         }
-        return this.map.get(task);
+        const r = this.map.get(task);
+
+        if (r === undefined) {
+            throw new Error("Task not Found");
+        }
+        return r;
     }
 
     public static async reloadTasks(): Promise<void> {
@@ -47,4 +54,9 @@ export async function runTask(task: Task): Promise<void> {
 
         await tasks.executeTask(task);
     });
+}
+
+export async function sendAssembleTaskRequest(client: LanguageClient, params: AssembleTaskParams): Promise<AssembleTaskResult> {
+
+    return client.sendRequest(AssembleTaskRequest.method, params);
 }
