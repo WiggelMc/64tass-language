@@ -37,11 +37,12 @@ export async function runTask(task: Task): Promise<void> {
     return new Promise(async (resolve, reject) => {
 
         const listener = tasks.onDidEndTask((e) => {
+            console.log("Listener Execution");
             if (task === e.execution.task) {
                 console.log("Task has ended");
                 resolve();
+                listener?.dispose();
             }
-            listener?.dispose();
         });
 
         await tasks.executeTask(task);
