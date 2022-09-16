@@ -24,6 +24,7 @@ import { selectionRangeHandler } from "./selection-range";
 import { semanticTokensHandler } from "./semantic-tokens";
 import { signatureInformationHandler } from "./signature-information";
 import { symbolHandler } from "./symbol";
+import { taskHandler } from "./task";
 import { textDocumentHandler } from "./text-document";
 
 export interface ConnectionEventHandler {
@@ -59,6 +60,7 @@ const handlers : ConnectionEventHandler[] = [
     definitionHandler,
     diagnosticsHandler,
     assembleHandler,
+    taskHandler,
 ];
 
 export function registerHandlers(connection: _Connection<_, _, _, _, _, _, _>) {

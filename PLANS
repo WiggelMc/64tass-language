@@ -141,6 +141,8 @@ TODO
 	organize server handlers into multiple folders
 V	test if workspace folders support is nessessary
 
+	maybe check if task is assembling on server instead of client ???
+
 
 
 

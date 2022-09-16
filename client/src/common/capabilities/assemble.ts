@@ -1,4 +1,4 @@
-import { TextDocumentIdentifier } from "vscode-languageserver";
+import { TextDocumentIdentifier } from "vscode-languageclient";
 
 export interface AssembleTaskRequest {
     (params: AssembleTaskParams): AssembleTaskResult | Promise<AssembleTaskResult>

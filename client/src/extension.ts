@@ -7,9 +7,12 @@ import * as path from 'path';
 import { workspace, ExtensionContext } from 'vscode';
 import * as vscode from "vscode";
 
-import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient/node';
+import { DidChangeConfigurationSignature, LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient/node';
 import { sendViewInSourceFileRequest, getCurrentDocumentLocation, gotoDocumentLocation, sendViewInListFileRequest } from './util/list-file-utils';
 import { Selector } from './common/capabilities/document-selector';
+import { runTask, TaskMap } from './tasks';
+import { TaskEndNotification, TaskParams, TaskStartNotification } from './common/capabilities/task';
+import { AssembleTaskParams, AssembleTaskRequest, AssembleTaskResult } from './common/capabilities/assemble';
 
 let client: LanguageClient;
 
@@ -60,43 +63,109 @@ export function activate(context: ExtensionContext) {
 	vscode.commands.registerCommand("tass.viewInList", viewInList);
 	vscode.commands.registerCommand("tass.assembleAndViewInList", assembleAndViewInList);
 
-	async function viewInSource() {
-		
-		sendViewInSourceFileRequest(client, getCurrentDocumentLocation())
-		.then(r => {
+	vscode.tasks.onDidStartTask(onDidStartTask);
+	vscode.tasks.onDidEndTask(onDidEndTask);
 
-			console.log("View In Source", r);
-
-			if (r === undefined || r === null) {
-				vscode.window.showErrorMessage("Could not View In Source");
-				return;
-			}
-
-			gotoDocumentLocation(r);
-		});
-	}
-
-	async function viewInList() {
-
-		sendViewInListFileRequest(client, getCurrentDocumentLocation())
-		.then(r => {
-
-			console.log("View In List", r);
-
-			if (r === undefined || r === null) {
-				vscode.window.showInformationMessage("Could not View In List");
-				return;
-			}
-
-			gotoDocumentLocation(r);
-		});
-	}
-
-	async function assembleAndViewInList() {
-
-		console.log("Assemble");
-	}
+	vscode.workspace.onDidChangeConfiguration(onDidChangeConfiguration);
 	
+}
+
+const onDidStartTask: (e: vscode.TaskStartEvent) => any =
+async function(e) {
+	
+	const params: TaskParams = {
+		task: e.execution.task.name
+	};
+	client.sendNotification(TaskStartNotification.method, params);
+};
+
+const onDidEndTask: (e: vscode.TaskEndEvent) => any =
+async function(e) {
+	
+	const params: TaskParams = {
+		task: e.execution.task.name
+	};
+	client.sendNotification(TaskEndNotification.method, params);
+};
+
+const onDidChangeConfiguration: (e: vscode.ConfigurationChangeEvent) => any =
+async function(e) {
+
+	if (e.affectsConfiguration("tasks")) {
+		TaskMap.invalidate();
+	}
+};
+
+async function viewInSource() {
+		
+	sendViewInSourceFileRequest(client, getCurrentDocumentLocation())
+	.then(r => {
+
+		console.log("View In Source", r);
+
+		if (r === undefined || r === null) {
+			vscode.window.showErrorMessage("Could not View In Source");
+			return;
+		}
+
+		gotoDocumentLocation(r);
+	});
+}
+
+async function viewInList() {
+
+	sendViewInListFileRequest(client, getCurrentDocumentLocation())
+	.then(r => {
+
+		console.log("View In List", r);
+
+		if (r === undefined || r === null) {
+			vscode.window.showInformationMessage("Could not View In List");
+			return;
+		}
+
+		gotoDocumentLocation(r);
+	});
+}
+
+async function assembleAndViewInList() {
+
+	const location = getCurrentDocumentLocation();
+ 
+	const params: AssembleTaskParams = {
+		textDocument: {
+			uri: location.textDocument.uri
+		}
+	};
+
+	const r: AssembleTaskResult = await client.sendRequest(AssembleTaskRequest.method, params);
+
+	console.log("Result:", r);
+
+	const taskName = r.task;
+
+	const task = await TaskMap.getTask(taskName);
+
+	console.log("Task:", task);
+
+	if (task === undefined) {
+		vscode.window.showErrorMessage(`Task '${taskName}' not found`);
+		return;
+	}
+
+	runTask(task)
+	.then(() => sendViewInListFileRequest(client, location))
+	.then(r => {
+
+		console.log("View In List (Assemble)", r);
+
+		if (r === undefined || r === null) {
+			vscode.window.showInformationMessage("Could not View In List");
+			return;
+		}
+
+		gotoDocumentLocation(r);
+	});
 }
 
 export function deactivate(): Thenable<void> | undefined {

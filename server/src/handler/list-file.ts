@@ -20,7 +20,7 @@ async function(params) {
     }
 
     return {
-        textDocument: {uri: 'file:///c%3A/Users/kimhh/Documents/SNESProgramming/vscode/64tass-language/testing-code/out/game.list'},
+        textDocument: {uri: 'file:///c%3A/Users/kimhh/Documents/SNESProgramming/vscode/64tass-language/testing-code/workspace1/out/game.list'},
         range: params.range
     };
 };
@@ -35,7 +35,7 @@ async function(params) {
     }
 
     return {
-        textDocument: {uri: 'file:///c%3A/Users/kimhh/Documents/SNESProgramming/vscode/64tass-language/testing-code/Test1/master.asm'},
+        textDocument: {uri: 'file:///c%3A/Users/kimhh/Documents/SNESProgramming/vscode/64tass-language/testing-code/workspace1/Test1/master.asm'},
         range: params.range
     };
 };
