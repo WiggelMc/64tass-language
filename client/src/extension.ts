@@ -109,15 +109,7 @@ async function viewInSource() {
 
 	sendViewInSourceFileRequest(client, location)
 	.then(gotoDocumentLocation)
-	.catch(reason => {
-		switch (reason?.message) {
-			case "Source File not Found":
-				vscode.window.showErrorMessage("Could not find Source File");
-				break;
-			default:
-				vscode.window.showErrorMessage(`Error while running Command`);
-		}
-	});
+	.catch(displayErrorMessage);
 }
 
 async function viewInList() {
@@ -132,15 +124,7 @@ async function viewInList() {
 
 	sendViewInListFileRequest(client, location)
 	.then(gotoDocumentLocation)
-	.catch(reason => {
-		switch (reason?.message) {
-			case "List File not Found":
-				vscode.window.showErrorMessage("Could not find List File");
-				break;
-			default:
-				vscode.window.showErrorMessage(`Error while running Command`);
-		}
-	});
+	.catch(displayErrorMessage);
 }
 
 async function assembleAndViewInList() {
@@ -153,7 +137,6 @@ async function assembleAndViewInList() {
 		return;
 	}
 	
-
 	const params: AssembleTaskParams = {
 		textDocument: location.textDocument
 	};
@@ -163,18 +146,23 @@ async function assembleAndViewInList() {
 	.then(runTask)
 	.then(() => sendViewInListFileRequest(client, location))
 	.then(gotoDocumentLocation)
-	.catch(reason => {
-		switch (reason?.message) {
-			case "Task not Found":
-				vscode.window.showErrorMessage(`Could not find Assemble Task`);
-				break;
-			case "List File not Found":
-				vscode.window.showErrorMessage("Could not find List File");
-				break;
-			default:
-				vscode.window.showErrorMessage(`Error while running Command`);
-		}
-	});
+	.catch(displayErrorMessage);
+}
+
+function displayErrorMessage(error?: Error) {
+	switch (error?.message) {
+		case "Task not Found":
+			vscode.window.showErrorMessage(`Could not find Assemble Task`);
+			break;
+		case "Source File not Found":
+			vscode.window.showErrorMessage("Could not find Source File");
+			break;
+		case "List File not Found":
+			vscode.window.showErrorMessage("Could not find List File");
+			break;
+		default:
+			vscode.window.showErrorMessage(`Error while running Command`);
+	}
 }
 
 export function deactivate(): Thenable<void> | undefined {
