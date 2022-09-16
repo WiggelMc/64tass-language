@@ -1,6 +1,7 @@
 import { _Connection, _, TextDocumentSyncKind, NotificationHandler, InitializedParams, InitializeError, InitializeParams, InitializeResult, ServerRequestHandler, DidChangeConfigurationNotification, WorkspaceFoldersChangeEvent } from "vscode-languageserver";
 import { globalCapabilities } from "../data/data";
 import { connection } from "../server";
+import { configSections } from "./configuration";
 import { ConnectionEventHandler, getCapabilities } from "./handler";
 
 export const initializationHandler : ConnectionEventHandler = {
@@ -45,7 +46,7 @@ async function(params) {
 
     if (globalCapabilities.hasConfigurationCapability) {
 		// Register for all configuration changes.
-		connection.client.register(DidChangeConfigurationNotification.type, undefined);
+		connection.client.register(DidChangeConfigurationNotification.type, {section: configSections});
 	}
 	if (globalCapabilities.hasWorkspaceFolderCapability) {
 		

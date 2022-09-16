@@ -1,5 +1,6 @@
 import { _Connection, _, DidChangeConfigurationParams, NotificationHandler } from "vscode-languageserver";
 import { globalCapabilities, documentSettings, ExtensionSettings, defaultSettings, globalDocumentSettings } from "../data/data";
+import { connection } from "../server";
 import { ConnectionEventHandler } from "./handler";
 
 export const configurationHandler : ConnectionEventHandler = {
@@ -9,10 +10,14 @@ export const configurationHandler : ConnectionEventHandler = {
     }
 };
 
+export const configSections = [
+	"64tass-language"
+];
+
 const onDidChangeConfiguration: NotificationHandler<DidChangeConfigurationParams> = 
 async function(params) {
 
-	console.log("VSCode Config Change: ", params);
+	console.log("VSCode Config Change: ", await connection.workspace.getConfiguration("64tass-language"));
 
     if (globalCapabilities.hasConfigurationCapability) {
 		// Reset all cached document settings
