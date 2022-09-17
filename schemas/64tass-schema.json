@@ -124,10 +124,29 @@
             "examples": ["out.list","./out.list","../dir0/dir1/out.list","./dir1/out.list"]
         },
         "assemble-task": {
-            "title": "Specify the task to assemble the Project (path relative to this file)",
+            "title": "Specify the task to assemble the Project",
             "type": "string",
             "default": "Assemble",
             "examples": ["Build","Compile"]
+        },
+        "start-task": {
+            "title": "Specify the task to execute the output of the Project",
+            "type": "string",
+            "default": "Start",
+            "examples": ["Start","Run"]
+        },
+        "assemble-and-start-task": {
+            "title": "Specify the task to assemble and then run the Project",
+            "type": "string",
+            "default": "Assemble and Start",
+            "examples": ["Assemble and Start","Compile and Run"]
+        },
+        "additional-assemble-tasks": {
+            "title": "Specify other tasks which also assemble the Project",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
         }
     }
 }
