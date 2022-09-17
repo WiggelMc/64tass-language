@@ -23,6 +23,25 @@
   ],
   "main": "./client/out/extension.js",
   "contributes": {
+    "problemMatchers": [
+      {
+        "name": "64tass",
+        "label": "64tass Problem Matcher",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": [
+          {
+            "regexp": "^([^:]*):(\\d:\\d): ([^:]*): (.*)$",
+            "file": 1,
+            "location": 2,
+            "severity": 3,
+            "message": 4
+          }
+        ],
+        "applyTo": "allDocuments",
+        "source": "64tass Assembler",
+        "owner": "64tass"
+      }
+    ],
     "commands": [
       {
         "command": "64tass.viewInList",

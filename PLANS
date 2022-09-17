@@ -141,6 +141,7 @@ V	[some way to link the versions of assembly to files reliably (server- and clie
 	organize server handlers into multiple folders
 V	test if workspace folders support is nessessary
 	find support for jump to compile error (and throw Error in runTask() function)
+	find way to remove diagnostics
 
 
 

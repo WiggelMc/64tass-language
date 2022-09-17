@@ -71,7 +71,15 @@ export function activate(context: ExtensionContext) {
 	vscode.tasks.onDidEndTask(onDidEndTask);
 
 	vscode.workspace.onDidChangeConfiguration(onDidChangeConfiguration);
-	
+	vscode.languages.onDidChangeDiagnostics(e => {
+		console.log("Diagnostics Change: ",
+			e.uris
+			.map(u => vscode.languages.getDiagnostics(u))
+			.flat()
+			.flat()
+			.filter(d => d.source === "64tass Assembler")
+		);
+	});
 }
 
 const runningTasks: Map<vscode.Task,boolean> = new Map();
@@ -95,7 +103,8 @@ async function(e) {
 	}
 	runningTasks.delete(e.execution.task);
 
-	
+	console.log("Task End", vscode.window.activeTerminal.exitStatus, vscode.window.activeTerminal.state);
+
 	const params: TaskParams = {
 		task: e.execution.task.name
 	};
