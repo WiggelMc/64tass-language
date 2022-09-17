@@ -64,7 +64,7 @@ export function activate(context: ExtensionContext) {
 	vscode.commands.registerCommand("64tass.viewInList", viewInList);
 	vscode.commands.registerCommand("64tass.assembleAndViewInList", assembleAndViewInList);
 
-	vscode.commands.registerCommand("64tass.assemble", () => console.log("A"));
+	vscode.commands.registerCommand("64tass.assemble", assemble);
 	vscode.commands.registerCommand("64tass.assembleAndStart", () => console.log("AS"));
 	vscode.commands.registerCommand("64tass.start", () => console.log("S"));
 
@@ -150,6 +150,26 @@ async function assembleAndViewInList() {
 	.then(runTask)
 	.then(() => sendViewInListFileRequest(client, location))
 	.then(gotoDocumentLocation)
+	.catch(displayErrorMessage);
+}
+
+async function assemble() {
+
+	let location: DocumentLocation;
+	try {
+		location = getCurrentDocumentLocation();
+	} catch (error) {
+		vscode.window.showErrorMessage("No Open Editor");
+		return;
+	}
+	
+	const params: AssembleTaskParams = {
+		textDocument: location.textDocument
+	};
+
+	sendAssembleTaskRequest(client, params)
+	.then(r => TaskMap.getTask(r.task))
+	.then(runTask)
 	.catch(displayErrorMessage);
 }
 
