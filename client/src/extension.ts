@@ -74,9 +74,13 @@ export function activate(context: ExtensionContext) {
 	
 }
 
+const runningTasks: Map<vscode.Task,boolean> = new Map();
+
 const onDidStartTask: (e: vscode.TaskStartEvent) => any =
 async function(e) {
 	
+	runningTasks.set(e.execution.task, true);
+
 	const params: TaskParams = {
 		task: e.execution.task.name
 	};
@@ -85,6 +89,12 @@ async function(e) {
 
 const onDidEndTask: (e: vscode.TaskEndEvent) => any =
 async function(e) {
+	
+	if (!runningTasks.has(e.execution.task)) {
+		return;
+	}
+	runningTasks.delete(e.execution.task);
+
 	
 	const params: TaskParams = {
 		task: e.execution.task.name
