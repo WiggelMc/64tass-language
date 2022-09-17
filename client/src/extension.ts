@@ -60,9 +60,13 @@ export function activate(context: ExtensionContext) {
 	// Start the client. This will also launch the server
 	client.start();
 
-	vscode.commands.registerCommand("tass.viewInSource", viewInSource);
-	vscode.commands.registerCommand("tass.viewInList", viewInList);
-	vscode.commands.registerCommand("tass.assembleAndViewInList", assembleAndViewInList);
+	vscode.commands.registerCommand("64tass.viewInSource", viewInSource);
+	vscode.commands.registerCommand("64tass.viewInList", viewInList);
+	vscode.commands.registerCommand("64tass.assembleAndViewInList", assembleAndViewInList);
+
+	vscode.commands.registerCommand("64tass.assemble", () => console.log("A"));
+	vscode.commands.registerCommand("64tass.assembleAndStart", () => console.log("AS"));
+	vscode.commands.registerCommand("64tass.start", () => console.log("S"));
 
 	vscode.tasks.onDidStartTask(onDidStartTask);
 	vscode.tasks.onDidEndTask(onDidEndTask);

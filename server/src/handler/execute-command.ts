@@ -10,7 +10,7 @@ export const executeCommandHandler : ConnectionEventHandler = {
 
         executeCommandProvider: {
             commands: [
-                //"tass.assembleAndViewInList"
+                //"64tass.assembleAndViewInList"
             ]
         }
     }
