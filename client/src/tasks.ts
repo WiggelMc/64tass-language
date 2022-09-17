@@ -1,7 +1,7 @@
 import { resolve } from "path";
 import { Disposable, Task, tasks } from "vscode";
 import { LanguageClient } from "vscode-languageclient/node";
-import { AssembleTaskParams, AssembleTaskRequest, AssembleTaskResult } from "./common/capabilities/assemble";
+import { TaskFetchParams, TaskFetchRequest, TaskFetchResult } from "./common/capabilities/task";
 
 export class TaskMap {
     private static map: Map<string, Task> = new Map();
@@ -56,7 +56,7 @@ export async function runTask(task: Task): Promise<void> {
     });
 }
 
-export async function sendAssembleTaskRequest(client: LanguageClient, params: AssembleTaskParams): Promise<AssembleTaskResult> {
+export async function sendTaskFetchRequest(client: LanguageClient, params: TaskFetchParams): Promise<TaskFetchResult> {
 
-    return client.sendRequest(AssembleTaskRequest.method, params);
+    return client.sendRequest(TaskFetchRequest.method, params);
 }

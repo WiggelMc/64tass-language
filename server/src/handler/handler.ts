@@ -1,5 +1,4 @@
 import { ServerCapabilities, _, _Connection } from "vscode-languageserver";
-import { assembleHandler } from "./assemble";
 import { codeActionHandler } from "./code-action";
 import { codeLensHandler } from "./code-lens";
 import { completionHandler } from "./completion";
@@ -59,7 +58,6 @@ const handlers : ConnectionEventHandler[] = [
     documentFormattingHandler,
     definitionHandler,
     diagnosticsHandler,
-    assembleHandler,
     taskHandler,
 ];
 

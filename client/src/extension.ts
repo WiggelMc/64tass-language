@@ -10,9 +10,8 @@ import * as vscode from "vscode";
 import { DidChangeConfigurationSignature, LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient/node';
 import { sendViewInSourceFileRequest, getCurrentDocumentLocation, gotoDocumentLocation, sendViewInListFileRequest } from './util/list-file-utils';
 import { Selector } from './common/capabilities/document-selector';
-import { runTask, sendAssembleTaskRequest, TaskMap } from './tasks';
-import { TaskEndNotification, TaskParams, TaskStartNotification } from './common/capabilities/task';
-import { AssembleTaskParams, AssembleTaskRequest, AssembleTaskResult } from './common/capabilities/assemble';
+import { runTask, sendTaskFetchRequest, TaskMap } from './tasks';
+import { TaskEndNotification, TaskFetchParams, TaskParams, TaskStartNotification, TaskType } from './common/capabilities/task';
 import { DocumentLocation } from './common/capabilities/list-file';
 
 let client: LanguageClient;
@@ -141,11 +140,12 @@ async function assembleAndViewInList() {
 		return;
 	}
 	
-	const params: AssembleTaskParams = {
-		textDocument: location.textDocument
+	const params: TaskFetchParams = {
+		textDocument: location.textDocument,
+		taskType: TaskType.assemble
 	};
 
-	sendAssembleTaskRequest(client, params)
+	sendTaskFetchRequest(client, params)
 	.then(r => TaskMap.getTask(r.task))
 	.then(runTask)
 	.then(() => sendViewInListFileRequest(client, location))
@@ -163,11 +163,12 @@ async function assemble() {
 		return;
 	}
 	
-	const params: AssembleTaskParams = {
-		textDocument: location.textDocument
+	const params: TaskFetchParams = {
+		textDocument: location.textDocument,
+		taskType: TaskType.assemble
 	};
 
-	sendAssembleTaskRequest(client, params)
+	sendTaskFetchRequest(client, params)
 	.then(r => TaskMap.getTask(r.task))
 	.then(runTask)
 	.catch(displayErrorMessage);
