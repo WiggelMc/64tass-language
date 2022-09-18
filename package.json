@@ -30,7 +30,7 @@
         "fileLocation": ["relative", "${workspaceFolder}"],
         "pattern": [
           {
-            "regexp": "^([^:]*):(\\d+:\\d+): ([^:]*): (.*)$",
+            "regexp": "^([^:]*):(\\d+:\\d+): (error|warning): (.*)$",
             "file": 1,
             "location": 2,
             "severity": 3,

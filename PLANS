@@ -144,6 +144,10 @@ V	test if workspace folders support is nessessary
 	find way to remove diagnostics
 
 
+Known issues:
+
+	if the terminal is too small, errors and warnings might not be correctly parsed (vscode / Windows bug)
+
 
 ####################################################################################################################
 ####################################################################################################################
