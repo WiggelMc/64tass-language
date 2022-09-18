@@ -7,7 +7,7 @@ import * as path from 'path';
 import { workspace, ExtensionContext } from 'vscode';
 import * as vscode from "vscode";
 
-import { DidChangeConfigurationSignature, LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient/node';
+import { DidChangeConfigurationSignature, LanguageClient, LanguageClientOptions, Range, ServerOptions, TransportKind } from 'vscode-languageclient/node';
 import { sendViewInSourceFileRequest, getCurrentDocumentLocation, gotoDocumentLocation, sendViewInListFileRequest } from './util/list-file-utils';
 import { Selector } from './common/capabilities/document-selector';
 import { runTask, sendTaskFetchRequest, TaskMap } from './tasks';
@@ -71,16 +71,43 @@ export function activate(context: ExtensionContext) {
 	vscode.tasks.onDidEndTask(onDidEndTask);
 
 	vscode.workspace.onDidChangeConfiguration(onDidChangeConfiguration);
-	vscode.languages.onDidChangeDiagnostics(e => {
-		console.log("Diagnostics Change: ",
-			e.uris
-			.map(u => vscode.languages.getDiagnostics(u))
-			.flat()
-			.flat()
-			.filter(d => d.source === "64tass Assembler")
-		);
-	});
+	vscode.languages.onDidChangeDiagnostics(onDidChangeDiagnostics);
 }
+
+let errorShown = true;
+
+const onDidChangeDiagnostics: (e: vscode.DiagnosticChangeEvent) => any =
+async function(e) {
+
+	if (errorShown) {
+		return;
+	}
+	
+	for (const uri of e.uris) {
+		const error = vscode.languages.getDiagnostics(uri)
+		.flat()
+		.filter(
+			d => d.source === "64tass Assembler" &&
+			d.severity === vscode.DiagnosticSeverity.Error
+		)
+		.at(0);
+
+		if (error !== undefined) {
+
+			const location: DocumentLocation = {
+				textDocument: {
+					uri: uri.toString()
+				},
+				range: error.range
+			};
+
+			
+			gotoDocumentLocation(location);
+			errorShown = true;
+			return;
+		}
+	}
+};
 
 const runningTasks: Map<vscode.Task,boolean> = new Map();
 
@@ -97,18 +124,18 @@ async function(e) {
 
 const onDidEndTask: (e: vscode.TaskEndEvent) => any =
 async function(e) {
-	
+
 	if (!runningTasks.has(e.execution.task)) {
 		return;
 	}
 	runningTasks.delete(e.execution.task);
 
-	console.log("Task End", vscode.window.activeTerminal.exitStatus, vscode.window.activeTerminal.state);
-
 	const params: TaskParams = {
 		task: e.execution.task.name
 	};
 	client.sendNotification(TaskEndNotification.method, params);
+
+	errorShown = false; //do only when task is assemble or assemble and build
 };
 
 const onDidChangeConfiguration: (e: vscode.ConfigurationChangeEvent) => any =
