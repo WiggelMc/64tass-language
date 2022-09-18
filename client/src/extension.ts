@@ -11,7 +11,7 @@ import { DidChangeConfigurationSignature, LanguageClient, LanguageClientOptions,
 import { sendViewInSourceFileRequest, getCurrentDocumentLocation, gotoDocumentLocation, sendViewInListFileRequest } from './util/list-file-utils';
 import { Selector } from './common/capabilities/document-selector';
 import { runTask, sendTaskFetchRequest, TaskMap } from './tasks';
-import { TaskEndNotification, TaskFetchParams, TaskParams, TaskStartNotification, TaskType } from './common/capabilities/task';
+import { TaskEndRequest, TaskFetchParams, TaskParams, TaskResult, TaskStartRequest, TaskType } from './common/capabilities/task';
 import { DocumentLocation } from './common/capabilities/list-file';
 
 let client: LanguageClient;
@@ -164,7 +164,7 @@ async function(e) {
 	const params: TaskParams = {
 		task: e.execution.task.name
 	};
-	client.sendNotification(TaskStartNotification.method, params);
+	client.sendRequest(TaskStartRequest.method, params);
 };
 
 const onDidEndTask: (e: vscode.TaskEndEvent) => any =
@@ -178,9 +178,14 @@ async function(e) {
 	const params: TaskParams = {
 		task: e.execution.task.name
 	};
-	client.sendNotification(TaskEndNotification.method, params);
+	client.sendRequest(TaskEndRequest.method, params).then((r: TaskResult) => {
 
-	errorShown = false; //do only when task is assemble or assemble and build
+		if (r.type === TaskType.assemble || r.type === TaskType.assembleAndStart) {
+			//this might reset errorShown after running if 'assembleAndStart' is an independent task
+			//however, as the program should not be run when errors are present, this does not pose a problem
+			errorShown = false;
+		}
+	});
 };
 
 let config = vscode.workspace.getConfiguration("64tass-language");

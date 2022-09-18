@@ -1,26 +1,32 @@
 import { _Connection, _, TextDocumentSyncKind, TextDocumentFilter } from "vscode-languageserver";
-import { TaskEndNotification, TaskFetchRequest, TaskStartNotification, TaskType } from "../common/capabilities/task";
+import { TaskEndRequest, TaskFetchRequest, TaskStartRequest, TaskType } from "../common/capabilities/task";
 import { ConnectionEventHandler } from "./handler";
 
 export const taskHandler : ConnectionEventHandler = {
     register: function (connection: _Connection<_, _, _, _, _, _, _>): void {
         
-        connection.onNotification(TaskStartNotification.method, onTaskStart);
-        connection.onNotification(TaskEndNotification.method, onTaskEnd);
+        connection.onRequest(TaskStartRequest.method, onTaskStart);
+        connection.onRequest(TaskEndRequest.method, onTaskEnd);
         connection.onRequest(TaskFetchRequest.method, onTaskFetch);
     }
 };
 
-const onTaskStart: TaskStartNotification =
+const onTaskStart: TaskStartRequest =
 async function(params) {
 
     console.log("Task Start: ", params);
+    return {
+        type: getTaskType(params.task)
+    };
 };
 
-const onTaskEnd: TaskEndNotification =
+const onTaskEnd: TaskEndRequest =
 async function(params) {
 
     console.log("Task End: ", params);
+    return {
+        type: getTaskType(params.task)
+    };
 };
 
 const onTaskFetch: TaskFetchRequest =
@@ -40,5 +46,18 @@ function getTask(type: TaskType): string {
             return "Assemble and Start";
         case TaskType.start:
             return "Start";
+    }
+}
+
+function getTaskType(task: string): TaskType | undefined {
+    switch (task) {
+        case "Assemble":
+            return TaskType.assemble;
+        case "Assemble and Start":
+            return TaskType.assembleAndStart;
+        case "Start":
+            return TaskType.start;
+        default:
+            return undefined;
     }
 }

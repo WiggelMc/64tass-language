@@ -1,21 +1,25 @@
 import { TextDocumentIdentifier } from "vscode-languageserver";
 
-export interface TaskStartNotification {
-    (params: TaskParams): void | Promise<void>
+export interface TaskStartRequest {
+    (params: TaskParams): TaskResult | Promise<TaskResult>
 }
-export namespace TaskStartNotification {
+export namespace TaskStartRequest {
     export const method = "64tass.TaskStart";
 }
 
-export interface TaskEndNotification {
-    (params: TaskParams): void | Promise<void>
+export interface TaskEndRequest {
+    (params: TaskParams): TaskResult | Promise<TaskResult>
 }
-export namespace TaskEndNotification {
+export namespace TaskEndRequest {
     export const method = "64tass.TaskEnd";
 }
 
 export interface TaskParams {
     task: string
+}
+
+export interface TaskResult {
+    type?: TaskType;
 }
 
 export interface TaskFetchRequest {
