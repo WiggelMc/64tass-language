@@ -63,9 +63,9 @@ export function activate(context: ExtensionContext) {
 	vscode.commands.registerCommand("64tass.viewInList", viewInList);
 	vscode.commands.registerCommand("64tass.assembleAndViewInList", assembleAndViewInList);
 
-	vscode.commands.registerCommand("64tass.assemble", assemble);
-	vscode.commands.registerCommand("64tass.assembleAndStart", () => console.log("AS"));
-	vscode.commands.registerCommand("64tass.start", () => console.log("S"));
+	vscode.commands.registerCommand("64tass.assemble", () => executeTaskType(TaskType.assemble));
+	vscode.commands.registerCommand("64tass.assembleAndStart", () => executeTaskType(TaskType.assembleAndStart));
+	vscode.commands.registerCommand("64tass.start", () => executeTaskType(TaskType.start));
 
 	vscode.tasks.onDidStartTask(onDidStartTask);
 	vscode.tasks.onDidEndTask(onDidEndTask);
@@ -84,7 +84,7 @@ class TerminalLinkProvider implements vscode.TerminalLinkProvider<TerminalLink> 
 			return [];
 		}
 
-		const path = vscode.workspace.workspaceFolders[0]?.uri.toString() + "/e" + match.at(1);
+		const path = vscode.workspace.workspaceFolders[0]?.uri.toString() + "/" + match.at(1);
 		const position = match.at(2).split(":").map(Number).map(n => n-1);
 
 		console.log(path, position);
@@ -250,7 +250,7 @@ async function assembleAndViewInList() {
 	.catch(displayErrorMessage);
 }
 
-async function assemble() {
+async function executeTaskType(type: TaskType) {
 
 	let location: DocumentLocation;
 	try {
@@ -262,7 +262,7 @@ async function assemble() {
 	
 	const params: TaskFetchParams = {
 		textDocument: location.textDocument,
-		taskType: TaskType.assemble
+		taskType: type
 	};
 
 	sendTaskFetchRequest(client, params)
