@@ -135,13 +135,13 @@ Document all handlers
 TODO
 
 	organize client code
-	find read only support	(might be a deep rabbit hole)
+X	find read only support	(might be a deep rabbit hole)
 V	find good way to run a user selectable task (and detect if an element from a list of them is run [eg. fresh compilation])
 V	[some way to link the versions of assembly to files reliably (server- and client)]
 	organize server handlers into multiple folders
 V	test if workspace folders support is nessessary
-	find support for jump to compile error (and throw Error in runTask() function)
-	find way to remove diagnostics
+V	find support for jump to compile error
+X	find way to remove diagnostics
 
 
 Known issues:
