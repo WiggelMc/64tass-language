@@ -72,6 +72,46 @@ export function activate(context: ExtensionContext) {
 
 	vscode.workspace.onDidChangeConfiguration(onDidChangeConfiguration);
 	vscode.languages.onDidChangeDiagnostics(onDidChangeDiagnostics);
+	vscode.window.registerTerminalLinkProvider(new TerminalLinkProvider());
+}
+
+
+class TerminalLinkProvider implements vscode.TerminalLinkProvider<TerminalLink> {
+	provideTerminalLinks(context: vscode.TerminalLinkContext, token: vscode.CancellationToken): vscode.ProviderResult<TerminalLink[]> {
+		const match = context.line.match("^([^:]*):(\\d+:\\d+): (error|warning): (.*)$");
+
+		if (match === null) {
+			return [];
+		}
+
+		const path = vscode.workspace.workspaceFolders[0]?.uri.toString() + "/e" + match.at(1);
+		const position = match.at(2).split(":").map(Number).map(n => n-1);
+
+		console.log(path, position);
+
+		const location: DocumentLocation = {
+			textDocument: {uri: path},
+			range: Range.create(position[0],position[1],position[0],position[1])
+		};
+		
+		return [
+			new TerminalLink(0, context.line.length, location, "Open in Editor")
+		];
+	}
+
+	handleTerminalLink(link: TerminalLink): vscode.ProviderResult<void> {
+		gotoDocumentLocation(link.location);
+	}
+}
+
+class TerminalLink extends vscode.TerminalLink {
+	location: DocumentLocation;
+
+	constructor(startIndex: number, length: number, location: DocumentLocation, tooltip?: string) {
+		super(startIndex, length, tooltip);
+
+		this.location = location;
+	}
 }
 
 let errorShown = true;

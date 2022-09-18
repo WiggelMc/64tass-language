@@ -43,8 +43,6 @@ export function getCurrentDocumentLocation(): DocumentLocation {
 
 export function gotoDocumentLocation(location: DocumentLocation) {
 
-    console.log("GOTO");
-
     vscode.workspace.openTextDocument(vscode.Uri.parse(location.textDocument.uri))
     .then(document => vscode.window.showTextDocument(document,vscode.ViewColumn.Active))
     .then(editor => {
