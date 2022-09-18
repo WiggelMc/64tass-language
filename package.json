@@ -103,6 +103,12 @@
 					"default": "off",
 					"description": "Traces the communication between VS Code and the language server."
 				},
+        "64tass-language.assemble.goto-error": {
+					"scope": "window",
+					"type": "boolean",
+					"default": true,
+					"description": "Automatically open the first error in the editor if an assemble error occurs"
+				},
         "64tass-language.menu": {
 					"scope": "window",
 					"type": "object",

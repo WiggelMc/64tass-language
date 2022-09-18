@@ -79,6 +79,11 @@ let errorShown = true;
 const onDidChangeDiagnostics: (e: vscode.DiagnosticChangeEvent) => any =
 async function(e) {
 
+	if (!config.get("assemble.goto-error")) {
+		errorShown = true;
+		return;
+	}
+
 	if (errorShown) {
 		return;
 	}
@@ -138,11 +143,17 @@ async function(e) {
 	errorShown = false; //do only when task is assemble or assemble and build
 };
 
+let config = vscode.workspace.getConfiguration("64tass-language");
+
 const onDidChangeConfiguration: (e: vscode.ConfigurationChangeEvent) => any =
 async function(e) {
 
 	if (e.affectsConfiguration("tasks")) {
 		TaskMap.invalidate();
+	}
+
+	if (e.affectsConfiguration("64tass-language")) {
+		config = vscode.workspace.getConfiguration("64tass-language");
 	}
 };
 
