@@ -1,5 +1,4 @@
-import { resolve } from "path";
-import { Disposable, Task, tasks } from "vscode";
+import { Task, tasks } from "vscode";
 import { LanguageClient } from "vscode-languageclient/node";
 import { TaskFetchParams, TaskFetchRequest, TaskFetchResult } from "./common/capabilities/task";
 

@@ -1,4 +1,4 @@
-import { LanguageClient, Range, uinteger } from "vscode-languageclient/node";
+import { LanguageClient, Range } from "vscode-languageclient/node";
 import * as vscode from "vscode";
 import { DocumentLocation, OptionalDocumentLocation, ViewInListFileRequest, ViewInSourceFileRequest } from "../common/capabilities/list-file";
 import { sleep } from "./sleep";

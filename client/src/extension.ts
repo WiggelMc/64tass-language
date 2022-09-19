@@ -7,7 +7,7 @@ import * as path from 'path';
 import { workspace, ExtensionContext } from 'vscode';
 import * as vscode from "vscode";
 
-import { DidChangeConfigurationSignature, LanguageClient, LanguageClientOptions, Range, ServerOptions, TransportKind } from 'vscode-languageclient/node';
+import { LanguageClient, LanguageClientOptions, Range, ServerOptions, TransportKind } from 'vscode-languageclient/node';
 import { sendViewInSourceFileRequest, getCurrentDocumentLocation, gotoDocumentLocation, sendViewInListFileRequest, gotoDocumentLocationStoppable } from './util/list-file-utils';
 import { Selector } from './common/capabilities/document-selector';
 import { runTask, sendTaskFetchRequest, TaskMap } from './tasks';
@@ -18,7 +18,6 @@ let client: LanguageClient;
 
 export function activate(context: ExtensionContext) {
 
-	console.log("TEST");
 	// The server is implemented in node
 	const serverModule = context.asAbsolutePath(
 		path.join('server', 'out', 'server.js')
@@ -73,6 +72,8 @@ export function activate(context: ExtensionContext) {
 	vscode.workspace.onDidChangeConfiguration(onDidChangeConfiguration);
 	vscode.languages.onDidChangeDiagnostics(onDidChangeDiagnostics);
 	vscode.window.registerTerminalLinkProvider(new TerminalLinkProvider());
+
+	console.log("Extention '64tass-language' is loaded");
 }
 
 
@@ -86,8 +87,6 @@ class TerminalLinkProvider implements vscode.TerminalLinkProvider<TerminalLink> 
 
 		const path = vscode.workspace.workspaceFolders[0]?.uri.toString() + "/" + match.at(1);
 		const position = match.at(2).split(":").map(Number).map(n => n-1);
-
-		console.log(path, position);
 
 		const location: DocumentLocation = {
 			textDocument: {uri: path},
@@ -150,7 +149,7 @@ async function(e) {
 			
 			gotoDocumentLocation(location)
 			.catch(displayErrorMessage);
-			
+
 			errorShown = true;
 			return;
 		}
@@ -280,7 +279,6 @@ async function executeTaskType(type: TaskType) {
 }
 
 function displayErrorMessage(error?: Error) {
-	console.log("ERROR");
 	switch (error?.message) {
 		case "Task not Found":
 			vscode.window.showErrorMessage(`Could not find Assemble Task`);
