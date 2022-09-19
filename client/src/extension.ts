@@ -63,6 +63,8 @@ export function activate(context: ExtensionContext) {
 		vscode.commands.registerCommand("64tass.viewInList", viewInList),
 		vscode.commands.registerCommand("64tass.assembleAndViewInList", assembleAndViewInList),
 
+		vscode.commands.registerCommand("64tass.runCustomTask", runCustomTask),
+
 		vscode.commands.registerCommand("64tass.assemble", () => executeTaskType(TaskType.assemble)),
 		vscode.commands.registerCommand("64tass.assembleAndStart", () => executeTaskType(TaskType.assembleAndStart)),
 		vscode.commands.registerCommand("64tass.start", () => executeTaskType(TaskType.start)),
@@ -312,16 +314,67 @@ async function executeTaskType(type: TaskType) {
 	.catch(displayErrorMessage);
 }
 
+const runCustomTask: (...args: any[]) => Promise<void> =
+async function(taskString) {
+	if (taskString === undefined) {
+		(async () => {})()
+		.then(() => {
+			return vscode.window.showInputBox({
+				prompt: "Enter Task Number",
+				validateInput(taskString) {
+					if (validateCustomTaskInput(taskString)) {
+						return "";
+					} else {
+						return "Input must be a positive integer";
+					}
+				}
+			});
+		})
+		.then(executeCustomTaskType)
+		.catch(displayErrorMessage);
+	} else {
+		executeCustomTaskType(taskString)
+		.catch(displayErrorMessage);
+	}
+};
+
+async function executeCustomTaskType(taskString?: string) {
+
+	if (taskString === undefined) {
+		return;
+	}
+
+	if (!validateCustomTaskInput(taskString)) {
+		throw new Error("Invalid Task Argument");
+	}
+
+	const taskNumber = Number(taskString);
+	executeTaskType(TaskType.run(taskNumber));
+}
+
+function validateCustomTaskInput(taskString: string) {
+	const taskNumber = Number(taskString);
+	return (
+		!isNaN(taskNumber) 
+		&& taskNumber >= 1 
+		&& taskNumber <= 1000
+		&& Number.isInteger(taskNumber)
+	);
+}
+
 function displayErrorMessage(error?: Error) {
 	switch (error?.message) {
 		case "Task not Found":
-			vscode.window.showErrorMessage(`Could not find Assemble Task`);
+			vscode.window.showErrorMessage(`Could not find Task`);
 			break;
 		case "Source File not Found":
 			vscode.window.showErrorMessage("Could not find Source File");
 			break;
 		case "List File not Found":
 			vscode.window.showErrorMessage("Could not find List File");
+			break;
+		case "Invalid Task Argument":
+			vscode.window.showErrorMessage("Argument for Custom Task is not valid");
 			break;
 		default:
 			if (error?.message.startsWith("cannot open")) {

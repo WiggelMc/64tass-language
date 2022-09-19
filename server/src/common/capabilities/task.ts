@@ -34,10 +34,15 @@ export interface TaskFetchParams {
     taskType: TaskType
 }
 
-export enum TaskType {
-    assemble = 0,
-    start = 1,
-    assembleAndStart = 2
+export type TaskType = number;
+
+export namespace TaskType {
+    export const unknown = 0;
+    export const assemble = 1;
+    export const start = 2;
+    export const assembleAndStart = 3;
+    export const run = (n: number) => n + 100;
+    export const runToArrayIndex = (n: TaskType) => n - 101;
 }
 
 export interface TaskFetchResult {

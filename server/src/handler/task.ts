@@ -46,6 +46,8 @@ function getTask(type: TaskType): string {
             return "Assemble and Start";
         case TaskType.start:
             return "Start";
+        default:
+            return "Run";
     }
 }
 
