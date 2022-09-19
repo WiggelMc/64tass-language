@@ -100,7 +100,8 @@ class TerminalLinkProvider implements vscode.TerminalLinkProvider<TerminalLink> 
 	}
 
 	handleTerminalLink(link: TerminalLink): vscode.ProviderResult<void> {
-		gotoDocumentLocation(link.location);
+		gotoDocumentLocation(link.location)
+		.catch(displayErrorMessage);
 	}
 }
 
@@ -147,7 +148,9 @@ async function(e) {
 			};
 
 			
-			gotoDocumentLocation(location);
+			gotoDocumentLocation(location)
+			.catch(displayErrorMessage);
+			
 			errorShown = true;
 			return;
 		}
