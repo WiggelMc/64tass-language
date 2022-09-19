@@ -4,7 +4,7 @@
  * ------------------------------------------------------------------------------------------ */
 
 import * as path from 'path';
-import { workspace, ExtensionContext } from 'vscode';
+import { workspace, ExtensionContext, TerminalOptions, ExtensionTerminalOptions } from 'vscode';
 import * as vscode from "vscode";
 
 import { Disposable, LanguageClient, LanguageClientOptions, Range, ServerOptions, TransportKind } from 'vscode-languageclient/node';
@@ -83,14 +83,45 @@ export function activate(context: ExtensionContext) {
 
 class TerminalLinkProvider implements vscode.TerminalLinkProvider<TerminalLink> {
 	provideTerminalLinks(context: vscode.TerminalLinkContext, token: vscode.CancellationToken): vscode.ProviderResult<TerminalLink[]> {
+
 		const match = context.line.match("^([^:]*):(\\d+:\\d+): (error|warning): (.*)$");
 
 		if (match === null) {
 			return [];
 		}
 
-		const path = vscode.workspace.workspaceFolders[0]?.uri.toString() + "/" + match.at(1);
+
+		const relativePath = match.at(1);
 		const position = match.at(2).split(":").map(Number).map(n => n-1);
+
+
+		let workspaceFolder = "";
+
+		const terminalOptions: Readonly<TerminalOptions | vscode.ExtensionTerminalOptions> = context.terminal.creationOptions;
+
+		if ((<TerminalOptions>terminalOptions).cwd !== undefined) {
+			workspaceFolder = (<TerminalOptions>terminalOptions).cwd.toString();
+
+		} else if (vscode.workspace.workspaceFolders.length > 0) {
+			workspaceFolder = vscode.workspace.workspaceFolders[0].uri.toString();
+
+		}
+		
+		for (const folder of vscode.workspace.workspaceFolders) {
+
+			const diagnostics = vscode.languages.getDiagnostics(vscode.Uri.parse(folder.uri.toString() + "/" + relativePath))
+			.filter(
+				d => d.source === "64tass Assembler"
+			);
+
+			if (diagnostics.length > 0) {
+				workspaceFolder = folder.uri.toString();
+				break;
+			}
+		}
+
+
+		const path = workspaceFolder + "/" + relativePath;
 
 		const location: DocumentLocation = {
 			textDocument: {uri: path},
@@ -134,7 +165,6 @@ async function(e) {
 	
 	for (const uri of e.uris) {
 		const error = vscode.languages.getDiagnostics(uri)
-		.flat()
 		.filter(
 			d => d.source === "64tass Assembler" &&
 			d.severity === vscode.DiagnosticSeverity.Error
