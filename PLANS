@@ -142,6 +142,8 @@ V	[some way to link the versions of assembly to files reliably (server- and clie
 V	test if workspace folders support is nessessary
 V	find support for jump to compile error
 X	find way to remove diagnostics
+	simple indexing [at first only list of all documents]
+	workspace diagnostics support (so errors are show wven if the file is not open)
 
 
 Known issues:
