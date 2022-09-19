@@ -109,6 +109,12 @@
 					"default": true,
 					"description": "Automatically open the first error in the editor if an assemble error occurs"
 				},
+        "64tass-language.assemble.error-wait-time": {
+					"scope": "window",
+					"type": "number",
+					"default": 300,
+					"description": "Amount of time (in milliseconds) that an error will be awaited for (after assembly) before continuing further actions. Increasing this may stop some flickering but induce delays"
+				},
         "64tass-language.menu": {
 					"scope": "window",
 					"type": "object",

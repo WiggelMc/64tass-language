@@ -8,7 +8,7 @@ import { workspace, ExtensionContext } from 'vscode';
 import * as vscode from "vscode";
 
 import { DidChangeConfigurationSignature, LanguageClient, LanguageClientOptions, Range, ServerOptions, TransportKind } from 'vscode-languageclient/node';
-import { sendViewInSourceFileRequest, getCurrentDocumentLocation, gotoDocumentLocation, sendViewInListFileRequest } from './util/list-file-utils';
+import { sendViewInSourceFileRequest, getCurrentDocumentLocation, gotoDocumentLocation, sendViewInListFileRequest, gotoDocumentLocationStoppable } from './util/list-file-utils';
 import { Selector } from './common/capabilities/document-selector';
 import { runTask, sendTaskFetchRequest, TaskMap } from './tasks';
 import { TaskEndRequest, TaskFetchParams, TaskParams, TaskResult, TaskStartRequest, TaskType } from './common/capabilities/task';
@@ -188,7 +188,7 @@ async function(e) {
 	});
 };
 
-let config = vscode.workspace.getConfiguration("64tass-language");
+export let config = vscode.workspace.getConfiguration("64tass-language");
 
 const onDidChangeConfiguration: (e: vscode.ConfigurationChangeEvent) => any =
 async function(e) {
@@ -251,7 +251,7 @@ async function assembleAndViewInList() {
 	.then(r => TaskMap.getTask(r.task))
 	.then(runTask)
 	.then(() => sendViewInListFileRequest(client, location))
-	.then(gotoDocumentLocation)
+	.then(gotoDocumentLocationStoppable)
 	.catch(displayErrorMessage);
 }
 

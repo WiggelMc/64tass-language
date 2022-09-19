@@ -1,6 +1,8 @@
 import { LanguageClient, Range, uinteger } from "vscode-languageclient/node";
 import * as vscode from "vscode";
 import { DocumentLocation, OptionalDocumentLocation, ViewInListFileRequest, ViewInSourceFileRequest } from "../common/capabilities/list-file";
+import { sleep } from "./sleep";
+import { config } from "../extension";
 
 export async function sendViewInListFileRequest(client: LanguageClient, params: DocumentLocation): Promise<DocumentLocation> {
 
@@ -41,7 +43,36 @@ export function getCurrentDocumentLocation(): DocumentLocation {
     return params;
 }
 
-export function gotoDocumentLocation(location: DocumentLocation) {
+
+let runningGotos: Map<number, boolean> = new Map();
+
+export async function gotoDocumentLocationStoppable(location: DocumentLocation) {
+
+    const id = Math.random();
+
+    runningGotos.clear();
+    runningGotos.set(id,true);
+
+    let waitTime: number | undefined = config.get("assemble.error-wait-time");
+
+    if (waitTime === undefined) {
+        waitTime = 300;
+    }
+
+    if (waitTime > 0) {
+        await sleep(waitTime);
+    }
+
+    if (!runningGotos.get(id)) {
+        return;
+    }
+
+    return gotoDocumentLocation(location);
+}
+
+export async function gotoDocumentLocation(location: DocumentLocation) {
+
+    runningGotos.clear();
 
     vscode.workspace.openTextDocument(vscode.Uri.parse(location.textDocument.uri))
     .then(document => vscode.window.showTextDocument(document,vscode.ViewColumn.Active))
