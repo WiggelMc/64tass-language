@@ -144,6 +144,7 @@ V	find support for jump to compile error
 X	find way to remove diagnostics
 	simple indexing [at first only list of all documents]
 	workspace diagnostics support (so errors are show wven if the file is not open)
+	test/ fix multi workspace support for terminal links (likely fix) and auto error jump (might work already)
 
 
 Known issues:
