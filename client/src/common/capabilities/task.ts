@@ -19,7 +19,7 @@ export interface TaskParams {
 }
 
 export interface TaskResult {
-    type?: TaskType;
+    type: TaskType;
 }
 
 export interface TaskFetchRequest {

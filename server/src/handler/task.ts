@@ -51,7 +51,7 @@ function getTask(type: TaskType): string {
     }
 }
 
-function getTaskType(task: string): TaskType | undefined {
+function getTaskType(task: string): TaskType {
     switch (task) {
         case "Assemble":
             return TaskType.assemble;
@@ -60,6 +60,6 @@ function getTaskType(task: string): TaskType | undefined {
         case "Start":
             return TaskType.start;
         default:
-            return undefined;
+            return TaskType.unknown;
     }
 }
