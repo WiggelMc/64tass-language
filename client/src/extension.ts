@@ -77,7 +77,7 @@ export function activate(context: ExtensionContext) {
 
 	context.subscriptions.push(...handlers);
 
-	console.log("Extention '64tass-language' is loaded");
+	console.log("Extension '64tass-language' is loaded");
 }
 
 
@@ -106,7 +106,7 @@ class TerminalLinkProvider implements vscode.TerminalLinkProvider<TerminalLink> 
 			workspaceFolder = vscode.workspace.workspaceFolders[0].uri.toString();
 
 		}
-		
+
 		for (const folder of vscode.workspace.workspaceFolders) {
 
 			const diagnostics = vscode.languages.getDiagnostics(vscode.Uri.parse(folder.uri.toString() + "/" + relativePath))
