@@ -277,6 +277,7 @@ async function executeTaskType(type: TaskType) {
 }
 
 function displayErrorMessage(error?: Error) {
+	console.log("ERROR");
 	switch (error?.message) {
 		case "Task not Found":
 			vscode.window.showErrorMessage(`Could not find Assemble Task`);
@@ -288,7 +289,11 @@ function displayErrorMessage(error?: Error) {
 			vscode.window.showErrorMessage("Could not find List File");
 			break;
 		default:
-			vscode.window.showErrorMessage(`Error while running Command`);
+			if (error?.message.startsWith("cannot open")) {
+				vscode.window.showErrorMessage("Could not open File");
+			} else {
+				vscode.window.showErrorMessage(`Error while running Command: ${error?.message}`);
+			}
 	}
 }
 

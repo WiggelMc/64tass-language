@@ -131,6 +131,8 @@ Document all handlers
 	@ use for what
 
 
+somehow let the server know if the assembly has errors (maybe check timestamp in header and / or changed watch of list file)
+for compillation assume that last any change before the list file update was compiled (might be wrong, but currently cant reproduce)
 
 TODO
 

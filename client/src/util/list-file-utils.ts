@@ -71,20 +71,25 @@ export async function gotoDocumentLocationStoppable(location: DocumentLocation) 
 }
 
 export async function gotoDocumentLocation(location: DocumentLocation) {
+    return new Promise<void>((resolve, reject) => {
 
-    runningGotos.clear();
+        runningGotos.clear();
 
-    vscode.workspace.openTextDocument(vscode.Uri.parse(location.textDocument.uri))
-    .then(document => vscode.window.showTextDocument(document,vscode.ViewColumn.Active))
-    .then(editor => {
-
-        const range = location.range;
-
-        const pos1 = new vscode.Position(range.start.line, range.start.character);
-        const pos2 = new vscode.Position(range.end.line, range.end.character);
-
-        editor.selection = new vscode.Selection(pos1, pos2);
-        editor.revealRange(new vscode.Range(safeTranslate(pos1, -7), safeTranslate(pos2, 7)), vscode.TextEditorRevealType.Default);
+        (async () => {})()
+        .then(() => vscode.workspace.openTextDocument(vscode.Uri.parse(location.textDocument.uri)))
+        .then(document => vscode.window.showTextDocument(document,vscode.ViewColumn.Active))
+        .then(editor => {
+    
+            const range = location.range;
+    
+            const pos1 = new vscode.Position(range.start.line, range.start.character);
+            const pos2 = new vscode.Position(range.end.line, range.end.character);
+    
+            editor.selection = new vscode.Selection(pos1, pos2);
+            editor.revealRange(new vscode.Range(safeTranslate(pos1, -7), safeTranslate(pos2, 7)), vscode.TextEditorRevealType.Default);
+        })
+        .then(resolve)
+        .catch(reject);
     });
 }
 
