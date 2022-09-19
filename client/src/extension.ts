@@ -349,7 +349,7 @@ async function executeCustomTaskType(taskString?: string) {
 	}
 
 	const taskNumber = Number(taskString);
-	executeTaskType(TaskType.run(taskNumber));
+	executeTaskType(TaskType.customTaskOf(taskNumber));
 }
 
 function validateCustomTaskInput(taskString: string) {

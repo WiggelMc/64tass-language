@@ -41,8 +41,8 @@ export namespace TaskType {
     export const assemble = 1;
     export const start = 2;
     export const assembleAndStart = 3;
-    export const run = (n: number) => n + 100;
-    export const runToArrayIndex = (n: TaskType) => n - 101;
+    export const customTaskOf = (n: number) => n + 100;
+    export const customTaskToArrayIndex = (n: TaskType) => n - 101;
 }
 
 export interface TaskFetchResult {
