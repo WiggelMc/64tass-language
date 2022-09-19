@@ -166,7 +166,7 @@
     "jsonValidation": [
       {
         "fileMatch": "64tasslang.json",
-        "url": "./schemas/64tass-schema.json"
+        "url": "./schemas/64tasslang-config-schema.json"
       }
     ],
     "menus": {

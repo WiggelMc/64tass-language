@@ -147,6 +147,13 @@
             "items": {
                 "type": "string"
             }
+        },
+        "custom-tasks": {
+            "title": "Specify other tasks which can be executed with the runCustomTask Command",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
         }
     }
 }
