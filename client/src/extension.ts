@@ -7,7 +7,7 @@ import * as path from 'path';
 import { workspace, ExtensionContext } from 'vscode';
 import * as vscode from "vscode";
 
-import { LanguageClient, LanguageClientOptions, Range, ServerOptions, TransportKind } from 'vscode-languageclient/node';
+import { Disposable, LanguageClient, LanguageClientOptions, Range, ServerOptions, TransportKind } from 'vscode-languageclient/node';
 import { sendViewInSourceFileRequest, getCurrentDocumentLocation, gotoDocumentLocation, sendViewInListFileRequest, gotoDocumentLocationStoppable } from './util/list-file-utils';
 import { Selector } from './common/capabilities/document-selector';
 import { runTask, sendTaskFetchRequest, TaskMap } from './tasks';
@@ -15,6 +15,7 @@ import { TaskEndRequest, TaskFetchParams, TaskParams, TaskResult, TaskStartReque
 import { DocumentLocation } from './common/capabilities/list-file';
 
 let client: LanguageClient;
+let handlers: Disposable[];
 
 export function activate(context: ExtensionContext) {
 
@@ -58,20 +59,22 @@ export function activate(context: ExtensionContext) {
 	// Start the client. This will also launch the server
 	client.start();
 
-	vscode.commands.registerCommand("64tass.viewInSource", viewInSource);
-	vscode.commands.registerCommand("64tass.viewInList", viewInList);
-	vscode.commands.registerCommand("64tass.assembleAndViewInList", assembleAndViewInList);
+	handlers = [
+		vscode.commands.registerCommand("64tass.viewInSource", viewInSource),
+		vscode.commands.registerCommand("64tass.viewInList", viewInList),
+		vscode.commands.registerCommand("64tass.assembleAndViewInList", assembleAndViewInList),
 
-	vscode.commands.registerCommand("64tass.assemble", () => executeTaskType(TaskType.assemble));
-	vscode.commands.registerCommand("64tass.assembleAndStart", () => executeTaskType(TaskType.assembleAndStart));
-	vscode.commands.registerCommand("64tass.start", () => executeTaskType(TaskType.start));
+		vscode.commands.registerCommand("64tass.assemble", () => executeTaskType(TaskType.assemble)),
+		vscode.commands.registerCommand("64tass.assembleAndStart", () => executeTaskType(TaskType.assembleAndStart)),
+		vscode.commands.registerCommand("64tass.start", () => executeTaskType(TaskType.start)),
 
-	vscode.tasks.onDidStartTask(onDidStartTask);
-	vscode.tasks.onDidEndTask(onDidEndTask);
+		vscode.tasks.onDidStartTask(onDidStartTask),
+		vscode.tasks.onDidEndTask(onDidEndTask),
 
-	vscode.workspace.onDidChangeConfiguration(onDidChangeConfiguration);
-	vscode.languages.onDidChangeDiagnostics(onDidChangeDiagnostics);
-	vscode.window.registerTerminalLinkProvider(new TerminalLinkProvider());
+		vscode.workspace.onDidChangeConfiguration(onDidChangeConfiguration),
+		vscode.languages.onDidChangeDiagnostics(onDidChangeDiagnostics),
+		vscode.window.registerTerminalLinkProvider(new TerminalLinkProvider()),
+	];
 
 	console.log("Extention '64tass-language' is loaded");
 }
@@ -299,6 +302,9 @@ function displayErrorMessage(error?: Error) {
 }
 
 export function deactivate(): Thenable<void> | undefined {
+
+	handlers?.forEach(p => p.dispose());
+	
 	if (!client) {
 		return undefined;
 	}
