@@ -15,7 +15,6 @@ import { TaskEndRequest, TaskFetchParams, TaskParams, TaskResult, TaskStartReque
 import { DocumentLocation } from './common/capabilities/list-file';
 
 let client: LanguageClient;
-let handlers: Disposable[];
 
 export function activate(context: ExtensionContext) {
 
@@ -59,7 +58,7 @@ export function activate(context: ExtensionContext) {
 	// Start the client. This will also launch the server
 	client.start();
 
-	handlers = [
+	const handlers: Disposable[] = [
 		vscode.commands.registerCommand("64tass.viewInSource", viewInSource),
 		vscode.commands.registerCommand("64tass.viewInList", viewInList),
 		vscode.commands.registerCommand("64tass.assembleAndViewInList", assembleAndViewInList),
@@ -75,6 +74,8 @@ export function activate(context: ExtensionContext) {
 		vscode.languages.onDidChangeDiagnostics(onDidChangeDiagnostics),
 		vscode.window.registerTerminalLinkProvider(new TerminalLinkProvider()),
 	];
+
+	context.subscriptions.push(...handlers);
 
 	console.log("Extention '64tass-language' is loaded");
 }
@@ -303,8 +304,6 @@ function displayErrorMessage(error?: Error) {
 
 export function deactivate(): Thenable<void> | undefined {
 
-	handlers?.forEach(p => p.dispose());
-	
 	if (!client) {
 		return undefined;
 	}
