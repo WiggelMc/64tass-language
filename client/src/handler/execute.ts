@@ -1,7 +1,6 @@
 import { commands, window } from "vscode";
 import { DocumentLocation } from "../common/capabilities/list-file";
 import { TaskFetchParams, TaskType } from "../common/capabilities/task";
-import { client } from "../extension";
 import { runTask, sendTaskFetchRequest, TaskMap } from "../tasks";
 import { getCurrentDocumentLocation, gotoDocumentLocation, gotoDocumentLocationStoppable, sendViewInListFileRequest, sendViewInSourceFileRequest } from "../util/list-file-utils";
 import { displayErrorMessage } from "./error";
@@ -33,7 +32,7 @@ async function viewInSource() {
 		return;
 	}
 
-	sendViewInSourceFileRequest(client, location)
+	sendViewInSourceFileRequest(location)
 	.then(gotoDocumentLocation)
 	.catch(displayErrorMessage);
 }
@@ -48,7 +47,7 @@ async function viewInList() {
 		return;
 	}
 
-	sendViewInListFileRequest(client, location)
+	sendViewInListFileRequest(location)
 	.then(gotoDocumentLocation)
 	.catch(displayErrorMessage);
 }
@@ -68,10 +67,10 @@ async function assembleAndViewInList() {
 		taskType: TaskType.assemble
 	};
 
-	sendTaskFetchRequest(client, params)
+	sendTaskFetchRequest(params)
 	.then(r => TaskMap.getTask(r.task))
 	.then(runTask)
-	.then(() => sendViewInListFileRequest(client, location))
+	.then(() => sendViewInListFileRequest(location))
 	.then(gotoDocumentLocationStoppable)
 	.catch(displayErrorMessage);
 }
@@ -91,7 +90,7 @@ async function executeTaskType(type: TaskType) {
 		taskType: type
 	};
 
-	sendTaskFetchRequest(client, params)
+	sendTaskFetchRequest(params)
 	.then(r => TaskMap.getTask(r.task))
 	.then(runTask)
 	.catch(displayErrorMessage);

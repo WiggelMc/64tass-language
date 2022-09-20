@@ -1,11 +1,12 @@
-import { LanguageClient, Range } from "vscode-languageclient/node";
+import { Range } from "vscode-languageclient/node";
 import * as vscode from "vscode";
 import { DocumentLocation, OptionalDocumentLocation, ViewInListFileRequest, ViewInSourceFileRequest } from "../common/capabilities/list-file";
 import { sleep } from "./sleep";
 import { config } from "../handler/config";
+import { client } from "../handler/languageclient";
 
 
-export async function sendViewInListFileRequest(client: LanguageClient, params: DocumentLocation): Promise<DocumentLocation> {
+export async function sendViewInListFileRequest(params: DocumentLocation): Promise<DocumentLocation> {
 
     const r: OptionalDocumentLocation = await client.sendRequest(ViewInListFileRequest.method, params);
 
@@ -16,7 +17,7 @@ export async function sendViewInListFileRequest(client: LanguageClient, params: 
     return r;
 };
 
-export async function sendViewInSourceFileRequest(client: LanguageClient, params: DocumentLocation): Promise<DocumentLocation> {
+export async function sendViewInSourceFileRequest(params: DocumentLocation): Promise<DocumentLocation> {
 
     const r: OptionalDocumentLocation = await client.sendRequest(ViewInSourceFileRequest.method, params);
 

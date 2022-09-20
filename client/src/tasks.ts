@@ -1,6 +1,6 @@
 import { Task, tasks } from "vscode";
-import { LanguageClient } from "vscode-languageclient/node";
 import { TaskFetchParams, TaskFetchRequest, TaskFetchResult } from "./common/capabilities/task";
+import { client } from "./handler/languageclient";
 
 export class TaskMap {
     private static map: Map<string, Task> = new Map();
@@ -53,7 +53,7 @@ export async function runTask(task: Task): Promise<void> {
     });
 }
 
-export async function sendTaskFetchRequest(client: LanguageClient, params: TaskFetchParams): Promise<TaskFetchResult> {
+export async function sendTaskFetchRequest(params: TaskFetchParams): Promise<TaskFetchResult> {
 
     return client.sendRequest(TaskFetchRequest.method, params);
 }
