@@ -2,7 +2,8 @@ import { commands, window } from "vscode";
 import { DocumentLocation } from "../common/capabilities/list-file";
 import { TaskFetchParams, TaskType } from "../common/capabilities/task";
 import { runTask, sendTaskFetchRequest, TaskMap } from "../tasks";
-import { getCurrentDocumentLocation, gotoDocumentLocation, gotoDocumentLocationStoppable, sendViewInListFileRequest, sendViewInSourceFileRequest } from "../util/list-file-utils";
+import { sendViewInListFileRequest, sendViewInSourceFileRequest } from "../server/list-file";
+import { getCurrentDocumentLocation, gotoDocumentLocation, gotoDocumentLocationStoppable } from "../util/document-location";
 import { displayErrorMessage } from "./error";
 import { ClientHandler } from "./handler";
 

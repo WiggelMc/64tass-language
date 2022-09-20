@@ -1,7 +1,7 @@
 import { CancellationToken, DiagnosticSeverity, ExtensionTerminalOptions, languages, ProviderResult, TerminalOptions, Uri, workspace, DiagnosticChangeEvent, TerminalLink, TerminalLinkProvider, TerminalLinkContext, window } from "vscode";
 import { Range } from "vscode-languageclient";
 import { DocumentLocation } from "../common/capabilities/list-file";
-import { gotoDocumentLocation } from "../util/list-file-utils";
+import { gotoDocumentLocation } from "../util/document-location";
 import { config } from "./config";
 import { displayErrorMessage } from "./error";
 import { ClientHandler } from "./handler";
