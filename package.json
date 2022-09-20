@@ -45,31 +45,31 @@
     "commands": [
       {
         "command": "64tass.viewInList",
-        "title": "64tass: View in List"
+        "title": "View in List"
       },
       {
         "command": "64tass.assembleAndViewInList",
-        "title": "64tass: Assemble and View in List"
+        "title": "Assemble and View in List"
       },
       {
         "command": "64tass.viewInSource",
-        "title": "64tass: View in Source"
+        "title": "View in Source"
       },
       {
         "command": "64tass.assemble",
-        "title": "64tass: Assemble"
+        "title": "Assemble"
       },
       {
         "command": "64tass.assembleAndStart",
-        "title": "64tass: Assemble and Start"
+        "title": "Assemble and Start"
       },
       {
         "command": "64tass.start",
-        "title": "64tass: Start"
+        "title": "Start"
       },
       {
         "command": "64tass.runCustomTask",
-        "title": "64tass: Run Custom Task"
+        "title": "Run Custom Task"
       }
     ],
     "languages": [
