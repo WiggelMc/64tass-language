@@ -28,7 +28,7 @@ export async function sendViewInSourceFileRequest(params: DocumentLocation): Pro
     return r;
 };
 
-export function getCurrentDocumentLocation(): DocumentLocation {
+export async function getCurrentDocumentLocation(): Promise<DocumentLocation> {
     const editor = vscode.window.activeTextEditor;
 		
     if (editor === undefined) {

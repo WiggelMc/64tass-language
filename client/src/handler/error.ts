@@ -15,6 +15,9 @@ export async function displayErrorMessage(error?: Error) {
 		case "Invalid Task Argument":
 			window.showErrorMessage("Argument for Custom Task is not valid");
 			break;
+		case "No Open Editor":
+			window.showErrorMessage("No Open Editor");
+			break;
 		default:
 			if (error?.message.startsWith("cannot open")) {
 				window.showErrorMessage("Could not open File");

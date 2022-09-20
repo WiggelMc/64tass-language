@@ -24,94 +24,61 @@ export const executeHandler: ClientHandler = {
 
 async function viewInSource() {
 		
-	let location: DocumentLocation;
-	try {
-		location = getCurrentDocumentLocation();
-	} catch (error) {
-		window.showErrorMessage("No Open Editor");
-		return;
-	}
-
-	sendViewInSourceFileRequest(location)
+	getCurrentDocumentLocation()
+	.then(sendViewInSourceFileRequest)
 	.then(gotoDocumentLocation)
 	.catch(displayErrorMessage);
 }
 
 async function viewInList() {
 
-	let location: DocumentLocation;
-	try {
-		location = getCurrentDocumentLocation();
-	} catch (error) {
-		window.showErrorMessage("No Open Editor");
-		return;
-	}
-
-	sendViewInListFileRequest(location)
+	getCurrentDocumentLocation()
+	.then(sendViewInListFileRequest)
 	.then(gotoDocumentLocation)
 	.catch(displayErrorMessage);
 }
 
 async function assembleAndViewInList() {
 
-	let location: DocumentLocation;
-	try {
-		location = getCurrentDocumentLocation();
-	} catch (error) {
-		window.showErrorMessage("No Open Editor");
-		return;
-	}
-	
-	const params: TaskFetchParams = {
-		textDocument: location.textDocument,
-		taskType: TaskType.assemble
-	};
-
-	sendTaskFetchRequest(params)
-	.then(r => TaskMap.getTask(r.task))
-	.then(runTask)
-	.then(() => sendViewInListFileRequest(location))
-	.then(gotoDocumentLocationStoppable)
+	getCurrentDocumentLocation()
+	.then(location => {
+		createTaskFetchParamConverter(TaskType.assemble)(location)
+		.then(sendTaskFetchRequest)
+		.then(r => TaskMap.getTask(r.task))
+		.then(runTask)
+		.then(() => sendViewInListFileRequest(location))
+		.then(gotoDocumentLocationStoppable)
+		.catch(displayErrorMessage);
+	})
 	.catch(displayErrorMessage);
 }
 
 async function executeTaskType(type: TaskType) {
 
-	let location: DocumentLocation;
-	try {
-		location = getCurrentDocumentLocation();
-	} catch (error) {
-		window.showErrorMessage("No Open Editor");
-		return;
-	}
-	
-	const params: TaskFetchParams = {
-		textDocument: location.textDocument,
-		taskType: type
-	};
-
-	sendTaskFetchRequest(params)
+	getCurrentDocumentLocation()
+	.then(createTaskFetchParamConverter(type))
+	.then(sendTaskFetchRequest)
 	.then(r => TaskMap.getTask(r.task))
 	.then(runTask)
 	.catch(displayErrorMessage);
 }
 
+const createTaskFetchParamConverter: (type: TaskType) => ((location: DocumentLocation) => Promise<TaskFetchParams>) =
+function(type: TaskType) {
+	return async function(location: DocumentLocation) {
+
+		return {
+			textDocument: location.textDocument,
+			taskType: type
+		};
+	};
+};
+
 const runCustomTask: (...args: any[]) => Promise<void> =
 async function(taskString) {
 	if (taskString === undefined) {
 		(async () => {})()
-		.then(() => {
-			return window.showInputBox({
-				prompt: "Enter Task Number",
-				validateInput(taskString) {
-					if (validateCustomTaskInput(taskString)) {
-						return "";
-					} else {
-						return "Input must be a positive integer";
-					}
-				}
-			});
-		})
+		.then(showCustomTaskInputBox)
 		.then(executeCustomTaskType)
 		.catch(displayErrorMessage);
 	} else {
@@ -119,6 +86,20 @@ async function(taskString) {
 		.catch(displayErrorMessage);
 	}
 };
+
+async function showCustomTaskInputBox() {
+
+	return window.showInputBox({
+		prompt: "Enter Task Number",
+		validateInput(taskString) {
+			if (validateCustomTaskInput(taskString)) {
+				return "";
+			} else {
+				return "Input must be a positive integer";
+			}
+		}
+	});
+}
 
 async function executeCustomTaskType(taskString?: string) {
 
