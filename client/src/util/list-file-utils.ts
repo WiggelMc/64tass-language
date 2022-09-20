@@ -2,7 +2,8 @@ import { LanguageClient, Range } from "vscode-languageclient/node";
 import * as vscode from "vscode";
 import { DocumentLocation, OptionalDocumentLocation, ViewInListFileRequest, ViewInSourceFileRequest } from "../common/capabilities/list-file";
 import { sleep } from "./sleep";
-import { config } from "../extension";
+import { config } from "../handler/config";
+
 
 export async function sendViewInListFileRequest(client: LanguageClient, params: DocumentLocation): Promise<DocumentLocation> {
 
