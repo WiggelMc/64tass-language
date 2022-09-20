@@ -1,6 +1,4 @@
 import { Task, tasks } from "vscode";
-import { TaskFetchParams, TaskFetchRequest, OptionalTaskIdentifier, TaskIdentifier } from "./common/capabilities/task";
-import { client } from "./handler/languageclient";
 
 export class TaskMap {
     private static map: Map<string, Task> = new Map();
@@ -51,15 +49,4 @@ export async function runTask(task: Task): Promise<void> {
 
         await tasks.executeTask(task);
     });
-}
-
-export async function sendTaskFetchRequest(params: TaskFetchParams): Promise<TaskIdentifier> {
-
-    const r: OptionalTaskIdentifier = await client.sendRequest(TaskFetchRequest.method, params);
-
-    if (r === undefined || r === null) {
-        throw new Error("Task not defined");
-    }
-
-    return r;
 }

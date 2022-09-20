@@ -1,5 +1,5 @@
 import { ConfigurationChangeEvent, workspace } from "vscode";
-import { TaskMap } from "../tasks";
+import { TaskMap } from "../util/task";
 import { ClientHandler } from "./handler";
 
 export const configHandler: ClientHandler = {
