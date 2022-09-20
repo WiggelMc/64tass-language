@@ -1,7 +1,7 @@
 import { Task, TaskEndEvent, tasks, TaskStartEvent } from "vscode";
 import { TaskEndRequest, TaskParams, TaskResult, TaskStartRequest, TaskType } from "../common/capabilities/task";
 import { ClientHandler } from "./handler";
-import { client } from "./languageclient";
+import { client } from "../util/languageclient";
 import { setErrorShown } from "./terminal";
 
 export const taskHandler: ClientHandler = {

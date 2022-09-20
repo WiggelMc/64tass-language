@@ -1,5 +1,5 @@
 import { TaskFetchParams, TaskFetchRequest, OptionalTaskIdentifier, TaskIdentifier } from "../common/capabilities/task";
-import { client } from "../handler/languageclient";
+import { client } from "../util/languageclient";
 
 
 export async function sendTaskFetchRequest(params: TaskFetchParams): Promise<TaskIdentifier> {

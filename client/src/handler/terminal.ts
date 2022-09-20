@@ -3,7 +3,7 @@ import { Range } from "vscode-languageclient";
 import { DocumentLocation } from "../common/capabilities/list-file";
 import { gotoDocumentLocation } from "../util/document-location";
 import { config } from "./config";
-import { displayErrorMessage } from "./error";
+import { displayErrorMessage } from "../util/error";
 import { ClientHandler } from "./handler";
 
 export const terminalHandler: ClientHandler = {

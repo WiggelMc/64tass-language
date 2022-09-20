@@ -1,5 +1,5 @@
 import { DocumentLocation, OptionalDocumentLocation, ViewInListFileRequest, ViewInSourceFileRequest } from "../common/capabilities/list-file";
-import { client } from "../handler/languageclient";
+import { client } from "../util/languageclient";
 
 
 export async function sendViewInListFileRequest(params: DocumentLocation): Promise<DocumentLocation> {
