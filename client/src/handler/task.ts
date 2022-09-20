@@ -1,10 +1,10 @@
 import { Task, TaskEndEvent, tasks, TaskStartEvent } from "vscode";
 import { TaskEndRequest, TaskParams, TaskResult, TaskStartRequest, TaskType } from "../common/capabilities/task";
 import { client } from "../extension";
-import { ClientInitHandler } from "./handler";
+import { ClientHandler } from "./handler";
 import { setErrorShown } from "./terminal";
 
-export const taskHandler: ClientInitHandler = {
+export const taskHandler: ClientHandler = {
     register(context) {
         return [
             tasks.onDidStartTask(onDidStartTask),

@@ -1,8 +1,8 @@
 import { ConfigurationChangeEvent, workspace } from "vscode";
 import { TaskMap } from "../tasks";
-import { ClientInitHandler } from "./handler";
+import { ClientHandler } from "./handler";
 
-export const configHandler: ClientInitHandler = {
+export const configHandler: ClientHandler = {
     register(context) {
         return [
             workspace.onDidChangeConfiguration(onDidChangeConfiguration),

@@ -4,9 +4,9 @@ import { DocumentLocation } from "../common/capabilities/list-file";
 import { gotoDocumentLocation } from "../util/list-file-utils";
 import { config } from "./config";
 import { displayErrorMessage } from "./error";
-import { ClientInitHandler } from "./handler";
+import { ClientHandler } from "./handler";
 
-export const terminalHandler: ClientInitHandler = {
+export const terminalHandler: ClientHandler = {
     register(context) {
         return [
             languages.onDidChangeDiagnostics(onDidChangeDiagnostics),

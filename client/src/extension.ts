@@ -4,20 +4,11 @@
  * ------------------------------------------------------------------------------------------ */
 
 import * as path from 'path';
-import { workspace, ExtensionContext, TerminalOptions, ExtensionTerminalOptions } from 'vscode';
-import * as vscode from "vscode";
+import { workspace, ExtensionContext } from 'vscode';
 
-import { Disposable, LanguageClient, LanguageClientOptions, Range, ServerOptions, TransportKind } from 'vscode-languageclient/node';
-import { sendViewInSourceFileRequest, getCurrentDocumentLocation, gotoDocumentLocation, sendViewInListFileRequest, gotoDocumentLocationStoppable } from './util/list-file-utils';
+import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient/node';
 import { Selector } from './common/capabilities/document-selector';
-import { runTask, sendTaskFetchRequest, TaskMap } from './tasks';
-import { TaskEndRequest, TaskFetchParams, TaskParams, TaskResult, TaskStartRequest, TaskType } from './common/capabilities/task';
-import { DocumentLocation } from './common/capabilities/list-file';
-import { displayErrorMessage } from './handler/error';
-import { configHandler } from './handler/config';
-import { setErrorShown, terminalHandler } from './handler/terminal';
-import { taskHandler } from './handler/task';
-import { executeHandler } from './handler/execute';
+import { registerClientHandlers } from './handler/handler';
 
 export let client: LanguageClient;
 
@@ -63,16 +54,7 @@ export function activate(context: ExtensionContext) {
 	// Start the client. This will also launch the server
 	client.start();
 
-	const handlers: Disposable[] = [
-	
-		...executeHandler.register(context),
-		...taskHandler.register(context),
-		...configHandler.register(context),
-		...terminalHandler.register(context),
-		
-	];
-
-	context.subscriptions.push(...handlers);
+	registerClientHandlers(context);
 
 	console.log("Extension '64tass-language' is loaded");
 }

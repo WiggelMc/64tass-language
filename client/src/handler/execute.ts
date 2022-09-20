@@ -5,9 +5,9 @@ import { client } from "../extension";
 import { runTask, sendTaskFetchRequest, TaskMap } from "../tasks";
 import { getCurrentDocumentLocation, gotoDocumentLocation, gotoDocumentLocationStoppable, sendViewInListFileRequest, sendViewInSourceFileRequest } from "../util/list-file-utils";
 import { displayErrorMessage } from "./error";
-import { ClientInitHandler } from "./handler";
+import { ClientHandler } from "./handler";
 
-export const executeHandler: ClientInitHandler = {
+export const executeHandler: ClientHandler = {
     register(context) {
         return [
             commands.registerCommand("64tass.viewInSource", viewInSource),
