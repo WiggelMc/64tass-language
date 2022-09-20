@@ -1,13 +1,3 @@
-// function initFSWatcher(workspaceFolders: WorkspaceFolder[] | null) {
-// 	workspaceFolders?.forEach(folder => {
-// 		const folderURI = vscodeUri.URI.parse(folder.uri);
-// 		console.log("folder");
-// 		chokidar.watch(folderURI.fsPath).on("all", (event, path) => {
-// 			console.log("ch",event, path);
-// 		});
-// 	});
-// }
-
 // function getDocumentSettings(resource: string): Thenable<ExampleSettings> {
 // 	if (!hasConfigurationCapability) {
 // 		return Promise.resolve(globalSettings);
