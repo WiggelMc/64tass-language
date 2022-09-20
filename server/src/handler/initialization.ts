@@ -2,6 +2,7 @@ import { _Connection, _, TextDocumentSyncKind, NotificationHandler, InitializedP
 import { globalCapabilities } from "../data/data";
 import { connection } from "../server";
 import { configSections } from "./configuration";
+import { registerFileWatcher, registerFileWatchers, unregisterFileWatchers } from "./file-system";
 import { ConnectionEventHandler, getCapabilities } from "./handler";
 
 export const initializationHandler : ConnectionEventHandler = {
@@ -51,11 +52,21 @@ async function(params) {
 	if (globalCapabilities.hasWorkspaceFolderCapability) {
 		
 		connection.workspace.onDidChangeWorkspaceFolders(onDidChangeWorkspaceFolders);
+
+		connection.workspace.getWorkspaceFolders()
+        .then(registerFileWatchers);
+	} else {
+		registerFileWatcher(".");
 	}
 };
 
 const onDidChangeWorkspaceFolders: (e: WorkspaceFoldersChangeEvent) => any =
 async function(e) {
+
+	registerFileWatchers(e.added);
+	unregisterFileWatchers(e.removed);
+
+	//The files in the removed workspace need to be removed from index manually (TODO) [either here or in unregisterFileWatcher]
     
     console.log("Change folders: ", e);
 };

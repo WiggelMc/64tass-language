@@ -145,11 +145,11 @@ V	test if workspace folders support is nessessary
 V	find support for jump to compile error
 X	find way to remove diagnostics
 .	simple indexing [at first only list of all documents]
-.	workspace diagnostics support (so errors are show wven if the file is not open)
+.	workspace diagnostics support (so errors are show when if the file is not open)
 V	test/ fix multi workspace support for terminal links (likely fix) and auto error jump (might work already)
-	clean up languageclient
-	enable multi workspace support for vscode settings
-	enable multi workspace support for server file watcher
+.	clean up languageclient
+.	enable multi workspace support for vscode settings
+V	enable multi workspace support for server file watcher
 
 
 Known issues:
