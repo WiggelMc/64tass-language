@@ -75,7 +75,7 @@ function(workspaceFolderPath) {
         // fs.readFile(path, (err, data) => {
         // 	console.log("File Data: ", err, data?.toString());
         // });
-        console.log("---   File Update   ---\nEvent:   %s\nFile:    %s\nFolder:  %s\n",event, path.substring(77), workspaceFolderPath.substring(77));
+        // console.log("---   File Update   ---\nEvent:   %s\nFile:    %s\nFolder:  %s\n",event, path.substring(77), workspaceFolderPath.substring(77));
         let filename = Path.basename(path);
         
         if (filename === configFilename) {

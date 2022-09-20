@@ -1,6 +1,6 @@
 {
   "name": "64tass-language",
-  "displayName": "64Tass Language",
+  "displayName": "64tass Language",
   "description": "",
   "version": "0.0.1",
   "engines": {
@@ -88,10 +88,10 @@
     ],
     "configuration": {
 			"type": "object",
-			"title": "64Tass Config",
+			"title": "64tass Language",
 			"properties": {
 				"64tass-language.maxNumberOfProblems": {
-					"scope": "resource",
+					"scope": "window",
 					"type": "number",
 					"default": 100,
 					"description": "Controls the maximum number of problems produced by the server."
