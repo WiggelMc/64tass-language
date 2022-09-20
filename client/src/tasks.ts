@@ -1,5 +1,5 @@
 import { Task, tasks } from "vscode";
-import { TaskFetchParams, TaskFetchRequest, TaskFetchResult } from "./common/capabilities/task";
+import { TaskFetchParams, TaskFetchRequest, OptionalTaskIdentifier, TaskIdentifier } from "./common/capabilities/task";
 import { client } from "./handler/languageclient";
 
 export class TaskMap {
@@ -53,7 +53,13 @@ export async function runTask(task: Task): Promise<void> {
     });
 }
 
-export async function sendTaskFetchRequest(params: TaskFetchParams): Promise<TaskFetchResult> {
+export async function sendTaskFetchRequest(params: TaskFetchParams): Promise<TaskIdentifier> {
 
-    return client.sendRequest(TaskFetchRequest.method, params);
+    const r: OptionalTaskIdentifier = await client.sendRequest(TaskFetchRequest.method, params);
+
+    if (r === undefined || r === null) {
+        throw new Error("Task not defined");
+    }
+
+    return r;
 }

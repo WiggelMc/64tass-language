@@ -23,7 +23,7 @@ export interface TaskResult {
 }
 
 export interface TaskFetchRequest {
-    (params: TaskFetchParams): TaskFetchResult | Promise<TaskFetchResult>
+    (params: TaskFetchParams): OptionalTaskIdentifier | Promise<OptionalTaskIdentifier>
 }
 export namespace TaskFetchRequest {
     export const method = "64tass.TaskFetch";
@@ -45,6 +45,8 @@ export namespace TaskType {
     export const customTaskToArrayIndex = (n: TaskType) => n - 101;
 }
 
-export interface TaskFetchResult {
+export type OptionalTaskIdentifier = TaskIdentifier | undefined | null;
+
+export interface TaskIdentifier {
     task: string
 }

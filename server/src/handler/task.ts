@@ -1,5 +1,5 @@
 import { _Connection, _, TextDocumentSyncKind, TextDocumentFilter } from "vscode-languageserver";
-import { TaskEndRequest, TaskFetchRequest, TaskStartRequest, TaskType } from "../common/capabilities/task";
+import { OptionalTaskIdentifier, TaskEndRequest, TaskFetchRequest, TaskStartRequest, TaskType } from "../common/capabilities/task";
 import { ConnectionEventHandler } from "./handler";
 
 export const taskHandler : ConnectionEventHandler = {
@@ -33,12 +33,23 @@ const onTaskFetch: TaskFetchRequest =
 async function(params) {
 
     console.log("Fetch Task: ", params);
-    return {
-        task: getTask(params.taskType)
-    };
+
+    return getTask(params.taskType);
 };
 
-function getTask(type: TaskType): string {
+function getTask(type: TaskType): OptionalTaskIdentifier {
+    const taskName = getTaskName(type);
+
+    if (taskName === undefined) {
+        return undefined;
+    }
+
+    return {
+        task: taskName
+    };
+}
+
+function getTaskName(type: TaskType): string | undefined {
     switch (type) {
         case TaskType.assemble:
             return "Assemble";
@@ -47,7 +58,7 @@ function getTask(type: TaskType): string {
         case TaskType.start:
             return "Start";
         default:
-            return "Run";
+            return undefined;
     }
 }
 

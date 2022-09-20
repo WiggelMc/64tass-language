@@ -18,6 +18,9 @@ export async function displayErrorMessage(error?: Error) {
 		case "No Open Editor":
 			window.showErrorMessage("No Open Editor");
 			break;
+		case "Task not defined":
+			window.showErrorMessage("The requested Task is not defined for the current Directory");
+			break;
 		default:
 			if (error?.message.startsWith("cannot open")) {
 				window.showErrorMessage("Could not open File");
