@@ -29,6 +29,7 @@ async function viewInSource() {
 	getCurrentDocumentLocation()
 	.then(sendViewInSourceFileRequest)
 	.then(gotoDocumentLocation)
+	
 	.catch(displayErrorMessage);
 }
 
@@ -37,6 +38,7 @@ async function viewInList() {
 	getCurrentDocumentLocation()
 	.then(sendViewInListFileRequest)
 	.then(gotoDocumentLocation)
+	
 	.catch(displayErrorMessage);
 }
 
@@ -44,10 +46,12 @@ async function assembleAndViewInList() {
 
 	getCurrentDocumentLocation()
 	.then(async location => {
+		
 		return createTaskFetchParamConverter(TaskType.assemble)(location)
 		.then(sendTaskFetchRequest)
 		.then(r => TaskMap.getTask(r.task))
 		.then(runTask)
+
 		.then(() => sendViewInListFileRequest(location))
 		.then(gotoDocumentLocationStoppable);
 	})
@@ -58,9 +62,11 @@ async function executeTaskType(type: TaskType) {
 
 	getCurrentDocumentLocation()
 	.then(createTaskFetchParamConverter(type))
+
 	.then(sendTaskFetchRequest)
 	.then(r => TaskMap.getTask(r.task))
 	.then(runTask)
+	
 	.catch(displayErrorMessage);
 }
 
