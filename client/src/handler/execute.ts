@@ -58,6 +58,24 @@ async function assembleAndViewInList() {
 	.catch(displayErrorMessage);
 }
 
+async function assembleAndViewInListAlternative() {
+
+	let location: DocumentLocation;
+
+	getCurrentDocumentLocation()
+	.then(x => location = x)
+	
+	.then(createTaskFetchParamConverter(TaskType.assemble))
+	.then(sendTaskFetchRequest)
+	.then(r => TaskMap.getTask(r.task))
+	.then(runTask)
+
+	.then(() => sendViewInListFileRequest(location))
+	.then(gotoDocumentLocationStoppable)
+
+	.catch(displayErrorMessage);
+}
+
 async function executeTaskType(type: TaskType) {
 
 	getCurrentDocumentLocation()
