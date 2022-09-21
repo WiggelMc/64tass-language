@@ -77,13 +77,28 @@
         "id": "64tass",
         "aliases": ["64tass", "64tass"],
         "extensions": [".asm"],
-        "configuration": "./language-configuration.json"
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./resources/type.png",
+          "dark": "./resources/type.png"
+        }
       },
       {
         "id": "64tasslist",
         "aliases": ["64tass List", "64tasslist"],
         "extensions": [".list"],
-        "configuration": "./language-configuration.json"
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./resources/type2.png",
+          "dark": "./resources/type2.png"
+        }
+      }
+    ],
+    "iconThemes": [
+      {
+        "id": "64tass",
+        "label": "64tass (vscode seti edit)",
+        "path": "./fileicons/64tass-icon-theme.json"
       }
     ],
     "configuration": {
