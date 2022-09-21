@@ -43,7 +43,7 @@ async function viewInList() {
 async function assembleAndViewInList() {
 
 	getCurrentDocumentLocation()
-	.then(location => {
+	.then(async location => {
 		return createTaskFetchParamConverter(TaskType.assemble)(location)
 		.then(sendTaskFetchRequest)
 		.then(r => TaskMap.getTask(r.task))
