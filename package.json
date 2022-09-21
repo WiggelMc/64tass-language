@@ -42,6 +42,22 @@
         "owner": "64tass"
       }
     ],
+    "walkthroughs": [
+      {
+        "id": "64tass",
+        "title": "64tass Language Extension Guide",
+        "description": "Explains all features added by this extension",
+        "steps": [
+          {
+            "id": "runcommand",
+            "title": "Run Command",
+            "description": "This step will run a command and check off once it has been run.\n[Run Command](command:getting-started-sample.runCommand)",
+            "media": { "image": "./resources/type.png", "altText": "Empty image" },
+            "completionEvents": ["onCommand:64tass.assemble"]
+          }
+        ]
+      }
+    ],
     "configurationDefaults": {
       "[64tass]": {
 
@@ -87,7 +103,7 @@
         "id": "64tass",
         "aliases": ["64tass", "64tass"],
         "extensions": [".asm"],
-        "configuration": "./language-configuration.json",
+        "configuration": "./definitions/language-configurations/64tass-language-configuration.json",
         "icon": {
           "light": "./resources/type.png",
           "dark": "./resources/type.png"
@@ -97,7 +113,7 @@
         "id": "64tasslist",
         "aliases": ["64tass List", "64tasslist"],
         "extensions": [".list"],
-        "configuration": "./language-configuration.json",
+        "configuration": "./definitions/language-configurations/64tasslist-language-configuration.json",
         "icon": {
           "light": "./resources/type2.png",
           "dark": "./resources/type2.png"
@@ -108,7 +124,27 @@
       {
         "id": "64tass",
         "label": "64tass (vscode seti edit)",
-        "path": "./fileicons/64tass-icon-theme.json"
+        "path": "./definitions/icon-themes/64tass-icon-theme.json"
+      }
+    ],
+    "themes": [
+      {
+        "label": "64tass Dark Default",
+        "id": "64tassDarkDefault",
+        "uiTheme": "vs-dark",
+        "path": "./definitions/themes/64tass-dark-default-color-theme.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "64tass",
+        "scopeName": "source.64tass",
+        "path": "./definitions/grammars/64tass.tmLanguage.json"
+      },
+      {
+        "language": "64tasslist",
+        "scopeName": "source.64tasslist",
+        "path": "./definitions/grammars/64tasslist.tmLanguage.json"
       }
     ],
     "configuration": {
@@ -191,7 +227,7 @@
     "jsonValidation": [
       {
         "fileMatch": "64tasslang.json",
-        "url": "./schemas/64tasslang-config-schema.json"
+        "url": "./definitions/64tasslang-config-schema.json"
       }
     ],
     "menus": {
