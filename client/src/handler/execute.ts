@@ -44,13 +44,12 @@ async function assembleAndViewInList() {
 
 	getCurrentDocumentLocation()
 	.then(location => {
-		createTaskFetchParamConverter(TaskType.assemble)(location)
+		return createTaskFetchParamConverter(TaskType.assemble)(location)
 		.then(sendTaskFetchRequest)
 		.then(r => TaskMap.getTask(r.task))
 		.then(runTask)
 		.then(() => sendViewInListFileRequest(location))
-		.then(gotoDocumentLocationStoppable)
-		.catch(displayErrorMessage);
+		.then(gotoDocumentLocationStoppable);
 	})
 	.catch(displayErrorMessage);
 }
