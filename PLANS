@@ -160,8 +160,8 @@ V	test/ fix multi workspace support for terminal links (likely fix) and auto err
 .	enable multi workspace support for vscode settings
 V	enable multi workspace support for server file watcher
 .	Fix consistency issues (different ids), kebap case in settings
-.	Use configuration defaults to use sensible settings for list and asm (ex. no line numbers in list)
-.	Add Icons to languages
+V	Use configuration defaults to use sensible settings for list and asm (ex. no line numbers in list)
+.	Add Icons to languages (make 4 images)
 .	Add Themes
 .	Add Grammars
 .	Add Walkthrough
