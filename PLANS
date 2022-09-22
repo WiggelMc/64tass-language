@@ -161,10 +161,13 @@ V	test/ fix multi workspace support for terminal links (likely fix) and auto err
 V	enable multi workspace support for server file watcher
 .	Fix consistency issues (different ids), kebap case in settings
 V	Use configuration defaults to use sensible settings for list and asm (ex. no line numbers in list)
-.	Add Icons to languages (make 4 images)
+V	Add Icons to languages (make 4 images)
 .	Add Themes
 .	Add Grammars
 .	Add Walkthrough
+.	Organize package.json
+.	fix nested workspaces updating twice
+.	determine behaviour for include directory outside workspace (might be done for shared libs)
 
 
 
