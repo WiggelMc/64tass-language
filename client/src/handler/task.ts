@@ -26,7 +26,7 @@ class TassTaskProvider implements TaskProvider<TassTask> {
 	resolveTask(task: TassTask, token: CancellationToken): ProviderResult<TassTask> {
 
 		console.log("TaskProvider resolve");
-		return task;
+		return undefined;
 	}
 }
 
@@ -50,7 +50,7 @@ class TassTask extends Task {
 			{type: "process"},
 			workspace.getWorkspaceFolder(Uri.parse("file:///c%3A/Users/kimhh/Documents/SNESProgramming/vscode/64tass-language/testing-code/workspace2/Test1/master.asm")),
 			"Goat Process",
-			"64tass", 
+			"64tass",
 			new ProcessExecution("64tass", ["-a", "-X", "-b", "-o", "out/game.sfc", "--line-numbers", "-L", "out/game.list", "--dump-label", "-l", "out/game.tass", "Test1/master.asm"]),
 			"$64tass"
 		);
