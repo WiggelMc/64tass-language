@@ -1,4 +1,4 @@
-import { CancellationToken, ProviderResult, Task, TaskEndEvent, TaskProvider, tasks, TaskStartEvent } from "vscode";
+import { CancellationToken, ProcessExecution, ProviderResult, ShellExecution, Task, TaskEndEvent, TaskProvider, tasks, TaskScope, TaskStartEvent, Uri, workspace } from "vscode";
 import { TaskParams, TaskType } from "../common/capabilities/task";
 import { ClientHandler } from "./handler";
 import { setErrorShown } from "./terminal";
@@ -18,7 +18,10 @@ class TassTaskProvider implements TaskProvider<TassTask> {
 	provideTasks(token: CancellationToken): ProviderResult<TassTask[]> {
 
 		console.log("TaskProvider provide");
-		return [];
+		return [
+			TassTask.makeShellTask(),
+			TassTask.makeProcessTask()
+		];
 	}
 	resolveTask(task: TassTask, token: CancellationToken): ProviderResult<TassTask> {
 
@@ -29,6 +32,29 @@ class TassTaskProvider implements TaskProvider<TassTask> {
 
 class TassTask extends Task {
 
+	static makeShellTask() {
+		const folder = workspace.getWorkspaceFolder(Uri.parse("file:///c%3A/Users/kimhh/Documents/SNESProgramming/vscode/64tass-language/testing-code/workspace2/Test1/master.asm"));
+
+		return new this(
+			{type: "shell"},
+			folder,
+			"Goat Shell",
+			"64tass",
+			new ShellExecution("64tass -a -X -b -o out/game.sfc --line-numbers -L out/game.list --dump-label -l out/game.tass Test1/master.asm"),
+			"$64tass"
+		);
+	}
+
+	static makeProcessTask() {
+		return new this(
+			{type: "process"},
+			workspace.getWorkspaceFolder(Uri.parse("file:///c%3A/Users/kimhh/Documents/SNESProgramming/vscode/64tass-language/testing-code/workspace2/Test1/master.asm")),
+			"Goat Process",
+			"64tass", 
+			new ProcessExecution("64tass", ["-a", "-X", "-b", "-o", "out/game.sfc", "--line-numbers", "-L", "out/game.list", "--dump-label", "-l", "out/game.tass", "Test1/master.asm"]),
+			"$64tass"
+		);
+	}
 }
 
 const runningTasks: Map<Task,boolean> = new Map();

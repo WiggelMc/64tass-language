@@ -147,6 +147,7 @@ way to generate assemble task code from 64tasslang.json (possibly automatically 
 		[also vscode options (3x bool)[copy-menu-option insert-task-menu-option automatic-insert-task]] 
 		wont override task if another 64tasslang.json specifies it already
 		maybe provide assemble (and assembleAndBuild) directy (without tasks.json) [maybe optional] (might make problems with task runner)
+		add additional args array to 64tasslang.json
 
 TODO
 

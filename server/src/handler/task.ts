@@ -65,6 +65,9 @@ function getTaskName(type: TaskType): string | undefined {
 function getTaskType(task: string): TaskType {
     switch (task) {
         case "Assemble":
+        case "Assemble A":
+        case "Goat Process":
+        case "Goat Shell":
             return TaskType.assemble;
         case "Assemble and Start":
             return TaskType.assembleAndStart;
