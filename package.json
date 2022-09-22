@@ -105,8 +105,8 @@
         "extensions": [".asm"],
         "configuration": "./definitions/language-configurations/64tass-language-configuration.json",
         "icon": {
-          "light": "./resources/64tass-icon.svg",
-          "dark": "./resources/64tass-icon.svg"
+          "light": "./resources/icons/64tass-light-icon.svg",
+          "dark": "./resources/icons/64tass-dark-icon.svg"
         }
       },
       {
@@ -115,8 +115,8 @@
         "extensions": [".list"],
         "configuration": "./definitions/language-configurations/64tasslist-language-configuration.json",
         "icon": {
-          "light": "./resources/64tass-icon-green.svg",
-          "dark": "./resources/64tass-icon-green.svg"
+          "light": "./resources/icons/64tasslist-light-icon.svg",
+          "dark": "./resources/icons/64tasslist-dark-icon.svg"
         }
       }
     ],

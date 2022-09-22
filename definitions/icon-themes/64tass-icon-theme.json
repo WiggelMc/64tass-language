@@ -1953,7 +1953,7 @@
             "mdo": "_mdo_light",
             "cls": "_salesforce_light",
             "apex": "_salesforce_light",
-            "asm": "_asm_light",
+            //"asm": "_asm_light",              //EDIT HERE
             "s": "_asm_light",
             "bicep": "_bicep_light",
             "bzl": "_bazel_light",
