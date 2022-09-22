@@ -227,7 +227,7 @@
     "jsonValidation": [
       {
         "fileMatch": "64tasslang.json",
-        "url": "./definitions/64tasslang-config-schema.json"
+        "url": "./definitions/schemas/64tasslang-config-schema.json"
       }
     ],
     "menus": {
