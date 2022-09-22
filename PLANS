@@ -143,6 +143,11 @@ settings scopes
 somehow let the server know if the assembly has errors (maybe check timestamp in header and / or changed watch of list file)
 for compillation assume that last any change before the list file update was compiled (might be wrong, but currently cant reproduce)
 
+way to generate assemble task code from 64tasslang.json (possibly automatically put it in the specified assemble task) 
+		[also vscode options (3x bool)[copy-menu-option insert-task-menu-option automatic-insert-task]] 
+		wont override task if another 64tasslang.json specifies it already
+		maybe provide assemble (and assembleAndBuild) directy (without tasks.json) [maybe optional] (might make problems with task runner)
+
 TODO
 
 V	organize client code
@@ -167,7 +172,9 @@ V	Add Icons to languages (make 4 images)
 .	Add Walkthrough
 .	Organize package.json
 .	fix nested workspaces updating twice
-.	determine behaviour for include directory outside workspace (might be done for shared libs)
+.	determine behaviour for include of files (relative path or include directory) outside workspace (might be done for shared libs)
+.	add error message for missing property in 64tasslang.json (+open code action [maybe create action])
+.	test how include path handles backtracking out of specified paths
 
 
 

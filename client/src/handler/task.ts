@@ -1,4 +1,4 @@
-import { Task, TaskEndEvent, tasks, TaskStartEvent } from "vscode";
+import { CancellationToken, ProviderResult, Task, TaskEndEvent, TaskProvider, tasks, TaskStartEvent } from "vscode";
 import { TaskParams, TaskType } from "../common/capabilities/task";
 import { ClientHandler } from "./handler";
 import { setErrorShown } from "./terminal";
@@ -9,9 +9,27 @@ export const taskHandler: ClientHandler = {
         return [
             tasks.onDidStartTask(onDidStartTask),
 		    tasks.onDidEndTask(onDidEndTask),
+			tasks.registerTaskProvider("shell", new TassTaskProvider())
         ];
     },
 };
+
+class TassTaskProvider implements TaskProvider<TassTask> {
+	provideTasks(token: CancellationToken): ProviderResult<TassTask[]> {
+
+		console.log("TaskProvider provide");
+		return [];
+	}
+	resolveTask(task: TassTask, token: CancellationToken): ProviderResult<TassTask> {
+
+		console.log("TaskProvider resolve");
+		return task;
+	}
+}
+
+class TassTask extends Task {
+
+}
 
 const runningTasks: Map<Task,boolean> = new Map();
 
