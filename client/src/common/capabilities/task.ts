@@ -50,3 +50,26 @@ export type OptionalTaskIdentifier = TaskIdentifier | undefined | null;
 export interface TaskIdentifier {
     task: string
 }
+
+export interface TaskCommandFetchRequest {
+    (params: TaskCommandFetchParams): OptionalTaskCommandIdentifier | Promise<OptionalTaskCommandIdentifier>
+}
+export namespace TaskCommandFetchRequest {
+    export const method = "64tass.TaskCommandFetch";
+}
+
+export interface TaskCommandFetchParams {
+    textDocument: TextDocumentIdentifier,
+    taskCommandType: TaskCommandType
+}
+
+export enum TaskCommandType {
+    processTask,
+    commandLineCommand
+}
+
+export type OptionalTaskCommandIdentifier = TaskCommandIdentifier | undefined | null;
+
+export interface TaskCommandIdentifier {
+    command: string
+}

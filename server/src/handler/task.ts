@@ -1,5 +1,5 @@
 import { _Connection, _, TextDocumentSyncKind, TextDocumentFilter } from "vscode-languageserver";
-import { OptionalTaskIdentifier, TaskEndRequest, TaskFetchRequest, TaskStartRequest, TaskType } from "../common/capabilities/task";
+import { OptionalTaskIdentifier, TaskCommandFetchRequest, TaskCommandType, TaskEndRequest, TaskFetchRequest, TaskStartRequest, TaskType } from "../common/capabilities/task";
 import { ConnectionEventHandler } from "./handler";
 
 export const taskHandler : ConnectionEventHandler = {
@@ -8,6 +8,7 @@ export const taskHandler : ConnectionEventHandler = {
         connection.onRequest(TaskStartRequest.method, onTaskStart);
         connection.onRequest(TaskEndRequest.method, onTaskEnd);
         connection.onRequest(TaskFetchRequest.method, onTaskFetch);
+        connection.onRequest(TaskCommandFetchRequest.method, onTaskCommandFetch);
     }
 };
 
@@ -27,6 +28,22 @@ async function(params) {
     return {
         type: getTaskType(params.task)
     };
+};
+
+const onTaskCommandFetch: TaskCommandFetchRequest =
+async function(params) {
+
+    console.log("Fetch Task: ", params);
+
+    if (params.taskCommandType === TaskCommandType.commandLineCommand) {
+        return {
+            command: "CMD: " + params.textDocument.uri
+        };
+    } else {
+        return {
+            command: "JSON: " + params.textDocument.uri
+        };
+    }
 };
 
 const onTaskFetch: TaskFetchRequest =

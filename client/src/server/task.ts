@@ -1,4 +1,4 @@
-import { TaskFetchParams, TaskFetchRequest, OptionalTaskIdentifier, TaskIdentifier, TaskParams, TaskResult, TaskStartRequest, TaskEndRequest } from "../common/capabilities/task";
+import { TaskFetchParams, TaskFetchRequest, OptionalTaskIdentifier, TaskIdentifier, TaskParams, TaskResult, TaskStartRequest, TaskEndRequest, TaskCommandFetchParams, TaskCommandIdentifier, OptionalTaskCommandIdentifier, TaskCommandFetchRequest } from "../common/capabilities/task";
 import { client } from "../util/languageclient";
 
 
@@ -18,6 +18,17 @@ export async function sendTaskFetchRequest(params: TaskFetchParams): Promise<Tas
 
     if (r === undefined || r === null) {
         throw new Error("Task not defined");
+    }
+
+    return r;
+}
+
+export async function sendTaskCommandFetchRequest(params: TaskCommandFetchParams): Promise<TaskCommandIdentifier> {
+
+    const r: OptionalTaskCommandIdentifier = await client.sendRequest(TaskCommandFetchRequest.method, params);
+
+    if (r === undefined || r === null) {
+        throw new Error("Command could not be created");
     }
 
     return r;

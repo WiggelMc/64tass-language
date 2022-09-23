@@ -158,8 +158,6 @@ if composite task doesnt work
 	final plans:
 
 	copy command (menu) [start command / process task]
-	create/update process task (menu / auto) 			[later]
-	create/update										[later]
 
 TODO
 
@@ -188,7 +186,6 @@ V	Add Icons to languages (make 4 images)
 .	determine behaviour for include of files (relative path or include directory) outside workspace (might be done for shared libs)
 .	add error message for missing property in 64tasslang.json (+open code action [maybe create action])
 .	test how include path handles backtracking out of specified paths
-.	get Composite Task to work
 
 
 
