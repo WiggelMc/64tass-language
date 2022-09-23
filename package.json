@@ -71,39 +71,48 @@
     "commands": [
       {
         "command": "64tass.viewInList",
-        "title": "View in List"
+        "title": "View in List",
+        "enablement": "editorLangId == 64tass"
       },
       {
         "command": "64tass.assembleAndViewInList",
-        "title": "Assemble and View in List"
+        "title": "Assemble and View in List",
+        "enablement": "editorLangId == 64tass"
       },
       {
         "command": "64tass.viewInSource",
-        "title": "View in Source"
+        "title": "View in Source",
+        "enablement": "editorLangId == 64tasslist"
       },
       {
         "command": "64tass.assemble",
-        "title": "Assemble"
+        "title": "Assemble",
+        "enablement": "editorLangId =~ /(64tasslist|64tass)/ || resourceFilename == 64tasslang.json"
       },
       {
         "command": "64tass.assembleAndStart",
-        "title": "Assemble and Start"
+        "title": "Assemble and Start",
+        "enablement": "editorLangId =~ /(64tasslist|64tass)/ || resourceFilename == 64tasslang.json"
       },
       {
         "command": "64tass.start",
-        "title": "Start"
+        "title": "Start",
+        "enablement": "editorLangId =~ /(64tasslist|64tass)/ || resourceFilename == 64tasslang.json"
       },
       {
         "command": "64tass.runCustomTask",
-        "title": "Run Custom Task"
+        "title": "Run Custom Task",
+        "enablement": "editorLangId =~ /(64tasslist|64tass)/ || resourceFilename == 64tasslang.json"
       },
       {
         "command": "64tass.copyAssembleCommand",
-        "title": "Copy Assemble Command"
+        "title": "Copy Assemble Command",
+        "enablement": "resourceFilename == 64tasslang.json"
       },
       {
         "command": "64tass.copyAssembleTask",
-        "title": "Copy Assemble Task"
+        "title": "Copy Assemble Task",
+        "enablement": "resourceFilename == 64tasslang.json"
       }
     ],
     "languages": [
@@ -297,94 +306,87 @@
     },
     "keybindings": [
       {
-        "when": "editorLangId == 64tass",
         "command": "64tass.viewInList",
         "key": "alt+d"
       },
       {
-        "when": "editorLangId == 64tass",
         "command": "64tass.assembleAndViewInList",
         "key": "ctrl+alt+d"
       },
       {
-        "when": "editorLangId == 64tasslist",
         "command": "64tass.viewInSource",
         "key": "alt+d"
       },
 
       {
-        "when": "editorLangId =~ /(64tasslist|64tass)/ || resourceFilename == 64tasslang.json",
         "command": "64tass.assemble",
         "key": "alt+a alt+a"
       },
       {
-        "when": "editorLangId =~ /(64tasslist|64tass)/ || resourceFilename == 64tasslang.json",
         "command": "64tass.assembleAndStart",
         "key": "alt+a alt+d"
       },
       {
-        "when": "editorLangId =~ /(64tasslist|64tass)/ || resourceFilename == 64tasslang.json",
         "command": "64tass.start",
         "key": "alt+a alt+s"
       },
       {
-        "when": "editorLangId =~ /(64tasslist|64tass)/ || resourceFilename == 64tasslang.json",
         "command": "64tass.runCustomTask",
         "args": [1],
         "key": "alt+a alt+1"
       },
       {
-        "when": "editorLangId =~ /(64tasslist|64tass)/ || resourceFilename == 64tasslang.json",
         "command": "64tass.runCustomTask",
         "args": [2],
         "key": "alt+a alt+2"
       },
       {
-        "when": "editorLangId =~ /(64tasslist|64tass)/ || resourceFilename == 64tasslang.json",
         "command": "64tass.runCustomTask",
         "args": [3],
         "key": "alt+a alt+3"
       },
       {
-        "when": "editorLangId =~ /(64tasslist|64tass)/ || resourceFilename == 64tasslang.json",
         "command": "64tass.runCustomTask",
         "args": [4],
         "key": "alt+a alt+4"
       },
       {
-        "when": "editorLangId =~ /(64tasslist|64tass)/ || resourceFilename == 64tasslang.json",
         "command": "64tass.runCustomTask",
         "args": [5],
         "key": "alt+a alt+5"
       },
       {
-        "when": "editorLangId =~ /(64tasslist|64tass)/ || resourceFilename == 64tasslang.json",
         "command": "64tass.runCustomTask",
         "args": [6],
         "key": "alt+a alt+6"
       },
       {
-        "when": "editorLangId =~ /(64tasslist|64tass)/ || resourceFilename == 64tasslang.json",
         "command": "64tass.runCustomTask",
         "args": [7],
         "key": "alt+a alt+7"
       },
       {
-        "when": "editorLangId =~ /(64tasslist|64tass)/ || resourceFilename == 64tasslang.json",
         "command": "64tass.runCustomTask",
         "args": [8],
         "key": "alt+a alt+8"
       },
       {
-        "when": "editorLangId =~ /(64tasslist|64tass)/ || resourceFilename == 64tasslang.json",
         "command": "64tass.runCustomTask",
         "args": [9],
         "key": "alt+a alt+9"
       },
       {
-        "when": "editorLangId =~ /(64tasslist|64tass)/ || resourceFilename == 64tasslang.json",
         "command": "64tass.runCustomTask",
         "key": "alt+a alt+q"
+      },
+
+      {
+        "command": "64tass.copyAssembleCommand",
+        "key": "ctrl+alt+c ctrl+alt+c"
+      },
+      {
+        "command": "64tass.copyAssembleTask",
+        "key": "ctrl+alt+c ctrl+alt+x"
       }
     ]
   },
