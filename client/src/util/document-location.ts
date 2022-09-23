@@ -51,8 +51,11 @@ export async function gotoDocumentLocationStoppable(location: DocumentLocation) 
 export async function gotoDocumentLocation(location: DocumentLocation) {
     runningGotos.clear();
 
-    return (async () => {})()
-    .then(() => vscode.workspace.openTextDocument(vscode.Uri.parse(location.textDocument.uri)))
+    return (async () => {
+        return vscode.workspace.openTextDocument(
+            vscode.Uri.parse(location.textDocument.uri)
+        );
+    })()
     .then(document => vscode.window.showTextDocument(document,vscode.ViewColumn.Active))
     .then(editor => {
 

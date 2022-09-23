@@ -155,11 +155,11 @@ way to generate assemble task code from 64tasslang.json (possibly automatically 
 if composite task doesnt work
 	still auto create process task (but auto create it in tasks.json) [everything else will be the same]
 
+	final plans:
 
-maybe use label + detail to identify tasks (detail could be path) [allows for same name when using auto generated tasks]
-	full path (slighty annoying if task is run through Search)
-	WorkspaceFolder/relative (issues if multiple workspace folder have same name)
-	WorkspaceFolder/relative (many spaces) full path  (annoying on hover and in tasks.json)
+	copy command (menu) [start command / process task]
+	create/update process task (menu / auto) 			[later]
+	create/update										[later]
 
 TODO
 

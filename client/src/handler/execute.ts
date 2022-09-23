@@ -1,4 +1,4 @@
-import { commands, window } from "vscode";
+import { commands, env, window } from "vscode";
 import { DocumentLocation } from "../common/capabilities/list-file";
 import { TaskFetchParams, TaskType } from "../common/capabilities/task";
 import { runTask, TaskMap } from "../util/task";
@@ -20,6 +20,9 @@ export const executeHandler: ClientHandler = {
             commands.registerCommand("64tass.assemble", () => executeTaskType(TaskType.assemble)),
             commands.registerCommand("64tass.assembleAndStart", () => executeTaskType(TaskType.assembleAndStart)),
             commands.registerCommand("64tass.start", () => executeTaskType(TaskType.start)),
+
+            commands.registerCommand("64tass.copyAssembleCommand", copyAssembleCommand),
+            commands.registerCommand("64tass.copyAssembleTask", copyAssembleTask),
         ];
     },
 };
@@ -86,8 +89,7 @@ function(type: TaskType) {
 const runCustomTask: (...args: any[]) => Promise<void> =
 async function(taskString) {
 	if (taskString === undefined) {
-		(async () => {})()
-		.then(showCustomTaskInputBox)
+		showCustomTaskInputBox()
 		.then(executeCustomTaskType)
 		.catch(displayErrorMessage);
 	} else {
@@ -132,4 +134,26 @@ function validateCustomTaskInput(taskString: string) {
 		&& taskNumber <= 1000
 		&& Number.isInteger(taskNumber)
 	);
+}
+
+async function copyAssembleTask() {
+
+	getCurrentDocumentLocation()
+	
+	.then(() => "Assemble Task")
+	.then(env.clipboard.writeText)
+	.then(() => window.showInformationMessage("Assemble Task copied to clipboard"))
+
+	.catch(displayErrorMessage);
+}
+
+async function copyAssembleCommand() {
+	
+	getCurrentDocumentLocation()
+
+	.then(() => "Assemble Command")
+	.then(env.clipboard.writeText)
+	.then(() => window.showInformationMessage("Assemble Command copied to clipboard"))
+
+	.catch(displayErrorMessage);
 }

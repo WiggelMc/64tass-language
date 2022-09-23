@@ -96,6 +96,14 @@
       {
         "command": "64tass.runCustomTask",
         "title": "Run Custom Task"
+      },
+      {
+        "command": "64tass.copyAssembleCommand",
+        "title": "Copy Assemble Command"
+      },
+      {
+        "command": "64tass.copyAssembleTask",
+        "title": "Copy Assemble Task"
       }
     ],
     "languages": [
@@ -262,6 +270,16 @@
           "when": "config.64tass-language.menu.start && editorLangId =~ /(64tasslist|64tass)/ || config.64tass-language.menu.start && resourceFilename == 64tasslang.json",
           "command": "64tass.start",
           "group": "z_commands@0.952"
+        },
+        {
+          "when": "resourceFilename == 64tasslang.json",
+          "command": "64tass.copyAssembleCommand",
+          "group": "9_cutcopypaste@0.95"
+        },
+        {
+          "when": "resourceFilename == 64tasslang.json",
+          "command": "64tass.copyAssembleTask",
+          "group": "9_cutcopypaste@0.951"
         }
       ]
     },
