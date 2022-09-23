@@ -186,6 +186,8 @@ V	Add Icons to languages (make 4 images)
 .	determine behaviour for include of files (relative path or include directory) outside workspace (might be done for shared libs)
 .	add error message for missing property in 64tasslang.json (+open code action [maybe create action])
 .	test how include path handles backtracking out of specified paths
+.	better error messages for fail states (maybe use RequestError object instead of optional to let the server send back detailed feedback)
+.	determine behaviour for include of files (relative path or include directory) with different language settings (or none)
 
 
 
