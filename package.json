@@ -199,7 +199,10 @@
 
             "assemble": false,
             "start": false,
-            "assembleAndStart": false
+            "assembleAndStart": false,
+
+            "copyAssembleCommand": false,
+            "copyAssembleTask": true
           },
           "examples": [{}],
           "properties": {
@@ -227,6 +230,15 @@
             "assembleAndStart": {
               "type": "boolean",
               "default": false
+            },
+
+            "copyAssembleCommand": {
+              "type": "boolean",
+              "default": false
+            },
+            "copyAssembleTask": {
+              "type": "boolean",
+              "default": true
             }
           }
 				}
@@ -272,12 +284,12 @@
           "group": "z_commands@0.952"
         },
         {
-          "when": "resourceFilename == 64tasslang.json",
+          "when": "config.64tass-language.menu.copyAssembleCommand && resourceFilename == 64tasslang.json",
           "command": "64tass.copyAssembleCommand",
           "group": "9_cutcopypaste@0.95"
         },
         {
-          "when": "resourceFilename == 64tasslang.json",
+          "when": "config.64tass-language.menu.copyAssembleTask && resourceFilename == 64tasslang.json",
           "command": "64tass.copyAssembleTask",
           "group": "9_cutcopypaste@0.951"
         }
