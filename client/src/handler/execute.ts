@@ -1,67 +1,23 @@
-import { commands, env, window } from "vscode";
-import { DocumentLocation } from "../common/capabilities/list-file";
-import { TaskCommandFetchParams, TaskCommandType, TaskFetchParams, TaskType } from "../common/capabilities/task";
+import { commands, window } from "vscode";
+import { TaskType } from "../common/capabilities/task";
 import { runTask, TaskMap } from "../util/task";
-import { sendTaskCommandFetchRequest, sendTaskFetchRequest } from "../server/task";
-import { sendViewInListFileRequest, sendViewInSourceFileRequest } from "../server/list-file";
-import { getCurrentDocumentLocation, gotoDocumentLocation, gotoDocumentLocationStoppable } from "../util/document-location";
+import { sendTaskFetchRequest } from "../server/task";
+import { getCurrentDocumentLocation } from "../util/document-location";
 import { displayErrorMessage } from "../util/error";
 import { ClientHandler } from "./handler";
+import { createTaskFetchParamConverter } from "../util/execute";
 
 export const executeHandler: ClientHandler = {
     register(context) {
         return [
-            commands.registerCommand("64tass.viewInSource", viewInSource),
-            commands.registerCommand("64tass.viewInList", viewInList),
-            commands.registerCommand("64tass.assembleAndViewInList", assembleAndViewInList),
-
             commands.registerCommand("64tass.runCustomTask", runCustomTask),
 
             commands.registerCommand("64tass.assemble", () => executeTaskType(TaskType.assemble)),
             commands.registerCommand("64tass.assembleAndStart", () => executeTaskType(TaskType.assembleAndStart)),
             commands.registerCommand("64tass.start", () => executeTaskType(TaskType.start)),
-
-            commands.registerCommand("64tass.copyAssembleCommand", copyAssembleCommand),
-            commands.registerCommand("64tass.copyAssembleTask", copyAssembleTask),
         ];
     },
 };
-
-async function viewInSource() {
-		
-	getCurrentDocumentLocation()
-	.then(sendViewInSourceFileRequest)
-	.then(gotoDocumentLocation)
-	
-	.catch(displayErrorMessage);
-}
-
-async function viewInList() {
-
-	getCurrentDocumentLocation()
-	.then(sendViewInListFileRequest)
-	.then(gotoDocumentLocation)
-	
-	.catch(displayErrorMessage);
-}
-
-async function assembleAndViewInList() {
-
-	let location: DocumentLocation;
-
-	getCurrentDocumentLocation()
-	.then(x => location = x)
-	
-	.then(createTaskFetchParamConverter(TaskType.assemble))
-	.then(sendTaskFetchRequest)
-	.then(r => TaskMap.getTask(r.task))
-	.then(runTask)
-
-	.then(() => sendViewInListFileRequest(location))
-	.then(gotoDocumentLocationStoppable)
-
-	.catch(displayErrorMessage);
-}
 
 async function executeTaskType(type: TaskType) {
 
@@ -74,17 +30,6 @@ async function executeTaskType(type: TaskType) {
 	
 	.catch(displayErrorMessage);
 }
-
-const createTaskFetchParamConverter: (type: TaskType) => ((location: DocumentLocation) => Promise<TaskFetchParams>) =
-function(type: TaskType) {
-	return async function(location: DocumentLocation) {
-
-		return {
-			textDocument: location.textDocument,
-			taskType: type
-		};
-	};
-};
 
 const runCustomTask: (...args: any[]) => Promise<void> =
 async function(taskString) {
@@ -135,38 +80,3 @@ function validateCustomTaskInput(taskString: string) {
 		&& Number.isInteger(taskNumber)
 	);
 }
-
-async function copyAssembleTask() {
-
-	getCurrentDocumentLocation()
-	.then(createTaskCommandFetchParamConverter(TaskCommandType.processTask))
-	
-	.then(sendTaskCommandFetchRequest)
-	.then(r => env.clipboard.writeText(r.command))
-	.then(() => window.showInformationMessage("Assemble Task copied to clipboard"))
-
-	.catch(displayErrorMessage);
-}
-
-async function copyAssembleCommand() {
-	
-	getCurrentDocumentLocation()
-	.then(createTaskCommandFetchParamConverter(TaskCommandType.commandLineCommand))
-
-	.then(sendTaskCommandFetchRequest)
-	.then(r => env.clipboard.writeText(r.command))
-	.then(() => window.showInformationMessage("Assemble Command copied to clipboard"))
-
-	.catch(displayErrorMessage);
-}
-
-const createTaskCommandFetchParamConverter: (type: TaskCommandType) => ((location: DocumentLocation) => Promise<TaskCommandFetchParams>) =
-function(type: TaskType) {
-	return async function(location: DocumentLocation) {
-
-		return {
-			textDocument: location.textDocument,
-			taskCommandType: type			
-		};
-	};
-};

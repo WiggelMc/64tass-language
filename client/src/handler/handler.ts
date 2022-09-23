@@ -1,6 +1,8 @@
 import { Disposable, ExtensionContext } from "vscode";
+import { commandHandler } from "./command";
 import { configHandler } from "./config";
 import { executeHandler } from "./execute";
+import { listFileHandler } from "./list-file";
 import { taskHandler } from "./task";
 import { terminalHandler } from "./terminal";
 
@@ -10,6 +12,8 @@ export interface ClientHandler {
 
 const handlers: ClientHandler[] = [
     executeHandler,
+    listFileHandler,
+    commandHandler,
 	taskHandler,
 	configHandler,
 	terminalHandler,
