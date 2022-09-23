@@ -149,6 +149,18 @@ way to generate assemble task code from 64tasslang.json (possibly automatically 
 		maybe provide assemble (and assembleAndBuild) directy (without tasks.json) [maybe optional] (might make problems with task runner)
 		add additional args array to 64tasslang.json
 
+		menu: copy run command (64tass -a -...)
+		options: auto Provide Task / link existing task (might be good for makefile)
+
+if composite task doesnt work
+	still auto create process task (but auto create it in tasks.json) [everything else will be the same]
+
+
+maybe use label + detail to identify tasks (detail could be path) [allows for same name when using auto generated tasks]
+	full path (slighty annoying if task is run through Search)
+	WorkspaceFolder/relative (issues if multiple workspace folder have same name)
+	WorkspaceFolder/relative (many spaces) full path  (annoying on hover and in tasks.json)
+
 TODO
 
 V	organize client code
@@ -176,6 +188,7 @@ V	Add Icons to languages (make 4 images)
 .	determine behaviour for include of files (relative path or include directory) outside workspace (might be done for shared libs)
 .	add error message for missing property in 64tasslang.json (+open code action [maybe create action])
 .	test how include path handles backtracking out of specified paths
+.	get Composite Task to work
 
 
 
