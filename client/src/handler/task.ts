@@ -9,72 +9,9 @@ export const taskHandler: ClientHandler = {
         return [
             tasks.onDidStartTask(onDidStartTask),
 		    tasks.onDidEndTask(onDidEndTask),
-			tasks.registerTaskProvider("shell", new TassTaskProvider())
         ];
     },
 };
-
-class TassTaskProvider implements TaskProvider<TassTask> {
-	provideTasks(token: CancellationToken): ProviderResult<TassTask[]> {
-
-		console.log("TaskProvider provide2");
-		return [
-			TassTask.makeShellTask(),
-			TassTask.makeProcessTask(),
-			TassTask.makeCompositeTask()
-		];
-	}
-	resolveTask(task: TassTask, token: CancellationToken): ProviderResult<TassTask> {
-
-		console.log("TaskProvider resolve");
-		return undefined;
-	}
-}
-
-class TassTask extends Task {
-
-	static makeShellTask() {
-		const folder = workspace.getWorkspaceFolder(Uri.parse("file:///c%3A/Users/kimhh/Documents/SNESProgramming/vscode/64tass-language/testing-code/workspace2/Test1/master.asm"));
-
-		return new this(
-			{type: "shell"},
-			folder,
-			"Goat Shell",
-			"64tass",
-			new ShellExecution("64tass -a -X -b -o out/game.sfc --line-numbers -L out/game.list --dump-label -l out/game.tass Test1/master.asm"),
-			"$64tass"
-		);
-	}
-
-	static makeProcessTask() {
-		return new this(
-			{type: "process"},
-			workspace.getWorkspaceFolder(Uri.parse("file:///c%3A/Users/kimhh/Documents/SNESProgramming/vscode/64tass-language/testing-code/workspace2/Test1/master.asm")),
-			"Goat Process",
-			"64tass",
-			new ProcessExecution("64tass", ["-a", "-X", "-b", "-o", "out/game.sfc", "--line-numbers", "-L", "out/game.list", "--dump-label", "-l", "out/game.tass", "Test1/master.asm"]),
-			"$64tass"
-		);
-	}
-
-	static makeCompositeTask() {
-		return new this(
-			{
-				type: "process",
-				dependsOn: [
-					"Goat Process",
-					"Start A"
-            	],
-				"dependsOrder": "sequence"
-
-			},
-			workspace.getWorkspaceFolder(Uri.parse("file:///c%3A/Users/kimhh/Documents/SNESProgramming/vscode/64tass-language/testing-code/workspace2/Test1/master.asm")),
-			"Goat Process and Start",
-			"64tass",
-			new ProcessExecution("64tass", ["--help"])
-		);
-	}
-}
 
 const runningTasks: Map<Task,boolean> = new Map();
 
