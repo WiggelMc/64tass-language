@@ -1,10 +1,10 @@
 import { _Connection, _, WorkspaceFolder } from "vscode-languageserver";
 import { ConnectionEventHandler } from "./handler";
-import * as chokidar from "chokidar";
 import * as Path from "path";
 import * as fs from "fs";
 import { configFilename } from "../common/capabilities/document-selector";
 import { URI } from "vscode-uri";
+import { ConditionalFileWatcher, FileWatcherMap } from "../util/file-watcher-map";
 
 export const fileSystemHandler : ConnectionEventHandler = {
     register: function (connection: _Connection<_, _, _, _, _, _, _>): void {
@@ -13,11 +13,9 @@ export const fileSystemHandler : ConnectionEventHandler = {
     }
 };
 
-let fileWatchers: Map<string, chokidar.FSWatcher> = new Map();
+let fileWatchers: FileWatcherMap = new FileWatcherMap();
 
 export function registerFileWatchers(folders: WorkspaceFolder[] | null) {
-
-    
 
     if (folders === null) {
         return;
@@ -27,6 +25,8 @@ export function registerFileWatchers(folders: WorkspaceFolder[] | null) {
         const uri = URI.parse(folder.uri);
         registerFileWatcher(uri.fsPath);
     }
+
+    console.log("FSWATCH: ", fileWatchers.toString());
 }
 
 export function unregisterFileWatchers(folders: WorkspaceFolder[] | null) {
@@ -39,31 +39,18 @@ export function unregisterFileWatchers(folders: WorkspaceFolder[] | null) {
         const uri = URI.parse(folder.uri);
         unregisterFileWatcher(uri.fsPath);
     }
+
+    console.log("FSUNWATCH: ", fileWatchers.toString());
 }
 
 export function registerFileWatcher(fsPath: string) {
 
-    console.log("File watcher added: ", fsPath);
-    if (fileWatchers.has(fsPath)) {
-        console.log("File watcher could not be added");
-        return;
-    }
-
-    const watcher = chokidar.watch(fsPath).on("all", createFileSystemListener(fsPath));
-    fileWatchers.set(fsPath, watcher);
+    fileWatchers.add(fsPath, new ConditionalFileWatcher(fsPath, createFileSystemListener(fsPath)));
 }
 
 export function unregisterFileWatcher(fsPath: string) {
 
-    console.log("File watcher removed: ", fsPath);
-    if (!fileWatchers.has(fsPath)) {
-        console.log("File watcher could not be removed");
-        return;
-    }
-
-    const watcher = fileWatchers.get(fsPath);
-    fileWatchers.delete(fsPath);
-    watcher?.unwatch(fsPath).close();
+    fileWatchers.remove(fsPath);
 
     //The files in the removed workspace need to be removed from index manually (TODO) [either here or in onChangeWorkspaceFolders]
 }

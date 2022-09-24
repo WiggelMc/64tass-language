@@ -188,6 +188,8 @@ V	Add Icons to languages (make 4 images)
 .	test how include path handles backtracking out of specified paths
 .	better error messages for fail states (maybe use RequestError object instead of optional to let the server send back detailed feedback)
 .	determine behaviour for include of files (relative path or include directory) with different language settings (or none)
+.	add icons and language support for .(raw|bin) / .(inc)
+.	create general PathLayerMap, which can be used by FileWatcherMap and FileIndexMap (not yet implemented) [make on listeners part of Map and not of node]
 
 
 
