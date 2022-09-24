@@ -196,6 +196,7 @@ V	Add Icons to languages (make 4 images)
 .	determine behaviour for include of files (relative path or include directory) with different language settings (or none)
 .	add icons and language support for .(raw|bin) / .(inc)
 .	create general PathLayerMap
+.	automatically read fileTypeAssotiations from config for DocumentSelector
 
 
 
