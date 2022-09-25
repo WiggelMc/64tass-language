@@ -165,6 +165,8 @@ PathLayerMap
 	make on listeners part of Map and not of node
 	should also have a Map<string, T> for easier access (Optional) [make different implementations to ihnerit from]
 
+language settings have to match to allow for include (how to handle common libs from)
+
 TODO
 
 V	organize client code
@@ -188,12 +190,12 @@ V	Add Icons to languages (make 4 images)
 .	Add Grammars
 .	Add Walkthrough
 .	Organize package.json
-.	fix nested workspaces updating twice
+V	fix nested workspaces updating twice
 .	determine behaviour for include of files (relative path or include directory) outside workspace (might be done for shared libs)
 .	add error message for missing property in 64tasslang.json (+open code action [maybe create action])
 .	test how include path handles backtracking out of specified paths
 .	better error messages for fail states (maybe use RequestError object instead of optional to let the server send back detailed feedback)
-.	determine behaviour for include of files (relative path or include directory) with different language settings (or none)
+V	determine behaviour for include of files (relative path or include directory) with different language settings (or none)
 .	add icons and language support for .(raw|bin) / .(inc)
 .	create general PathLayerMap
 .	automatically read fileTypeAssotiations from config for DocumentSelector

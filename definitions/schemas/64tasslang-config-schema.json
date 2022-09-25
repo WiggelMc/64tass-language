@@ -154,6 +154,12 @@
             "items": {
                 "type": "string"
             }
+        },
+        "parent": {
+            "title": "Specify the file from which this one inherits. [auto] will search for the parent automatically in parent directories [library] will use the configuration of the project including files",
+            "type": "string",
+            "default": "auto",
+            "examples": ["library"]
         }
     }
 }
