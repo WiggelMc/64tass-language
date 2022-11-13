@@ -1,14 +1,13 @@
-import { DirPathSegment } from "./file";
-import { FileSystem } from "./file-system";
+import { DirPathSegment, EmitFileRemoved } from "./file";
 
 export class FileSystemNode<F> {
     files: Map<string, F> = new Map();
     children: Map<string, FileSystemNode<F>> = new Map();
     isTracked: boolean = false;
-    fileSystem: FileSystem<F>;
+    emitFileRemoved: EmitFileRemoved<F>;
 
-    constructor(fileSystem: FileSystem<F>) {
-        this.fileSystem = fileSystem;
+    constructor(emitFileRemoved: EmitFileRemoved<F>) {
+        this.emitFileRemoved = emitFileRemoved;
     }
 
     trackDir(pathSegments: DirPathSegment[]) {
@@ -31,7 +30,7 @@ export class FileSystemNode<F> {
         }
 
         for (const [segment, file] of this.files) {
-            this.fileSystem.emitFileRemoved(file);
+            this.emitFileRemoved(file);
         }
         this.files.clear();
 
@@ -79,7 +78,7 @@ export class FileSystemNode<F> {
         let nextNode = this.children.get(segment);
 
         if (nextNode === undefined) {
-            nextNode = new FileSystemNode(this.fileSystem);
+            nextNode = new FileSystemNode(this.emitFileRemoved);
             this.children.set(segment, nextNode);
         }
 

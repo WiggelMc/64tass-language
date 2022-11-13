@@ -1,11 +1,11 @@
 import EventEmitter = require("events");
-import { DirPath, FilePath, Path, PathSegment } from "./file";
+import { DirPath, FilePath, OnFileRemoved, Path, PathSegment } from "./file";
 import { FileSystemNode } from "./file-system-node";
 
 const REMOVE_FILE_EVENT = Symbol('FileRemoved');
 
 export class FileSystem<F> {
-    head: FileSystemNode<F> = new FileSystemNode(this);
+    head: FileSystemNode<F> = new FileSystemNode(this.emitFileRemoved);
     eventEmitter: EventEmitter = new EventEmitter();
 
     addFile(path: FilePath, file: F): void {
@@ -52,14 +52,6 @@ export class FileSystem<F> {
         return this.getFile(path) !== undefined;
     }
 
-    getAllFiles(path: DirPath): F[] {
-        const pathSegments = splitPath(path);
-
-        return this.head.getNodeAndDo(pathSegments, n => {
-            return []; //TODO implement
-        }) ?? [];
-    }
-
     trackDir(path: DirPath): void {
         this.head.trackDir(splitPath(path));
     }
@@ -67,11 +59,11 @@ export class FileSystem<F> {
         this.head.untrackDir(splitPath(path));
     }
 
-    onFileRemoved(listener: (file: F) => void): this {
+    onFileRemoved(listener: OnFileRemoved<F>): this {
         this.eventEmitter.on(REMOVE_FILE_EVENT, listener);
         return this;
     }
-    offFileRemoved(listener: (file: F) => void): this {
+    offFileRemoved(listener: OnFileRemoved<F>): this {
         this.eventEmitter.off(REMOVE_FILE_EVENT, listener);
         return this;
     }
