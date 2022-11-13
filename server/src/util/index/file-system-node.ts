@@ -4,24 +4,19 @@ export class FileSystemNode<F> {
     files: Map<string, F> = new Map();
     children: Map<string, FileSystemNode<F>> = new Map();
     isTracked: boolean = false;
-    emitFileRemoved: EmitFileRemoved<F>;
 
-    constructor(emitFileRemoved: EmitFileRemoved<F>) {
-        this.emitFileRemoved = emitFileRemoved;
-    }
-
-    untrackFiles() {
+    untrackFiles(emitFileRemoved: EmitFileRemoved<F>) {
         if (this.isTracked) {
             return;
         }
 
         for (const [segment, file] of this.files) {
-            this.emitFileRemoved(file);
+            emitFileRemoved(file);
         }
         this.files.clear();
 
         for (const [segment, child] of this.children) {
-            child.untrackFiles();
+            child.untrackFiles(emitFileRemoved);
             if (child.isEmpty()) {
                 this.children.delete(segment);
             }
@@ -64,7 +59,7 @@ export class FileSystemNode<F> {
         let nextNode = this.children.get(segment);
 
         if (nextNode === undefined) {
-            nextNode = new FileSystemNode(this.emitFileRemoved);
+            nextNode = new FileSystemNode();
             this.children.set(segment, nextNode);
         }
 

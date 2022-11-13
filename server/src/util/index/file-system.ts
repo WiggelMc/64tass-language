@@ -5,7 +5,7 @@ import { FileSystemNode } from "./file-system-node";
 const REMOVE_FILE_EVENT = Symbol('FileRemoved');
 
 export class FileSystem<F> {
-    head: FileSystemNode<F> = new FileSystemNode(this.emitFileRemoved);
+    head: FileSystemNode<F> = new FileSystemNode();
     eventEmitter: EventEmitter = new EventEmitter();
 
     addFile(path: FilePath, file: F): void {
@@ -65,7 +65,7 @@ export class FileSystem<F> {
         this.head.getNodeAndDo(pathSegments, (n, t) => {
             n.isTracked = false;
             if (!t) {
-                n.untrackFiles();
+                n.untrackFiles(this.emitFileRemoved);
             }
         });
     }
