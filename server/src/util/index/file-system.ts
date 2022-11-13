@@ -18,27 +18,23 @@ class FileSystem {
         const segments = path.split("/");
         this.head.addFile(segments, file);
     }
-
     removeFile(path: FilePath): File | undefined {
         const segments = path.split("/");
         return this.head.removeFile(segments);
     }
-
     getFile(path: FilePath): File | undefined {
         const segments = path.split("/");
         return this.head.getFile(segments);
     }
-
     hasFile(path: FilePath): boolean {
         return this.getFile(path) !== undefined;
     }
 
-    trackDir(path: DirPath) {
+    trackDir(path: DirPath): void {
         const segments = path.split("/");
         this.head.trackDir(segments);
     }
-
-    untrackDir(path: DirPath) {
+    untrackDir(path: DirPath): void {
         const segments = path.split("/");
         this.head.untrackDir(segments);
     }
@@ -47,14 +43,12 @@ class FileSystem {
         this.eventEmitter.on(REMOVE_FILE_EVENT, listener);
         return this;
     }
-
     offFileRemoved(listener: (file: File) => void): this {
         this.eventEmitter.off(REMOVE_FILE_EVENT, listener);
         return this;
     }
-
-    emitFileRemoved(file: File) {
-        this.eventEmitter.emit(REMOVE_FILE_EVENT, file);
+    emitFileRemoved(file: File): boolean {
+        return this.eventEmitter.emit(REMOVE_FILE_EVENT, file);
     }
 }
 
@@ -66,20 +60,6 @@ class FileSystemNode {
 
     constructor(fileSystem: FileSystem) {
         this.fileSystem = fileSystem;
-    }
-
-    getFile(pathSegments: FilePathSegment[]): File | undefined {
-        const segment = pathSegments.shift();
-
-        if (segment === undefined) {
-            return undefined;
-        }
-
-        if (pathSegments.length > 0) {
-            return this.children.get(segment)?.getFile(pathSegments);
-        } else {
-            return this.files.get(segment);
-        }
     }
 
     addFile(pathSegments: FilePathSegment[], file: File): void {
@@ -98,7 +78,6 @@ class FileSystemNode {
             }
         }
     }
-
     removeFile(pathSegments: FilePathSegment[]): File | undefined {
         const segment = pathSegments.shift();
 
@@ -118,6 +97,19 @@ class FileSystemNode {
             return file;
         }
     }
+    getFile(pathSegments: FilePathSegment[]): File | undefined {
+        const segment = pathSegments.shift();
+
+        if (segment === undefined) {
+            return undefined;
+        }
+
+        if (pathSegments.length > 0) {
+            return this.children.get(segment)?.getFile(pathSegments);
+        } else {
+            return this.files.get(segment);
+        }
+    }
 
     trackDir(pathSegments: DirPathSegment[]) {
         const segment = pathSegments.shift();
@@ -129,7 +121,6 @@ class FileSystemNode {
             nextNode.trackDir(pathSegments);
         }
     }
-
     untrackDir(pathSegments: DirPathSegment[], isTracked = false) {
         const segment = pathSegments.shift();
 
@@ -161,7 +152,6 @@ class FileSystemNode {
             }
         }
     }
-
     isEmpty(): boolean {
         return (
             !this.isTracked 
@@ -169,7 +159,6 @@ class FileSystemNode {
             && this.files.size === 0
         );
     }
-
     getOrCreateNode(segment: string) {
         let nextNode = this.children.get(segment);
 
@@ -183,5 +172,5 @@ class FileSystemNode {
 }
 
 class File {
-
+    //Might be removed in favour of Generic Parameter
 }
