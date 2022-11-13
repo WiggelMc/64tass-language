@@ -53,10 +53,21 @@ export class FileSystem<F> {
     }
 
     trackDir(path: DirPath): void {
-        this.head.trackDir(splitPath(path));
+        const pathSegments = splitPath(path);
+        
+        this.head.createNodeAndDo(pathSegments, n => {
+            n.isTracked = true;
+        });
     }
     untrackDir(path: DirPath): void {
-        this.head.untrackDir(splitPath(path));
+        const pathSegments = splitPath(path);
+
+        this.head.getNodeAndDo(pathSegments, (n, t) => {
+            n.isTracked = false;
+            if (!t) {
+                n.untrackFiles();
+            }
+        });
     }
 
     onFileRemoved(listener: OnFileRemoved<F>): this {

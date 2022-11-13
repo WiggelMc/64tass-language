@@ -10,20 +10,6 @@ export class FileSystemNode<F> {
         this.emitFileRemoved = emitFileRemoved;
     }
 
-    trackDir(pathSegments: DirPathSegment[]) {
-        this.createNodeAndDo(pathSegments, n => {
-            n.isTracked = true;
-        });
-    }
-    untrackDir(pathSegments: DirPathSegment[]) {
-        this.getNodeAndDo(pathSegments, (n, t) => {
-            n.isTracked = false;
-            if (!t) {
-                n.untrackFiles();
-            }
-        });
-    }
-
     untrackFiles() {
         if (this.isTracked) {
             return;
