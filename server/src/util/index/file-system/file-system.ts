@@ -1,12 +1,9 @@
-import EventEmitter = require("events");
 import { DirPath, FilePath, OnFileRemoved, Path, PathSegment } from "./file";
+import { FileEventEmitter } from "./file-event-emitter";
 import { FileSystemNode } from "./file-system-node";
 
-const REMOVE_FILE_EVENT = Symbol('FileRemoved');
-
-export class FileSystem<F> {
+export class FileSystem<F> extends FileEventEmitter<F> {
     head: FileSystemNode<F> = new FileSystemNode();
-    eventEmitter: EventEmitter = new EventEmitter();
 
     addFile(path: FilePath, file: F): void {
         const pathSegments = splitPath(path);
@@ -68,18 +65,6 @@ export class FileSystem<F> {
                 n.untrackFiles(this.emitFileRemoved);
             }
         });
-    }
-
-    onFileRemoved(listener: OnFileRemoved<F>): this {
-        this.eventEmitter.on(REMOVE_FILE_EVENT, listener);
-        return this;
-    }
-    offFileRemoved(listener: OnFileRemoved<F>): this {
-        this.eventEmitter.off(REMOVE_FILE_EVENT, listener);
-        return this;
-    }
-    emitFileRemoved(file: F): boolean {
-        return this.eventEmitter.emit(REMOVE_FILE_EVENT, file);
     }
 }
 
