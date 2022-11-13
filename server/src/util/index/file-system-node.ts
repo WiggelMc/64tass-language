@@ -5,6 +5,24 @@ export class FileSystemNode<F> {
     children: Map<string, FileSystemNode<F>> = new Map();
     isTracked: boolean = false;
 
+    isEmpty(): boolean {
+        return (
+            !this.isTracked 
+            && this.children.size === 0 
+            && this.files.size === 0
+        );
+    }
+    createNextNode(segment: string): FileSystemNode<F> {
+        let nextNode = this.children.get(segment);
+
+        if (nextNode === undefined) {
+            nextNode = new FileSystemNode();
+            this.children.set(segment, nextNode);
+        }
+
+        return nextNode;
+    }
+
     untrackFiles(emitFileRemoved: EmitFileRemoved<F>) {
         if (this.isTracked) {
             return;
@@ -22,14 +40,6 @@ export class FileSystemNode<F> {
             }
         }
     }
-    isEmpty(): boolean {
-        return (
-            !this.isTracked 
-            && this.children.size === 0 
-            && this.files.size === 0
-        );
-    }
-
     getNodeAndDo<R>(pathSegments: DirPathSegment[], f: (node: FileSystemNode<F>, isTracked: boolean) => R, isTracked = false): R | undefined {
         const segment = pathSegments.shift();
         
@@ -53,16 +63,5 @@ export class FileSystemNode<F> {
 
         const nextNode = this.createNextNode(segment);
         return nextNode.createNodeAndDo(pathSegments, f);
-    }
-
-    createNextNode(segment: string): FileSystemNode<F> {
-        let nextNode = this.children.get(segment);
-
-        if (nextNode === undefined) {
-            nextNode = new FileSystemNode();
-            this.children.set(segment, nextNode);
-        }
-
-        return nextNode;
     }
 }
