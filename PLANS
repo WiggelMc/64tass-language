@@ -391,3 +391,35 @@ list	List type
 str	Character string type
 tuple	Tuple type
 type	Type type
+
+
+
+
+
+
+
+Indexing System
+
+
+FileWatcher
+
+ AddDir 	(needs to know if dir is already tracked)
+ RemoveDir  (needs to know if Dir inside is also tracked / needs to know which files inside to let go)
+
+ OnFileChanged (from event)
+ OnFileCreated (from event) [automatically check in which folders and add itself to these]
+ OnFileRemoved (from event / RemoveDir)
+
+
+FSS
+
+FSSNode
+	files
+
+
+Index
+ addFile
+ getFile
+ hasFile
+
+ ???
