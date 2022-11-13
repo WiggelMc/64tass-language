@@ -423,3 +423,9 @@ Index
  hasFile
 
  ???
+
+
+Node
+
+destroy, no destroy
+create (add), break (get / remove)

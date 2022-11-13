@@ -27,6 +27,10 @@ class FileSystem {
         return this.getFile(path) !== undefined;
     }
 
+    getAllFiles(path: DirPath): File[] {
+        return this.head.getAllFiles(splitPath(path));
+    }
+
     trackDir(path: DirPath): void {
         this.head.trackDir(splitPath(path));
     }
@@ -69,7 +73,7 @@ class FileSystemNode {
         }
 
         if (pathSegments.length > 0) {
-            const nextNode = this.getOrCreateNode(segment);
+            const nextNode = this.createNextNode(segment);
             nextNode.addFile(pathSegments, file);
         } else {
             if (!this.files.has(segment)) {
@@ -110,13 +114,17 @@ class FileSystemNode {
         }
     }
 
+    getAllFiles(pathSegments: FilePathSegment[]): File[] {
+        return []; //TODO implement
+    }
+
     trackDir(pathSegments: DirPathSegment[]) {
         const segment = pathSegments.shift();
 
         if (segment === undefined) {
             this.isTracked = true;
         } else {
-            const nextNode = this.getOrCreateNode(segment);
+            const nextNode = this.createNextNode(segment);
             nextNode.trackDir(pathSegments);
         }
     }
@@ -129,7 +137,7 @@ class FileSystemNode {
                 this.untrackFiles();
             }
         } else {
-            const nextNode = this.getOrCreateNode(segment);
+            const nextNode = this.createNextNode(segment);
             nextNode.untrackDir(pathSegments, isTracked || this.isTracked);
         }
     }
@@ -158,7 +166,33 @@ class FileSystemNode {
             && this.files.size === 0
         );
     }
-    getOrCreateNode(segment: string) {
+
+    getNodeAndDo<R>(pathSegments: DirPathSegment[], f: (node: FileSystemNode) => R): R | undefined {
+        const segment = pathSegments.shift();
+        
+        if (segment === undefined) {
+            return f(this);
+        }
+
+        const nextNode = this.children.get(segment);
+        const value = nextNode?.getNodeAndDo(pathSegments, f);
+        if (nextNode?.isEmpty()) {
+            this.children.delete(segment);
+        }
+        return value;
+    }
+    createNodeAndDo<R>(pathSegments: DirPathSegment[], f: (node: FileSystemNode) => R): R {
+        const segment = pathSegments.shift();
+
+        if (segment === undefined) {
+            return f(this);
+        }
+
+        const nextNode = this.createNextNode(segment);
+        nextNode.createNodeAndDo(pathSegments, f);
+    }
+
+    createNextNode(segment: string): FileSystemNode {
         let nextNode = this.children.get(segment);
 
         if (nextNode === undefined) {
