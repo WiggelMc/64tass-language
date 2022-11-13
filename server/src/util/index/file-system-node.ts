@@ -10,7 +10,7 @@ export class FileSystemNode<F> {
             return;
         }
 
-        for (const [segment, file] of this.files) {
+        for (const file of this.files.values()) {
             emitFileRemoved(file);
         }
         this.files.clear();
