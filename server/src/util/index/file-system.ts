@@ -15,20 +15,55 @@ class FileSystem {
     eventEmitter: EventEmitter = new EventEmitter();
 
     addFile(path: FilePath, file: File): void {
-        this.head.addFile(splitPath(path), file);
+        const pathSegments = splitPath(path);
+        const filename = pathSegments.pop();
+
+        if (filename === undefined) {
+            return undefined;
+        }
+
+        this.head.createNodeAndDo(pathSegments, n => {
+            if (!n.files.has(filename)) {
+                n.files.set(filename, file);
+            }
+        });
     }
     removeFile(path: FilePath): File | undefined {
-        return this.head.removeFile(splitPath(path));
+        const pathSegments = splitPath(path);
+        const filename = pathSegments.pop();
+
+        if (filename === undefined) {
+            return undefined;
+        }
+
+        return this.head.getNodeAndDo(pathSegments, n => {
+            const file = n.files.get(filename);
+            n.files.delete(filename);
+            return file;
+        });
     }
     getFile(path: FilePath): File | undefined {
-        return this.head.getFile(splitPath(path));
+        const pathSegments = splitPath(path);
+        const filename = pathSegments.pop();
+
+        if (filename === undefined) {
+            return undefined;
+        }
+
+        return this.head.getNodeAndDo(pathSegments, n => {
+            return n.files.get(filename);
+        });
     }
     hasFile(path: FilePath): boolean {
         return this.getFile(path) !== undefined;
     }
 
     getAllFiles(path: DirPath): File[] {
-        return this.head.getAllFiles(splitPath(path));
+        const pathSegments = splitPath(path);
+
+        return this.head.getNodeAndDo(pathSegments, n => {
+            return []; //TODO implement
+        }) ?? [];
     }
 
     trackDir(path: DirPath): void {
@@ -63,50 +98,6 @@ class FileSystemNode {
 
     constructor(fileSystem: FileSystem) {
         this.fileSystem = fileSystem;
-    }
-
-    addFile(pathSegments: FilePathSegment[], file: File): void {
-        const filename = pathSegments.pop();
-
-        if (filename === undefined) {
-            return undefined;
-        }
-
-        this.createNodeAndDo(pathSegments, n => {
-            if (!n.files.has(filename)) {
-                n.files.set(filename, file);
-            }
-        });
-    }
-    removeFile(pathSegments: FilePathSegment[]): File | undefined {
-        const filename = pathSegments.pop();
-
-        if (filename === undefined) {
-            return undefined;
-        }
-
-        return this.getNodeAndDo(pathSegments, n => {
-            const file = n.files.get(filename);
-            n.files.delete(filename);
-            return file;
-        });
-    }
-    getFile(pathSegments: FilePathSegment[]): File | undefined {
-        const filename = pathSegments.pop();
-
-        if (filename === undefined) {
-            return undefined;
-        }
-
-        return this.getNodeAndDo(pathSegments, n => {
-            return n.files.get(filename);
-        });
-    }
-
-    getAllFiles(pathSegments: FilePathSegment[]): File[] {
-        return this.getNodeAndDo(pathSegments, n => {
-            return []; //TODO implement
-        }) ?? [];
     }
 
     trackDir(pathSegments: DirPathSegment[]) {
@@ -170,7 +161,7 @@ class FileSystemNode {
         }
 
         const nextNode = this.createNextNode(segment);
-        nextNode.createNodeAndDo(pathSegments, f);
+        return nextNode.createNodeAndDo(pathSegments, f);
     }
 
     createNextNode(segment: string): FileSystemNode {
