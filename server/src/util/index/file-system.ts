@@ -1,3 +1,4 @@
+import EventEmitter = require("events");
 
 type Path = FilePath | DirPath;
 type FilePath = string;
@@ -7,8 +8,11 @@ type PathSegment = FilePathSegment | DirPathSegment;
 type FilePathSegment = string;
 type DirPathSegment = string;
 
+const REMOVE_FILE_EVENT = Symbol('FileRemoved');
+
 class FileSystem {
-    head: FileSystemNode = new FileSystemNode();
+    head: FileSystemNode = new FileSystemNode(this);
+    eventEmitter: EventEmitter = new EventEmitter();
 
     addFile(path: FilePath, file: File): void {
         const segments = path.split("/");
@@ -33,8 +37,24 @@ class FileSystem {
         const segments = path.split("/");
         this.head.trackDir(segments);
     }
-    untrackDir() {
 
+    untrackDir(path: DirPath) {
+        const segments = path.split("/");
+        this.head.untrackDir(segments);
+    }
+
+    onFileRemoved(listener: (file: File) => void): this {
+        this.eventEmitter.on(REMOVE_FILE_EVENT, listener);
+        return this;
+    }
+
+    offFileRemoved(listener: (file: File) => void): this {
+        this.eventEmitter.off(REMOVE_FILE_EVENT, listener);
+        return this;
+    }
+
+    emitFileRemoved(file: File) {
+        this.eventEmitter.emit(REMOVE_FILE_EVENT, file);
     }
 }
 
@@ -42,6 +62,11 @@ class FileSystemNode {
     files: Map<string, File> = new Map();
     children: Map<string, FileSystemNode> = new Map();
     isTracked: boolean = false;
+    fileSystem: FileSystem;
+
+    constructor(fileSystem: FileSystem) {
+        this.fileSystem = fileSystem;
+    }
 
     getFile(pathSegments: FilePathSegment[]): File | undefined {
         const segment = pathSegments.shift();
@@ -130,7 +155,7 @@ class FileSystemNode {
         }
 
         for (const [segment, file] of this.files) {
-            //fire RemoveFileEvent
+            this.fileSystem.emitFileRemoved(file);
         }
         this.files.clear();
 
@@ -154,7 +179,7 @@ class FileSystemNode {
         let nextNode = this.children.get(segment);
 
         if (nextNode === undefined) {
-            nextNode = new FileSystemNode();
+            nextNode = new FileSystemNode(this.fileSystem);
             this.children.set(segment, nextNode);
         }
 
