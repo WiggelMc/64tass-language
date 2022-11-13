@@ -119,33 +119,28 @@ class FileSystemNode {
         }
     }
 
-    trackDir(pathSegments: DirPathSegment[], isTracked = false) {
+    trackDir(pathSegments: DirPathSegment[]) {
         const segment = pathSegments.shift();
-        isTracked ||= this.isTracked;
 
         if (segment === undefined) {
             this.isTracked = true;
-            if (!isTracked) {
-                //load files (do we need this?)
-            }
         } else {
             const nextNode = this.getOrCreateNode(segment);
-            nextNode.trackDir(pathSegments, isTracked);
+            nextNode.trackDir(pathSegments);
         }
     }
 
     untrackDir(pathSegments: DirPathSegment[], isTracked = false) {
         const segment = pathSegments.shift();
-        isTracked ||= this.isTracked;
 
         if (segment === undefined) {
             this.isTracked = false;
-            if (isTracked) {
+            if (!isTracked) {
                 this.untrackFiles();
             }
         } else {
             const nextNode = this.getOrCreateNode(segment);
-            nextNode.untrackDir(pathSegments, isTracked);
+            nextNode.untrackDir(pathSegments, isTracked || this.isTracked);
         }
     }
 
