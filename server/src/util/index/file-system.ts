@@ -66,80 +66,61 @@ class FileSystemNode {
     }
 
     addFile(pathSegments: FilePathSegment[], file: File): void {
-        const segment = pathSegments.shift();
+        const filename = pathSegments.pop();
 
-        if (segment === undefined) {
-            return;
+        if (filename === undefined) {
+            return undefined;
         }
 
-        if (pathSegments.length > 0) {
-            const nextNode = this.createNextNode(segment);
-            nextNode.addFile(pathSegments, file);
-        } else {
-            if (!this.files.has(segment)) {
-                this.files.set(segment, file);
+        this.createNodeAndDo(pathSegments, n => {
+            if (!n.files.has(filename)) {
+                n.files.set(filename, file);
             }
-        }
+        });
     }
     removeFile(pathSegments: FilePathSegment[]): File | undefined {
-        const segment = pathSegments.shift();
+        const filename = pathSegments.pop();
 
-        if (segment === undefined) {
+        if (filename === undefined) {
             return undefined;
         }
 
-        if (pathSegments.length > 0) {
-            const nextNode = this.children.get(segment);
-            if (nextNode?.isEmpty()) {
-                this.children.delete(segment);
-            }
-            return nextNode?.removeFile(pathSegments);
-        } else {
-            const file = this.files.get(segment);
-            this.files.delete(segment);
+        return this.getNodeAndDo(pathSegments, n => {
+            const file = n.files.get(filename);
+            n.files.delete(filename);
             return file;
-        }
+        });
     }
     getFile(pathSegments: FilePathSegment[]): File | undefined {
-        const segment = pathSegments.shift();
+        const filename = pathSegments.pop();
 
-        if (segment === undefined) {
+        if (filename === undefined) {
             return undefined;
         }
 
-        if (pathSegments.length > 0) {
-            return this.children.get(segment)?.getFile(pathSegments);
-        } else {
-            return this.files.get(segment);
-        }
+        return this.getNodeAndDo(pathSegments, n => {
+            return n.files.get(filename);
+        });
     }
 
     getAllFiles(pathSegments: FilePathSegment[]): File[] {
-        return []; //TODO implement
+        return this.getNodeAndDo(pathSegments, n => {
+            return []; //TODO implement
+        }) ?? [];
     }
 
     trackDir(pathSegments: DirPathSegment[]) {
-        const segment = pathSegments.shift();
-
-        if (segment === undefined) {
-            this.isTracked = true;
-        } else {
-            const nextNode = this.createNextNode(segment);
-            nextNode.trackDir(pathSegments);
-        }
+        this.createNodeAndDo(pathSegments, n => {
+            n.isTracked = true;
+        });
     }
-    untrackDir(pathSegments: DirPathSegment[], isTracked = false) {
-        const segment = pathSegments.shift();
-
-        if (segment === undefined) {
-            this.isTracked = false;
-            if (!isTracked) {
-                this.untrackFiles();
+    untrackDir(pathSegments: DirPathSegment[]) {
+        this.getNodeAndDo(pathSegments, (n, t) => {
+            n.isTracked = false;
+            if (!t) {
+                n.untrackFiles();
             }
-        } else {
-            const nextNode = this.createNextNode(segment);
-            nextNode.untrackDir(pathSegments, isTracked || this.isTracked);
-        }
+        });
     }
 
     untrackFiles() {
@@ -167,15 +148,15 @@ class FileSystemNode {
         );
     }
 
-    getNodeAndDo<R>(pathSegments: DirPathSegment[], f: (node: FileSystemNode) => R): R | undefined {
+    getNodeAndDo<R>(pathSegments: DirPathSegment[], f: (node: FileSystemNode, isTracked: boolean) => R, isTracked = false): R | undefined {
         const segment = pathSegments.shift();
         
         if (segment === undefined) {
-            return f(this);
+            return f(this, isTracked);
         }
 
         const nextNode = this.children.get(segment);
-        const value = nextNode?.getNodeAndDo(pathSegments, f);
+        const value = nextNode?.getNodeAndDo(pathSegments, f, isTracked || this.isTracked);
         if (nextNode?.isEmpty()) {
             this.children.delete(segment);
         }
