@@ -15,28 +15,23 @@ class FileSystem {
     eventEmitter: EventEmitter = new EventEmitter();
 
     addFile(path: FilePath, file: File): void {
-        const segments = path.split("/");
-        this.head.addFile(segments, file);
+        this.head.addFile(splitPath(path), file);
     }
     removeFile(path: FilePath): File | undefined {
-        const segments = path.split("/");
-        return this.head.removeFile(segments);
+        return this.head.removeFile(splitPath(path));
     }
     getFile(path: FilePath): File | undefined {
-        const segments = path.split("/");
-        return this.head.getFile(segments);
+        return this.head.getFile(splitPath(path));
     }
     hasFile(path: FilePath): boolean {
         return this.getFile(path) !== undefined;
     }
 
     trackDir(path: DirPath): void {
-        const segments = path.split("/");
-        this.head.trackDir(segments);
+        this.head.trackDir(splitPath(path));
     }
     untrackDir(path: DirPath): void {
-        const segments = path.split("/");
-        this.head.untrackDir(segments);
+        this.head.untrackDir(splitPath(path));
     }
 
     onFileRemoved(listener: (file: File) => void): this {
@@ -50,6 +45,10 @@ class FileSystem {
     emitFileRemoved(file: File): boolean {
         return this.eventEmitter.emit(REMOVE_FILE_EVENT, file);
     }
+}
+
+function splitPath(path: Path): PathSegment[] {
+    return path.split("/");
 }
 
 class FileSystemNode {
