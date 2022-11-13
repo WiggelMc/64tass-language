@@ -1,14 +1,14 @@
 import EventEmitter = require("events");
-import { DirPath, File, FilePath, Path, PathSegment } from "./file";
+import { DirPath, FilePath, Path, PathSegment } from "./file";
 import { FileSystemNode } from "./file-system-node";
 
 const REMOVE_FILE_EVENT = Symbol('FileRemoved');
 
-export class FileSystem {
-    head: FileSystemNode = new FileSystemNode(this);
+export class FileSystem<F> {
+    head: FileSystemNode<F> = new FileSystemNode(this);
     eventEmitter: EventEmitter = new EventEmitter();
 
-    addFile(path: FilePath, file: File): void {
+    addFile(path: FilePath, file: F): void {
         const pathSegments = splitPath(path);
         const filename = pathSegments.pop();
 
@@ -22,7 +22,7 @@ export class FileSystem {
             }
         });
     }
-    removeFile(path: FilePath): File | undefined {
+    removeFile(path: FilePath): F | undefined {
         const pathSegments = splitPath(path);
         const filename = pathSegments.pop();
 
@@ -36,7 +36,7 @@ export class FileSystem {
             return file;
         });
     }
-    getFile(path: FilePath): File | undefined {
+    getFile(path: FilePath): F | undefined {
         const pathSegments = splitPath(path);
         const filename = pathSegments.pop();
 
@@ -52,7 +52,7 @@ export class FileSystem {
         return this.getFile(path) !== undefined;
     }
 
-    getAllFiles(path: DirPath): File[] {
+    getAllFiles(path: DirPath): F[] {
         const pathSegments = splitPath(path);
 
         return this.head.getNodeAndDo(pathSegments, n => {
@@ -67,15 +67,15 @@ export class FileSystem {
         this.head.untrackDir(splitPath(path));
     }
 
-    onFileRemoved(listener: (file: File) => void): this {
+    onFileRemoved(listener: (file: F) => void): this {
         this.eventEmitter.on(REMOVE_FILE_EVENT, listener);
         return this;
     }
-    offFileRemoved(listener: (file: File) => void): this {
+    offFileRemoved(listener: (file: F) => void): this {
         this.eventEmitter.off(REMOVE_FILE_EVENT, listener);
         return this;
     }
-    emitFileRemoved(file: File): boolean {
+    emitFileRemoved(file: F): boolean {
         return this.eventEmitter.emit(REMOVE_FILE_EVENT, file);
     }
 }

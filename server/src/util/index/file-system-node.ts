@@ -1,13 +1,13 @@
-import { DirPathSegment, File } from "./file";
+import { DirPathSegment } from "./file";
 import { FileSystem } from "./file-system";
 
-export class FileSystemNode {
-    files: Map<string, File> = new Map();
-    children: Map<string, FileSystemNode> = new Map();
+export class FileSystemNode<F> {
+    files: Map<string, F> = new Map();
+    children: Map<string, FileSystemNode<F>> = new Map();
     isTracked: boolean = false;
-    fileSystem: FileSystem;
+    fileSystem: FileSystem<F>;
 
-    constructor(fileSystem: FileSystem) {
+    constructor(fileSystem: FileSystem<F>) {
         this.fileSystem = fileSystem;
     }
 
@@ -50,7 +50,7 @@ export class FileSystemNode {
         );
     }
 
-    getNodeAndDo<R>(pathSegments: DirPathSegment[], f: (node: FileSystemNode, isTracked: boolean) => R, isTracked = false): R | undefined {
+    getNodeAndDo<R>(pathSegments: DirPathSegment[], f: (node: FileSystemNode<F>, isTracked: boolean) => R, isTracked = false): R | undefined {
         const segment = pathSegments.shift();
         
         if (segment === undefined) {
@@ -64,7 +64,7 @@ export class FileSystemNode {
         }
         return value;
     }
-    createNodeAndDo<R>(pathSegments: DirPathSegment[], f: (node: FileSystemNode) => R): R {
+    createNodeAndDo<R>(pathSegments: DirPathSegment[], f: (node: FileSystemNode<F>) => R): R {
         const segment = pathSegments.shift();
 
         if (segment === undefined) {
@@ -75,7 +75,7 @@ export class FileSystemNode {
         return nextNode.createNodeAndDo(pathSegments, f);
     }
 
-    createNextNode(segment: string): FileSystemNode {
+    createNextNode(segment: string): FileSystemNode<F> {
         let nextNode = this.children.get(segment);
 
         if (nextNode === undefined) {
