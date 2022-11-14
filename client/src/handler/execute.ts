@@ -33,26 +33,18 @@ async function executeTaskType(type: TaskType) {
 
 const runCustomTask: (...args: any[]) => Promise<void> =
 async function(taskString) {
-	if (taskString === undefined) {
-		showCustomTaskInputBox()
-		.then(executeCustomTaskType)
-		.catch(displayErrorMessage);
-	} else {
-		executeCustomTaskType(taskString)
-		.catch(displayErrorMessage);
-	}
+
+	showCustomTaskInputBox(taskString)
+	.then(executeCustomTaskType)
+	.catch(displayErrorMessage);
 };
 
-async function showCustomTaskInputBox() {
+async function showCustomTaskInputBox(taskString: string): Promise<string> {
 
-	return window.showInputBox({
+	return taskString ?? window.showInputBox({
 		prompt: "Enter Task Number",
 		validateInput(taskString) {
-			if (validateCustomTaskInput(taskString)) {
-				return "";
-			} else {
-				return "Input must be a positive integer";
-			}
+			return validateCustomTaskInput(taskString) ? "" : "Input must be a positive integer";
 		}
 	});
 }
