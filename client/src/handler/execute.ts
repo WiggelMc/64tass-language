@@ -5,7 +5,7 @@ import { sendTaskFetchRequest } from "../server/task";
 import { getCurrentDocumentLocation } from "../util/document-location";
 import { displayErrorMessage } from "../util/error";
 import { ClientHandler } from "./handler";
-import { createTaskFetchParamConverter } from "../util/execute";
+import { createTaskFetchParams } from "../util/execute";
 
 export const executeHandler: ClientHandler = {
     register(context) {
@@ -22,7 +22,7 @@ export const executeHandler: ClientHandler = {
 async function executeTaskType(type: TaskType) {
 
 	getCurrentDocumentLocation()
-	.then(createTaskFetchParamConverter(type))
+	.then(x => createTaskFetchParams(x, type))
 
 	.then(sendTaskFetchRequest)
 	.then(r => TaskMap.getTask(r.task))

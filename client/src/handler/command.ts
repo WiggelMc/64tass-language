@@ -4,7 +4,7 @@ import { sendTaskCommandFetchRequest } from "../server/task";
 import { getCurrentDocumentLocation } from "../util/document-location";
 import { displayErrorMessage } from "../util/error";
 import { ClientHandler } from "./handler";
-import { createTaskCommandFetchParamConverter } from "../util/execute";
+import { createTaskCommandFetchParams } from "../util/execute";
 
 export const commandHandler: ClientHandler = {
     register(context) {
@@ -18,7 +18,7 @@ export const commandHandler: ClientHandler = {
 async function copyAssembleTask() {
 
 	getCurrentDocumentLocation()
-	.then(createTaskCommandFetchParamConverter(TaskCommandType.processTask))
+	.then(x => createTaskCommandFetchParams(x, TaskCommandType.processTask))
 	
 	.then(sendTaskCommandFetchRequest)
 	.then(r => env.clipboard.writeText(r.command))
@@ -30,7 +30,7 @@ async function copyAssembleTask() {
 async function copyAssembleCommand() {
 	
 	getCurrentDocumentLocation()
-	.then(createTaskCommandFetchParamConverter(TaskCommandType.commandLineCommand))
+	.then(x => createTaskCommandFetchParams(x, TaskCommandType.commandLineCommand))
 
 	.then(sendTaskCommandFetchRequest)
 	.then(r => env.clipboard.writeText(r.command))

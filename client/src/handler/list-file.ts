@@ -7,7 +7,7 @@ import { sendViewInListFileRequest, sendViewInSourceFileRequest } from "../serve
 import { getCurrentDocumentLocation, gotoDocumentLocation, gotoDocumentLocationStoppable } from "../util/document-location";
 import { displayErrorMessage } from "../util/error";
 import { ClientHandler } from "./handler";
-import { createTaskFetchParamConverter } from "../util/execute";
+import { createTaskFetchParams } from "../util/execute";
 
 export const listFileHandler: ClientHandler = {
     register(context) {
@@ -44,7 +44,7 @@ async function assembleAndViewInList() {
 	getCurrentDocumentLocation()
 	.then(x => location = x)
 	
-	.then(createTaskFetchParamConverter(TaskType.assemble))
+	.then(x => createTaskFetchParams(x, TaskType.assemble))
 	.then(sendTaskFetchRequest)
 	.then(r => TaskMap.getTask(r.task))
 	.then(runTask)
