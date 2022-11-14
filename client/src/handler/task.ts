@@ -13,12 +13,12 @@ export const taskHandler: ClientHandler = {
     },
 };
 
-const runningTasks: Map<Task,boolean> = new Map();
+const runningTasks: Set<Task> = new Set();
 
 const onDidStartTask: (e: TaskStartEvent) => any =
 async function(e) {
 	
-	runningTasks.set(e.execution.task, true);
+	runningTasks.add(e.execution.task);
 
 	const params: TaskParams = {
 		task: e.execution.task.name
@@ -29,10 +29,9 @@ async function(e) {
 const onDidEndTask: (e: TaskEndEvent) => any =
 async function(e) {
 
-	if (!runningTasks.has(e.execution.task)) {
+	if (!runningTasks.delete(e.execution.task)) {
 		return;
 	}
-	runningTasks.delete(e.execution.task);
 
 	const params: TaskParams = {
 		task: e.execution.task.name
