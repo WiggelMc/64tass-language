@@ -1,4 +1,4 @@
-import { CancellationToken, CustomExecution, ProcessExecution, ProviderResult, ShellExecution, Task, TaskEndEvent, TaskProvider, tasks, TaskScope, TaskStartEvent, Uri, workspace } from "vscode";
+import { Task, TaskEndEvent, tasks, TaskStartEvent } from "vscode";
 import { TaskParams, TaskType } from "../common/capabilities/task";
 import { ClientHandler } from "./handler";
 import { setErrorShown } from "./terminal";
