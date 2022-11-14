@@ -22,34 +22,27 @@ export async function getCurrentDocumentLocation(): Promise<DocumentLocation> {
 }
 
 
-let runningGotos: Map<number, boolean> = new Map();
+let currentRunning: object;
 
 export async function gotoDocumentLocationStoppable(location: DocumentLocation) {
 
-    const id = Math.random();
+    const instance = {};
 
-    runningGotos.clear();
-    runningGotos.set(id,true);
+    currentRunning = instance;
 
-    let waitTime: number | undefined = config.get("assemble.error-wait-time");
-
-    if (waitTime === undefined) {
-        waitTime = 300;
-    }
-
+    let waitTime: number = config.get("assemble.error-wait-time") ?? 300;
+    
     if (waitTime > 0) {
         await sleep(waitTime);
     }
 
-    if (!runningGotos.get(id)) {
-        return;
+    if (currentRunning === instance) {
+        gotoDocumentLocation(location);
     }
-
-    return gotoDocumentLocation(location);
 }
 
 export async function gotoDocumentLocation(location: DocumentLocation) {
-    runningGotos.clear();
+    currentRunning = undefined;
 
     return (async () => {
         return vscode.workspace.openTextDocument(
@@ -69,9 +62,7 @@ export async function gotoDocumentLocation(location: DocumentLocation) {
     });
 }
 
-function safeTranslate(pos: vscode.Position, lineDelta?: number, characterDelta?: number) {
-    lineDelta ??= 0;
-    characterDelta ??= 0;
+function safeTranslate(pos: vscode.Position, lineDelta: number = 0, characterDelta: number = 0) {
 
     const line = Math.max(0, pos.line + lineDelta);
     const character = Math.max(0, pos.character + characterDelta);
