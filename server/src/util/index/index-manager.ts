@@ -5,4 +5,6 @@ export class IndexManager {
     //file manager  // editor listener
     //      document index manager
     //      project index manager
+
+    // Parsers should be used via Generic Param with Interface
 }
