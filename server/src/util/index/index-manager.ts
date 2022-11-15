@@ -7,4 +7,6 @@ export class IndexManager {
     //      project index manager
 
     // Parsers should be used via Generic Param with Interface
+
+    // might be moved outside of util later
 }
