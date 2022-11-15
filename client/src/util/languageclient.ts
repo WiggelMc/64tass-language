@@ -6,7 +6,7 @@ import { Selector } from "../common/capabilities/document-selector";
 export let client: LanguageClient;
 
 export function initClient(context: ExtensionContext) {
-    // The server is implemented in node
+	// The server is implemented in node
 	const serverModule = context.asAbsolutePath(
 		path.join('server', 'out', 'server.js')
 	);

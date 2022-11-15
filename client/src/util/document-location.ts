@@ -6,7 +6,7 @@ import { getConfigOption } from "../handler/config";
 
 export async function getCurrentDocumentLocation(): Promise<DocumentLocation> {
     const editor = vscode.window.activeTextEditor;
-		
+
     if (editor === undefined) {
         throw new Error("No Open Editor");
     }
@@ -31,7 +31,7 @@ export async function gotoDocumentLocationStoppable(location: DocumentLocation) 
     currentRunning = instance;
 
     let waitTime: number = getConfigOption("assemble.error-wait-time") ?? 300;
-    
+
     if (waitTime > 0) {
         await sleep(waitTime);
     }
@@ -49,17 +49,17 @@ export async function gotoDocumentLocation(location: DocumentLocation) {
             vscode.Uri.parse(location.textDocument.uri)
         );
     })()
-    .then(document => vscode.window.showTextDocument(document,vscode.ViewColumn.Active))
-    .then(editor => {
+        .then(document => vscode.window.showTextDocument(document, vscode.ViewColumn.Active))
+        .then(editor => {
 
-        const range = location.range;
+            const range = location.range;
 
-        const pos1 = new vscode.Position(range.start.line, range.start.character);
-        const pos2 = new vscode.Position(range.end.line, range.end.character);
+            const pos1 = new vscode.Position(range.start.line, range.start.character);
+            const pos2 = new vscode.Position(range.end.line, range.end.character);
 
-        editor.selection = new vscode.Selection(pos1, pos2);
-        editor.revealRange(new vscode.Range(safeTranslate(pos1, -7), safeTranslate(pos2, 7)), vscode.TextEditorRevealType.Default);
-    });
+            editor.selection = new vscode.Selection(pos1, pos2);
+            editor.revealRange(new vscode.Range(safeTranslate(pos1, -7), safeTranslate(pos2, 7)), vscode.TextEditorRevealType.Default);
+        });
 }
 
 function safeTranslate(pos: vscode.Position, lineDelta: number = 0, characterDelta: number = 0) {

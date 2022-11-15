@@ -11,6 +11,6 @@ export async function createTaskFetchParams(location: DocumentLocation, type: Ta
 export async function createTaskCommandFetchParams(location: DocumentLocation, type: TaskCommandType): Promise<TaskCommandFetchParams> {
 	return {
 		textDocument: location.textDocument,
-		taskCommandType: type			
+		taskCommandType: type
 	};
 }
