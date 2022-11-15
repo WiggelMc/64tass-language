@@ -1,23 +1,30 @@
 import { EventEmitter } from "events";
-import { OnFileRemoved } from "./file-manager/file";
 
-const REMOVE_FILE_EVENT = Symbol('RemoveFile');
-const ADD_FILE_EVENT = Symbol('AddFile');
-const CHANGE_FILE_EVENT = Symbol('ChangeFile');
+export enum FileEvent {
+    remove = 'RemoveFile',
+    add = 'AddFile',
+    change = 'ChangeFile',
+}
+
+export type FileEmitter<F> = (file: F) => boolean;
+export type FileListener<F> = (file: F) => void;
 
 export class FileEventHandler<C, E> {
     eventEmitter: EventEmitter = new EventEmitter();
     
-    onFileRemoved(listener: OnFileRemoved<E>): this {
-        this.eventEmitter.on(REMOVE_FILE_EVENT, listener);
+    on(event: FileEvent, listener: FileListener<E>): this {
+        this.eventEmitter.on(event, listener);
         return this;
     }
-    offFileRemoved(listener: OnFileRemoved<E>): this {
-        this.eventEmitter.off(REMOVE_FILE_EVENT, listener);
+    off(event: FileEvent, listener: FileListener<E>): this {
+        this.eventEmitter.off(event, listener);
         return this;
     }
-    emitFileRemoved(file: E): boolean {
-        return this.eventEmitter.emit(REMOVE_FILE_EVENT, file);
+    emit(event: FileEvent, file: E): boolean {
+        return this.eventEmitter.emit(event, file);
+    }
+    getEmitter(event: FileEvent): FileEmitter<E> {
+        return file => this.emit(event, file); 
     }
 }
 

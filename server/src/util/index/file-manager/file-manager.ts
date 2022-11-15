@@ -1,5 +1,5 @@
 import { DirPath, FilePath, OnFileRemoved, Path, PathSegment } from "./file";
-import { FileEventHandler } from "../file-event-handler";
+import { FileEvent, FileEventHandler } from "../file-event-handler";
 import { FileManagerNode } from "./file-manager-node";
 
 export class FileManager<F> extends FileEventHandler<any, F> {
@@ -62,7 +62,7 @@ export class FileManager<F> extends FileEventHandler<any, F> {
         this.head.getNodeAndDo(pathSegments, (n, t) => {
             n.isTracked = false;
             if (!t) {
-                n.untrackFiles(this.emitFileRemoved);
+                n.untrackFiles(this.getEmitter(FileEvent.remove));
             }
         });
     }
