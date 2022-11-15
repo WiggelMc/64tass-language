@@ -1,5 +1,5 @@
 import { DirPath, FilePath, Path, PathSegment } from "./file";
-import { FileEventHandler, FileListener } from "../file-event-handler-2";
+import { FileEventHandler, FileListener } from "../file-event-handler";
 import { FileManagerNode } from "./file-manager-node";
 
 export class FileManager<F> extends FileEventHandler<FileWithPath<F>, FilePath, F, F, F, F> {

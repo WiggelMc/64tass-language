@@ -1,4 +1,4 @@
-import { FileEventHandler, FileListener } from "../file-event-handler-2";
+import { FileEventHandler, FileListener } from "../file-event-handler";
 
 export class ProjectIndexManager<T> extends FileEventHandler<T,T,T,T,T,T> {
     add: FileListener<T> = this.emitAdd;
