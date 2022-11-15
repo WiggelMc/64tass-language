@@ -16,7 +16,7 @@ export async function getTask(task: string): Promise<Task> {
     const r = taskMap.get(task);
 
     if (r === undefined) {
-        throw new Error("Task not Found");
+        throw new TaskNotDefinedError(task);
     }
     return r;
 }
@@ -47,4 +47,12 @@ export async function runTask(task: Task): Promise<void> {
 
         await tasks.executeTask(task);
     });
+}
+
+class TaskNotDefinedError extends Error {
+	constructor(task: string) {
+		
+		super(`The Task '${task}' is not defined`);
+		this.name = "TaskNotDefinedError";
+	}
 }

@@ -8,7 +8,7 @@ export async function getCurrentDocumentLocation(): Promise<DocumentLocation> {
     const editor = vscode.window.activeTextEditor;
 
     if (editor === undefined) {
-        throw new Error("No Open Editor");
+        throw new NoOpenEditorError();
     }
 
     const params = {
@@ -68,4 +68,12 @@ function safeTranslate(pos: vscode.Position, lineDelta: number = 0, characterDel
     const character = Math.max(0, pos.character + characterDelta);
 
     return new vscode.Position(line, character);
+}
+
+class NoOpenEditorError extends Error {
+	constructor() {
+		
+		super(`The Editor is not open`);
+		this.name = "NoOpenEditorError";
+	}
 }
