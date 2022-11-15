@@ -436,10 +436,10 @@ What does the index need
 
 Globals
 
-handler.config.config					(export)
+handler.config.config					(local)
 handler.task.runningTasks				(local)
 handler.terminal.errorShown				(local)
 
 util.document-location.currentRunning	(local)
-util.languageclient.client				(export)
-util.task.TaskMap						(export)
+util.languageclient.client				(export) {acceptable state}
+util.task.TaskMap						(export) [needs complete overhaul]

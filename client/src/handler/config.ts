@@ -10,7 +10,11 @@ export const configHandler: ClientHandler = {
     },
 };
 
-export let config = workspace.getConfiguration("64tass-language");
+let config = workspace.getConfiguration("64tass-language");
+
+export function getConfigOption<T>(section: string): T | undefined {
+	return config.get(section);
+}
 
 const onDidChangeConfiguration: (e: ConfigurationChangeEvent) => any =
 async function(e) {
