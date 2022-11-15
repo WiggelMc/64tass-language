@@ -1,10 +1,23 @@
 import { DirPath, FilePath, Path, PathSegment } from "./file";
-import { FileEvent, FileEventHandler } from "../file-event-handler";
+import { FileEvent, FileEventHandler, FileListener } from "../file-event-handler";
 import { FileManagerNode } from "./file-manager-node";
 
-export class FileManager<F> extends FileEventHandler<any, F> {
+export class FileManager<F> extends FileEventHandler<F, F> {
     head: FileManagerNode<F> = new FileManagerNode();
 
+    override getListener(event: FileEvent): FileListener<F> | undefined {
+        switch (event) {
+            case FileEvent.add:
+            case FileEvent.remove:
+            case FileEvent.change:
+            default:
+                return;
+        }
+    }
+
+    changeFile(path: FilePath, file: F) {
+        this.emit(FileEvent.change, file);
+    }
     addFile(path: FilePath, file: F): void {
         const pathSegments = splitPath(path);
         const filename = pathSegments.pop();
@@ -18,6 +31,8 @@ export class FileManager<F> extends FileEventHandler<any, F> {
                 n.files.set(filename, file);
             }
         });
+
+        this.emit(FileEvent.add, file);
     }
     removeFile(path: FilePath): F | undefined {
         const pathSegments = splitPath(path);
@@ -27,11 +42,17 @@ export class FileManager<F> extends FileEventHandler<any, F> {
             return undefined;
         }
 
-        return this.head.getNodeAndDo(pathSegments, n => {
+        const value = this.head.getNodeAndDo(pathSegments, n => {
             const file = n.files.get(filename);
             n.files.delete(filename);
             return file;
         });
+
+        if (value !== undefined) {
+            this.emit(FileEvent.remove, value);
+        }
+        
+        return value;
     }
     getFile(path: FilePath): F | undefined {
         const pathSegments = splitPath(path);
