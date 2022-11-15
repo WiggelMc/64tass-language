@@ -4,7 +4,6 @@ import * as Path from "path";
 import * as fs from "fs";
 import { configFilename } from "../common/capabilities/document-selector";
 import { URI } from "vscode-uri";
-import { ConditionalFileWatcher, FileWatcherMap } from "../util/file-watcher-map";
 
 export const fileSystemHandler : ConnectionEventHandler = {
     register: function (connection: _Connection<_, _, _, _, _, _, _>): void {
@@ -13,7 +12,7 @@ export const fileSystemHandler : ConnectionEventHandler = {
     }
 };
 
-let fileWatchers: FileWatcherMap = new FileWatcherMap();
+// let fileWatchers: FileWatcherMap = new FileWatcherMap();
 
 export function registerFileWatchers(folders: WorkspaceFolder[] | null) {
 
@@ -26,7 +25,7 @@ export function registerFileWatchers(folders: WorkspaceFolder[] | null) {
         registerFileWatcher(uri.fsPath);
     }
 
-    console.log("FSWATCH: ", fileWatchers.toString());
+    // console.log("FSWATCH: ", fileWatchers.toString());
 }
 
 export function unregisterFileWatchers(folders: WorkspaceFolder[] | null) {
@@ -40,17 +39,17 @@ export function unregisterFileWatchers(folders: WorkspaceFolder[] | null) {
         unregisterFileWatcher(uri.fsPath);
     }
 
-    console.log("FSUNWATCH: ", fileWatchers.toString());
+    // console.log("FSUNWATCH: ", fileWatchers.toString());
 }
 
 export function registerFileWatcher(fsPath: string) {
 
-    fileWatchers.add(fsPath, new ConditionalFileWatcher(fsPath, createFileSystemListener(fsPath)));
+    // fileWatchers.add(fsPath, new ConditionalFileWatcher(fsPath, createFileSystemListener(fsPath)));
 }
 
 export function unregisterFileWatcher(fsPath: string) {
 
-    fileWatchers.remove(fsPath);
+    // fileWatchers.remove(fsPath);
 
     //The files in the removed workspace need to be removed from index manually (TODO) [either here or in onChangeWorkspaceFolders]
 }
