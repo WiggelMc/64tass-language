@@ -1,4 +1,5 @@
 import { EventEmitter } from "events";
+import { integer } from "vscode-languageserver";
 import { enumValues } from "../enum";
 
 export enum FileEvent {
@@ -10,10 +11,10 @@ export enum FileEvent {
 export type FileEmitter<F> = (file: F) => boolean;
 export type FileListener<F> = (file: F) => void;
 
-export abstract class FileEventHandler<CA, CR, CC, EA, ER, EC> {
+export class FileEventHandler<EA, ER, EC> {
     eventEmitter: EventEmitter = new EventEmitter();
 
-    register<NA, NR, NC>(next: FileEventHandler<EA, ER, EC, NA, NR, NC>): typeof next {
+    register<I extends FileEventHandlerInput<EA, ER, EC>>(next: I): I {
 
         this.onAdd(next.add);
         this.onRemove(next.remove);
@@ -21,10 +22,6 @@ export abstract class FileEventHandler<CA, CR, CC, EA, ER, EC> {
 
         return next;
     }
-
-    abstract add: FileListener<CA>;
-    abstract remove: FileListener<CR>;
-    abstract change: FileListener<CC>;
 
     onAdd = (f: FileListener<EA>) => this.on(FileEvent.add, f);
     onRemove = (f: FileListener<ER>) => this.on(FileEvent.remove, f);
@@ -49,6 +46,18 @@ export abstract class FileEventHandler<CA, CR, CC, EA, ER, EC> {
     emit<E>(event: FileEvent, file: E): boolean {
         return this.eventEmitter.emit(event, file);
     }
+}
+
+export abstract class SingleInputFileEventHandler<CA, CR, CC, EA, ER, EC> extends FileEventHandler<EA, ER, EC> implements FileEventHandlerInput<CA, CR, CC> {
+    abstract add: FileListener<CA>;
+    abstract remove: FileListener<CR>;
+    abstract change: FileListener<CC>;
+}
+
+export interface FileEventHandlerInput<CA, CR, CC> {
+    add: FileListener<CA>;
+    remove: FileListener<CR>;
+    change: FileListener<CC>;
 }
 
 //provides

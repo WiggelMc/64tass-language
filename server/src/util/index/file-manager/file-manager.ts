@@ -1,8 +1,8 @@
 import { DirPath, FilePath, Path, PathSegment } from "./file";
-import { FileEventHandler, FileListener } from "../file-event-handler";
+import { SingleInputFileEventHandler, FileListener } from "../file-event-handler";
 import { FileManagerNode } from "./file-manager-node";
 
-export class FileManager<F> extends FileEventHandler<FileWithPath<F>, FilePath, F, F, F, F> {
+export class FileManager<F> extends SingleInputFileEventHandler<FileWithPath<F>, FilePath, F, F, F, F> {
     head: FileManagerNode<F> = new FileManagerNode();
 
     change: FileListener<F> = this.emitChange;
