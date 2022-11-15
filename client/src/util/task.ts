@@ -10,7 +10,7 @@ export function invalidateTasks(): void {
 export async function getTask(task: string): Promise<Task> {
 
     if (isDirty) {
-        await this.reloadTasks();
+        await reloadTasks();
         isDirty = false;
     }
     const r = taskMap.get(task);
