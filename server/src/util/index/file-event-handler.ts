@@ -1,8 +1,8 @@
 import { EventEmitter } from "events";
 
 export enum FileEvent {
-    remove = 'RemoveFile',
     add = 'AddFile',
+    remove = 'RemoveFile',
     change = 'ChangeFile',
 }
 
