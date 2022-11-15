@@ -431,3 +431,15 @@ destroy, no destroy
 create (add), break (get / remove)
 
 What does the index need
+
+
+
+Globals
+
+handler.config.config					(export)
+handler.task.runningTasks				(local)
+handler.terminal.errorShown				(local)
+
+util.document-location.currentRunning	(local)
+util.languageclient.client				(export)
+util.task.TaskMap						(export)

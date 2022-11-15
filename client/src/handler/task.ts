@@ -1,7 +1,7 @@
 import { Task, TaskEndEvent, tasks, TaskStartEvent } from "vscode";
 import { TaskParams, TaskType } from "../common/capabilities/task";
 import { ClientHandler } from "./handler";
-import { setErrorShown } from "./terminal";
+import { resetTaskLinterDiagnostics } from "./terminal";
 import { sendTaskEndRequest, sendTaskStartRequest } from "../server/task";
 
 export const taskHandler: ClientHandler = {
@@ -41,7 +41,7 @@ async function(e) {
 		if (r.type === TaskType.assemble || r.type === TaskType.assembleAndStart) {
 			//this might reset errorShown after running if 'assembleAndStart' is an independent task
 			//however, as the program should not be run when errors are present, this does not pose a problem
-			setErrorShown(false);
+			resetTaskLinterDiagnostics();
 		}
 	});
 };

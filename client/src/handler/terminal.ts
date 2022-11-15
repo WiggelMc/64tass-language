@@ -82,15 +82,15 @@ class TassTerminalLink extends TerminalLink {
 
 let errorShown = true;
 
-export function setErrorShown(state: boolean) {
-    errorShown = state;
+export function resetTaskLinterDiagnostics() {
+    errorShown = false;
 }
 
 const onDidChangeDiagnostics: (e: DiagnosticChangeEvent) => any =
 async function(e) {
 
 	if (!config.get("assemble.goto-error")) {
-		setErrorShown(true);
+		errorShown = true;
 		return;
 	}
 
@@ -119,7 +119,7 @@ async function(e) {
 			gotoDocumentLocation(location)
 			.catch(displayErrorMessage);
 
-			setErrorShown(true);
+			errorShown = true;
 			return;
 		}
 	}
