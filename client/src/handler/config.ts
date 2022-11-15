@@ -1,5 +1,5 @@
 import { ConfigurationChangeEvent, workspace } from "vscode";
-import { TaskMap } from "../util/task";
+import { invalidateTasks } from "../util/task";
 import { ClientHandler } from "./handler";
 
 export const configHandler: ClientHandler = {
@@ -20,7 +20,7 @@ const onDidChangeConfiguration: (e: ConfigurationChangeEvent) => any =
 	async function (e) {
 
 		if (e.affectsConfiguration("tasks")) {
-			TaskMap.invalidate();
+			invalidateTasks();
 		}
 
 		if (e.affectsConfiguration("64tass-language")) {

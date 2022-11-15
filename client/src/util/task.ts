@@ -1,37 +1,35 @@
 import { Task, tasks } from "vscode";
 
-export class TaskMap {
-    private static map: Map<string, Task> = new Map();
-    private static isDirty: boolean = true;
+const taskMap: Map<string, Task> = new Map();
+let isDirty: boolean = true;
 
-    public static invalidate(): void {
-        this.isDirty = true;
+export function invalidateTasks(): void {
+    isDirty = true;
+}
+
+export async function getTask(task: string): Promise<Task> {
+
+    if (isDirty) {
+        await this.reloadTasks();
+        isDirty = false;
     }
+    const r = taskMap.get(task);
 
-    public static async getTask(task: string): Promise<Task> {
-
-        if (this.isDirty) {
-            await this.reloadTasks();
-            this.isDirty = false;
-        }
-        const r = this.map.get(task);
-
-        if (r === undefined) {
-            throw new Error("Task not Found");
-        }
-        return r;
+    if (r === undefined) {
+        throw new Error("Task not Found");
     }
+    return r;
+}
 
-    public static async reloadTasks(): Promise<void> {
+async function reloadTasks(): Promise<void> {
 
-        const taskList = await tasks.fetchTasks();
-        this.map.clear();
+    const taskList = await tasks.fetchTasks();
+    taskMap.clear();
 
-        for (const task of taskList) {
+    for (const task of taskList) {
 
-            if (this.map.get(task.name) === undefined) {
-                this.map.set(task.name, task);
-            }
+        if (taskMap.get(task.name) === undefined) {
+            taskMap.set(task.name, task);
         }
     }
 }
