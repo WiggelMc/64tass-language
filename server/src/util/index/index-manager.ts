@@ -22,9 +22,14 @@ export class IndexManager {
         const documentIndexManager = new DocumentIndexManager<string>();
         const projectIndexManager = new ProjectIndexManager<string>();
 
-        fileWatcher.register(fileManager).register(documentIndexManager.file);
-        editorManager.register(documentIndexManager.editor);
+        fileWatcher
+            .register(fileManager)
+            .register(documentIndexManager.file);
 
-        documentIndexManager.register(projectIndexManager);
+        editorManager
+            .register(documentIndexManager.editor);
+
+        documentIndexManager
+            .register(projectIndexManager);
     }
 }
