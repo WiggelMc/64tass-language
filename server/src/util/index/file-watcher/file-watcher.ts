@@ -1,8 +1,10 @@
 import { SingleInputFileEventHandler, FileListener } from "../file-event-handler";
+import { FilePath } from "../file-manager/file";
+import { FileWithPath } from "../file-manager/file-manager";
 
-export class FileWatcher<T> extends SingleInputFileEventHandler<T,T,T,T,T,T> {
-    add: FileListener<T> = this.emitAdd;
-    remove: FileListener<T> = this.emitRemove;
+export class FileWatcher<T> extends SingleInputFileEventHandler<FileWithPath<T>, FilePath, T, FileWithPath<T>, FilePath, T> {
+    add: FileListener<FileWithPath<T>> = this.emitAdd;
+    remove: FileListener<FilePath> = this.emitRemove;
     change: FileListener<T> = this.emitChange;
 
     //contains FileListenerWatchers and manages them

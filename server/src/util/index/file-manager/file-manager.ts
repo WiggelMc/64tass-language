@@ -80,7 +80,7 @@ export class FileManager<F> extends SingleInputFileEventHandler<FileWithPath<F>,
     }
 }
 
-class FileWithPath<F> {
+export class FileWithPath<F> {
     file: F;
     path: FilePath;
 
