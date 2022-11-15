@@ -7,12 +7,12 @@ import { displayErrorMessage } from "../util/error";
 import { ClientHandler } from "./handler";
 
 export const terminalHandler: ClientHandler = {
-    register(context) {
-        return [
-            languages.onDidChangeDiagnostics(onDidChangeDiagnostics),
-		    window.registerTerminalLinkProvider(new TassTerminalLinkProvider()),
-        ];
-    },
+	register(context) {
+		return [
+			languages.onDidChangeDiagnostics(onDidChangeDiagnostics),
+			window.registerTerminalLinkProvider(new TassTerminalLinkProvider()),
+		];
+	},
 };
 
 class TassTerminalLinkProvider implements TerminalLinkProvider<TassTerminalLink> {
@@ -28,12 +28,12 @@ class TassTerminalLinkProvider implements TerminalLinkProvider<TassTerminalLink>
 		const workspaceFolder = getWorkspaceFolder(context.terminal.creationOptions, relativePath);
 
 		const path = workspaceFolder + "/" + relativePath;
-		const position = match.at(2).split(":").map(Number).map(n => n-1);
+		const position = match.at(2).split(":").map(Number).map(n => n - 1);
 		const location: DocumentLocation = {
-			textDocument: {uri: path},
-			range: Range.create(position[0],position[1],position[0],position[1])
+			textDocument: { uri: path },
+			range: Range.create(position[0], position[1], position[0], position[1])
 		};
-		
+
 		return [
 			new TassTerminalLink(0, context.line.length, location, "Open in Editor")
 		];
@@ -41,7 +41,7 @@ class TassTerminalLinkProvider implements TerminalLinkProvider<TassTerminalLink>
 
 	handleTerminalLink(link: TassTerminalLink): ProviderResult<void> {
 		gotoDocumentLocation(link.location)
-		.catch(displayErrorMessage);
+			.catch(displayErrorMessage);
 	}
 }
 
@@ -50,9 +50,9 @@ function getWorkspaceFolder(terminalOptions: Readonly<TerminalOptions | Extensio
 	for (const folder of workspace.workspaceFolders) {
 
 		const diagnostics = languages.getDiagnostics(Uri.parse(folder.uri.toString() + "/" + relativePath))
-		.filter(
-			d => d.source === "64tass Assembler"
-		);
+			.filter(
+				d => d.source === "64tass Assembler"
+			);
 
 		if (diagnostics.length > 0) {
 			return folder.uri.toString();
@@ -83,44 +83,44 @@ class TassTerminalLink extends TerminalLink {
 let errorShown = true;
 
 export function resetTaskLinterDiagnostics() {
-    errorShown = false;
+	errorShown = false;
 }
 
 const onDidChangeDiagnostics: (e: DiagnosticChangeEvent) => any =
-async function(e) {
+	async function (e) {
 
-	if (!getConfigOption("assemble.goto-error")) {
-		errorShown = true;
-		return;
-	}
-
-	if (errorShown) {
-		return;
-	}
-	
-	for (const uri of e.uris) {
-		const error = languages.getDiagnostics(uri)
-		.filter(
-			d => d.source === "64tass Assembler" &&
-			d.severity === DiagnosticSeverity.Error
-		)
-		.at(0);
-
-		if (error !== undefined) {
-
-			const location: DocumentLocation = {
-				textDocument: {
-					uri: uri.toString()
-				},
-				range: error.range
-			};
-
-			
-			gotoDocumentLocation(location)
-			.catch(displayErrorMessage);
-
+		if (!getConfigOption("assemble.goto-error")) {
 			errorShown = true;
 			return;
 		}
-	}
-};
+
+		if (errorShown) {
+			return;
+		}
+
+		for (const uri of e.uris) {
+			const error = languages.getDiagnostics(uri)
+				.filter(
+					d => d.source === "64tass Assembler"
+						&& d.severity === DiagnosticSeverity.Error
+				)
+				.at(0);
+
+			if (error !== undefined) {
+
+				const location: DocumentLocation = {
+					textDocument: {
+						uri: uri.toString()
+					},
+					range: error.range
+				};
+
+
+				gotoDocumentLocation(location)
+					.catch(displayErrorMessage);
+
+				errorShown = true;
+				return;
+			}
+		}
+	};

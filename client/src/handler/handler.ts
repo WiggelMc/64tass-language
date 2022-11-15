@@ -14,13 +14,13 @@ const handlers: ClientHandler[] = [
     executeHandler,
     listFileHandler,
     commandHandler,
-	taskHandler,
-	configHandler,
-	terminalHandler,
+    taskHandler,
+    configHandler,
+    terminalHandler,
 ];
 
 export function registerClientHandlers(context: ExtensionContext) {
-    const disposables: Disposable[] = [];    
+    const disposables: Disposable[] = [];
 
     for (const handler of handlers) {
         disposables.push(

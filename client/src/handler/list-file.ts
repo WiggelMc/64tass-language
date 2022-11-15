@@ -10,31 +10,31 @@ import { ClientHandler } from "./handler";
 import { createTaskFetchParams } from "../util/execute";
 
 export const listFileHandler: ClientHandler = {
-    register(context) {
-        return [
-            commands.registerCommand("64tass.viewInSource", viewInSource),
-            commands.registerCommand("64tass.viewInList", viewInList),
-            commands.registerCommand("64tass.assembleAndViewInList", assembleAndViewInList),
-        ];
-    },
+	register(context) {
+		return [
+			commands.registerCommand("64tass.viewInSource", viewInSource),
+			commands.registerCommand("64tass.viewInList", viewInList),
+			commands.registerCommand("64tass.assembleAndViewInList", assembleAndViewInList),
+		];
+	},
 };
 
 async function viewInSource() {
-		
+
 	getCurrentDocumentLocation()
-	.then(sendViewInSourceFileRequest)
-	.then(gotoDocumentLocation)
-	
-	.catch(displayErrorMessage);
+		.then(sendViewInSourceFileRequest)
+		.then(gotoDocumentLocation)
+
+		.catch(displayErrorMessage);
 }
 
 async function viewInList() {
 
 	getCurrentDocumentLocation()
-	.then(sendViewInListFileRequest)
-	.then(gotoDocumentLocation)
-	
-	.catch(displayErrorMessage);
+		.then(sendViewInListFileRequest)
+		.then(gotoDocumentLocation)
+
+		.catch(displayErrorMessage);
 }
 
 async function assembleAndViewInList() {
@@ -42,15 +42,15 @@ async function assembleAndViewInList() {
 	let location: DocumentLocation;
 
 	getCurrentDocumentLocation()
-	.then(x => location = x)
-	
-	.then(x => createTaskFetchParams(x, TaskType.assemble))
-	.then(sendTaskFetchRequest)
-	.then(r => TaskMap.getTask(r.task))
-	.then(runTask)
+		.then(x => location = x)
 
-	.then(() => sendViewInListFileRequest(location))
-	.then(gotoDocumentLocationStoppable)
+		.then(x => createTaskFetchParams(x, TaskType.assemble))
+		.then(sendTaskFetchRequest)
+		.then(r => TaskMap.getTask(r.task))
+		.then(runTask)
 
-	.catch(displayErrorMessage);
+		.then(() => sendViewInListFileRequest(location))
+		.then(gotoDocumentLocationStoppable)
+
+		.catch(displayErrorMessage);
 }

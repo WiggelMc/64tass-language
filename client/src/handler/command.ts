@@ -7,34 +7,34 @@ import { ClientHandler } from "./handler";
 import { createTaskCommandFetchParams } from "../util/execute";
 
 export const commandHandler: ClientHandler = {
-    register(context) {
-        return [
-            commands.registerCommand("64tass.copyAssembleCommand", copyAssembleCommand),
-            commands.registerCommand("64tass.copyAssembleTask", copyAssembleTask),
-        ];
-    },
+	register(context) {
+		return [
+			commands.registerCommand("64tass.copyAssembleCommand", copyAssembleCommand),
+			commands.registerCommand("64tass.copyAssembleTask", copyAssembleTask),
+		];
+	},
 };
 
 async function copyAssembleTask() {
 
 	getCurrentDocumentLocation()
-	.then(x => createTaskCommandFetchParams(x, TaskCommandType.processTask))
-	
-	.then(sendTaskCommandFetchRequest)
-	.then(r => env.clipboard.writeText(r.command))
-	.then(() => window.showInformationMessage("Assemble Task copied to clipboard"))
+		.then(x => createTaskCommandFetchParams(x, TaskCommandType.processTask))
 
-	.catch(displayErrorMessage);
+		.then(sendTaskCommandFetchRequest)
+		.then(r => env.clipboard.writeText(r.command))
+		.then(() => window.showInformationMessage("Assemble Task copied to clipboard"))
+
+		.catch(displayErrorMessage);
 }
 
 async function copyAssembleCommand() {
-	
+
 	getCurrentDocumentLocation()
-	.then(x => createTaskCommandFetchParams(x, TaskCommandType.commandLineCommand))
+		.then(x => createTaskCommandFetchParams(x, TaskCommandType.commandLineCommand))
 
-	.then(sendTaskCommandFetchRequest)
-	.then(r => env.clipboard.writeText(r.command))
-	.then(() => window.showInformationMessage("Assemble Command copied to clipboard"))
+		.then(sendTaskCommandFetchRequest)
+		.then(r => env.clipboard.writeText(r.command))
+		.then(() => window.showInformationMessage("Assemble Command copied to clipboard"))
 
-	.catch(displayErrorMessage);
+		.catch(displayErrorMessage);
 }
