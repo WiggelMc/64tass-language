@@ -61,14 +61,7 @@ export interface FileEventHandlerInput<CA, CR, CC> {
 }
 
 //provides
-//uniform IN/OUT with two generic Params <C,E>
+//uniform IN/OUT with two sets of generic Params
 //method to chain modules together
 
 //base class for all index modules
-
-
-//current solution assumes that all inputs and all outputs are the same
-//this leads to problems as add, get and remove need different
-
-//possible solution
-//FileEventHandler<CA,CR,CC, EA,ER,EC>
