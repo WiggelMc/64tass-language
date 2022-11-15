@@ -1,11 +1,11 @@
 import { _, _Connection } from "vscode-languageserver";
 
 export interface ExtensionSettings {
-	maxNumberOfProblems: number;
+    maxNumberOfProblems: number;
 }
 
 export const defaultSettings: ExtensionSettings = {
-     maxNumberOfProblems: 1000 
+    maxNumberOfProblems: 1000
 };
 
 export const documentSettings: Map<string, Thenable<ExtensionSettings>> = new Map();
