@@ -1,4 +1,4 @@
-import { FileEmitter } from "../file-event-handler";
+import { FileEmitter } from "../file-event-handler-2";
 import { DirPathSegment } from "./file";
 
 export class FileManagerNode<F> {
