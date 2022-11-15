@@ -20,3 +20,9 @@ export class FileEventEmitter<F> {
         return this.eventEmitter.emit(REMOVE_FILE_EVENT, file);
     }
 }
+
+//provides
+//uniform IN/OUT with two generic Params <C,E>
+//method to chain modules together
+
+//base class for all index modules
