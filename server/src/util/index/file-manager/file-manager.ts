@@ -1,59 +1,50 @@
 import { DirPath, FilePath, Path, PathSegment } from "./file";
-import { FileEvent, FileEventHandler, FileListener } from "../file-event-handler";
+import { FileEventHandler, FileListener } from "../file-event-handler-2";
 import { FileManagerNode } from "./file-manager-node";
 
-export class FileManager<F> extends FileEventHandler<F, F> {
+export class FileManager<F> extends FileEventHandler<FileWithPath<F>, FilePath, F, F, F, F> {
     head: FileManagerNode<F> = new FileManagerNode();
 
-    override getListener(event: FileEvent): FileListener<F> | undefined {
-        switch (event) {
-            case FileEvent.add:
-            case FileEvent.remove:
-            case FileEvent.change:
-            default:
-                return;
-        }
-    }
+    change: FileListener<F> = this.emitChange;
 
-    changeFile(path: FilePath, file: F) {
-        this.emit(FileEvent.change, file);
-    }
-    addFile(path: FilePath, file: F): void {
-        const pathSegments = splitPath(path);
-        const filename = pathSegments.pop();
+    add: FileListener<FileWithPath<F>> =
+        (fileWithPath: FileWithPath<F>) => {
+            const pathSegments = splitPath(fileWithPath.path);
+            const filename = pathSegments.pop();
 
-        if (filename === undefined) {
-            return undefined;
-        }
-
-        this.head.createNodeAndDo(pathSegments, n => {
-            if (!n.files.has(filename)) {
-                n.files.set(filename, file);
+            if (filename === undefined) {
+                return undefined;
             }
-        });
 
-        this.emit(FileEvent.add, file);
-    }
-    removeFile(path: FilePath): F | undefined {
-        const pathSegments = splitPath(path);
-        const filename = pathSegments.pop();
+            this.head.createNodeAndDo(pathSegments, n => {
+                if (!n.files.has(filename)) {
+                    n.files.set(filename, fileWithPath.file);
+                }
+            });
 
-        if (filename === undefined) {
-            return undefined;
-        }
+            this.emitAdd(fileWithPath.file);
+        };
+    remove: FileListener<FilePath> =
+        (path: FilePath) => {
+            const pathSegments = splitPath(path);
+            const filename = pathSegments.pop();
 
-        const value = this.head.getNodeAndDo(pathSegments, n => {
-            const file = n.files.get(filename);
-            n.files.delete(filename);
+            if (filename === undefined) {
+                return undefined;
+            }
+
+            const file = this.head.getNodeAndDo(pathSegments, n => {
+                const file = n.files.get(filename);
+                n.files.delete(filename);
+                return file;
+            });
+
+            if (file !== undefined) {
+                this.emitRemove(file);
+            }
+
             return file;
-        });
-
-        if (value !== undefined) {
-            this.emit(FileEvent.remove, value);
-        }
-        
-        return value;
-    }
+        };
     getFile(path: FilePath): F | undefined {
         const pathSegments = splitPath(path);
         const filename = pathSegments.pop();
@@ -72,7 +63,7 @@ export class FileManager<F> extends FileEventHandler<F, F> {
 
     trackDir(path: DirPath): void {
         const pathSegments = splitPath(path);
-        
+
         this.head.createNodeAndDo(pathSegments, n => {
             n.isTracked = true;
         });
@@ -83,9 +74,19 @@ export class FileManager<F> extends FileEventHandler<F, F> {
         this.head.getNodeAndDo(pathSegments, (n, t) => {
             n.isTracked = false;
             if (!t) {
-                n.untrackFiles(this.getEmitter(FileEvent.remove));
+                n.untrackFiles(this.emitRemove);
             }
         });
+    }
+}
+
+class FileWithPath<F> {
+    file: F;
+    path: FilePath;
+
+    constructor(file: F, path: FilePath) {
+        this.file = file;
+        this.path = path;
     }
 }
 
