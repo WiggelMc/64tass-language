@@ -1,8 +1,8 @@
 import { DirPathSegment, EmitFileRemoved } from "./file";
 
-export class FileSystemNode<F> {
+export class FileManagerNode<F> {
     files: Map<string, F> = new Map();
-    children: Map<string, FileSystemNode<F>> = new Map();
+    children: Map<string, FileManagerNode<F>> = new Map();
     isTracked: boolean = false;
 
     isEmpty(): boolean {
@@ -12,11 +12,11 @@ export class FileSystemNode<F> {
             && this.files.size === 0
         );
     }
-    createNextNode(segment: string): FileSystemNode<F> {
+    createNextNode(segment: string): FileManagerNode<F> {
         let nextNode = this.children.get(segment);
 
         if (nextNode === undefined) {
-            nextNode = new FileSystemNode();
+            nextNode = new FileManagerNode();
             this.children.set(segment, nextNode);
         }
 
@@ -40,7 +40,7 @@ export class FileSystemNode<F> {
             }
         }
     }
-    getNodeAndDo<R>(pathSegments: DirPathSegment[], f: (node: FileSystemNode<F>, isTracked: boolean) => R, isTracked = false): R | undefined {
+    getNodeAndDo<R>(pathSegments: DirPathSegment[], f: (node: FileManagerNode<F>, isTracked: boolean) => R, isTracked = false): R | undefined {
         const segment = pathSegments.shift();
         
         if (segment === undefined) {
@@ -54,7 +54,7 @@ export class FileSystemNode<F> {
         }
         return value;
     }
-    createNodeAndDo<R>(pathSegments: DirPathSegment[], f: (node: FileSystemNode<F>) => R): R {
+    createNodeAndDo<R>(pathSegments: DirPathSegment[], f: (node: FileManagerNode<F>) => R): R {
         const segment = pathSegments.shift();
 
         if (segment === undefined) {

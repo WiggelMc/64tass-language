@@ -1,9 +1,9 @@
 import { DirPath, FilePath, OnFileRemoved, Path, PathSegment } from "./file";
 import { FileEventEmitter } from "./file-event-emitter";
-import { FileSystemNode } from "./file-system-node";
+import { FileManagerNode } from "./file-manager-node";
 
-export class FileSystem<F> extends FileEventEmitter<F> {
-    head: FileSystemNode<F> = new FileSystemNode();
+export class FileManager<F> extends FileEventEmitter<F> {
+    head: FileManagerNode<F> = new FileManagerNode();
 
     addFile(path: FilePath, file: F): void {
         const pathSegments = splitPath(path);
