@@ -8,8 +8,8 @@ export class FileManagerNode<F> {
 
     isEmpty(): boolean {
         return (
-            !this.isTracked 
-            && this.children.size === 0 
+            !this.isTracked
+            && this.children.size === 0
             && this.files.size === 0
         );
     }
@@ -43,7 +43,7 @@ export class FileManagerNode<F> {
     }
     getNodeAndDo<R>(pathSegments: DirPathSegment[], f: (node: FileManagerNode<F>, isTracked: boolean) => R, isTracked = false): R | undefined {
         const segment = pathSegments.shift();
-        
+
         if (segment === undefined) {
             return f(this, isTracked);
         }

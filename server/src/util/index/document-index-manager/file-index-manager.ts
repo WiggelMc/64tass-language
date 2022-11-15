@@ -1,12 +1,12 @@
 import { FileEventHandler, FileEventHandlerInput } from "../file-event-handler";
 
-export class DocumentIndexManager<T> extends FileEventHandler<T,T,T> {
-    file: FileEventHandlerInput<T,T,T> = {
+export class DocumentIndexManager<T> extends FileEventHandler<T, T, T> {
+    file: FileEventHandlerInput<T, T, T> = {
         add: this.emitAdd,
         remove: this.emitRemove,
         change: this.emitChange,
     };
-    editor: FileEventHandlerInput<T,T,T> = {
+    editor: FileEventHandlerInput<T, T, T> = {
         add: this.emitAdd,
         remove: this.emitRemove,
         change: this.emitChange,
