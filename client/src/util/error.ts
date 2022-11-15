@@ -30,7 +30,7 @@ export async function displayErrorMessage(error?: any) {
 		if (m !== undefined) {
 			window.showErrorMessage(m);
 		} else {
-			window.showErrorMessage(`Error while running Command: ${error.message}`);
+			window.showErrorMessage(error.message);
 		}
 	}
 }

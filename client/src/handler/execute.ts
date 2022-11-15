@@ -56,7 +56,7 @@ async function executeCustomTaskType(taskString?: string) {
 	}
 
 	if (!validateCustomTaskInput(taskString)) {
-		throw new Error("Invalid Task Argument");
+		throw new InvalidCustomTaskArgumentError(taskString);
 	}
 
 	const taskNumber = Number(taskString);
@@ -71,4 +71,12 @@ function validateCustomTaskInput(taskString: string) {
 		&& taskNumber <= 1000
 		&& Number.isInteger(taskNumber)
 	);
+}
+
+class InvalidCustomTaskArgumentError extends Error {
+	constructor(taskString: string) {
+		
+		super(`The Argument '${taskString}' is not a valid Number for a Custom Task`);
+		this.name = "InvalidCustomTaskArgumentError";
+	}
 }
