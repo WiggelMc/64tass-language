@@ -1,4 +1,4 @@
-import { DirPath, FilePath, OnFileRemoved, Path, PathSegment } from "./file";
+import { DirPath, FilePath, Path, PathSegment } from "./file";
 import { FileEvent, FileEventHandler } from "../file-event-handler";
 import { FileManagerNode } from "./file-manager-node";
 
