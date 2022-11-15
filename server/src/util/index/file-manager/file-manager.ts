@@ -1,5 +1,5 @@
 import { DirPath, FilePath, OnFileRemoved, Path, PathSegment } from "./file";
-import { FileEventEmitter } from "./file-event-emitter";
+import { FileEventEmitter } from "../file-event-emitter";
 import { FileManagerNode } from "./file-manager-node";
 
 export class FileManager<F> extends FileEventEmitter<F> {

@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import { OnFileRemoved } from "./file";
+import { OnFileRemoved } from "./file-manager/file";
 
 const REMOVE_FILE_EVENT = Symbol('RemoveFile');
 const ADD_FILE_EVENT = Symbol('AddFile');
