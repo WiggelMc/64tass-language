@@ -1,8 +1,8 @@
 import { DirPath, FilePath, OnFileRemoved, Path, PathSegment } from "./file";
-import { FileEventEmitter } from "../file-event-emitter";
+import { FileEventHandler } from "../file-event-handler";
 import { FileManagerNode } from "./file-manager-node";
 
-export class FileManager<F> extends FileEventEmitter<F> {
+export class FileManager<F> extends FileEventHandler<any, F> {
     head: FileManagerNode<F> = new FileManagerNode();
 
     addFile(path: FilePath, file: F): void {

@@ -5,18 +5,18 @@ const REMOVE_FILE_EVENT = Symbol('RemoveFile');
 const ADD_FILE_EVENT = Symbol('AddFile');
 const CHANGE_FILE_EVENT = Symbol('ChangeFile');
 
-export class FileEventEmitter<F> {
+export class FileEventHandler<C, E> {
     eventEmitter: EventEmitter = new EventEmitter();
     
-    onFileRemoved(listener: OnFileRemoved<F>): this {
+    onFileRemoved(listener: OnFileRemoved<E>): this {
         this.eventEmitter.on(REMOVE_FILE_EVENT, listener);
         return this;
     }
-    offFileRemoved(listener: OnFileRemoved<F>): this {
+    offFileRemoved(listener: OnFileRemoved<E>): this {
         this.eventEmitter.off(REMOVE_FILE_EVENT, listener);
         return this;
     }
-    emitFileRemoved(file: F): boolean {
+    emitFileRemoved(file: E): boolean {
         return this.eventEmitter.emit(REMOVE_FILE_EVENT, file);
     }
 }
