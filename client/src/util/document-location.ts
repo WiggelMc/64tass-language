@@ -1,4 +1,4 @@
-import { Range } from "vscode-languageclient/node";
+import { Range, TextDocumentIdentifier } from "vscode-languageclient/node";
 import * as vscode from "vscode";
 import { DocumentLocation } from "../common/capabilities/list-file";
 import { sleep } from "./sleep";
@@ -27,11 +27,9 @@ let currentRunning: object;
 export async function gotoDocumentLocationStoppable(location: DocumentLocation) {
 
     const instance = {};
-
     currentRunning = instance;
 
     let waitTime: number = getConfigOption("assemble.error-wait-time") ?? 300;
-
     if (waitTime > 0) {
         await sleep(waitTime);
     }
@@ -44,22 +42,30 @@ export async function gotoDocumentLocationStoppable(location: DocumentLocation) 
 export async function gotoDocumentLocation(location: DocumentLocation) {
     currentRunning = undefined;
 
-    return (async () => {
-        return vscode.workspace.openTextDocument(
-            vscode.Uri.parse(location.textDocument.uri)
-        );
-    })()
-        .then(document => vscode.window.showTextDocument(document, vscode.ViewColumn.Active))
-        .then(editor => {
+    openTextDocument(location.textDocument)
+        .then(showTextDocument)
+        .then(editor => showRangeInEditor(editor, location.range));
+}
 
-            const range = location.range;
+async function openTextDocument(textDocument: TextDocumentIdentifier) {
 
-            const pos1 = new vscode.Position(range.start.line, range.start.character);
-            const pos2 = new vscode.Position(range.end.line, range.end.character);
+    return vscode.workspace.openTextDocument(
+        vscode.Uri.parse(textDocument.uri)
+    );
+}
 
-            editor.selection = new vscode.Selection(pos1, pos2);
-            editor.revealRange(new vscode.Range(safeTranslate(pos1, -7), safeTranslate(pos2, 7)), vscode.TextEditorRevealType.Default);
-        });
+async function showTextDocument(document: vscode.TextDocument) {
+
+    return vscode.window.showTextDocument(document, vscode.ViewColumn.Active);
+}
+
+async function showRangeInEditor(editor: vscode.TextEditor, range: Range) {
+
+    const pos1 = new vscode.Position(range.start.line, range.start.character);
+    const pos2 = new vscode.Position(range.end.line, range.end.character);
+
+    editor.selection = new vscode.Selection(pos1, pos2);
+    editor.revealRange(new vscode.Range(safeTranslate(pos1, -7), safeTranslate(pos2, 7)), vscode.TextEditorRevealType.Default);
 }
 
 function safeTranslate(pos: vscode.Position, lineDelta: number = 0, characterDelta: number = 0) {
@@ -71,9 +77,9 @@ function safeTranslate(pos: vscode.Position, lineDelta: number = 0, characterDel
 }
 
 class NoOpenEditorError extends Error {
-	constructor() {
-		
-		super(`The Editor is not open`);
-		this.name = "NoOpenEditorError";
-	}
+    constructor() {
+
+        super(`The Editor is not open`);
+        this.name = "NoOpenEditorError";
+    }
 }
