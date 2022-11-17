@@ -443,3 +443,8 @@ handler.terminal.errorShown				(local)
 util.document-location.currentRunning	(local)
 util.languageclient.client				(export) {acceptable state}
 util.task.TaskMap						(local)
+
+
+
+figure out workspace.createFileSystemWatcher('**/.clientrc') in languageclient
+remove string literals from most places
