@@ -8,7 +8,7 @@ export class FileManager<F> extends SingleInputFileEventHandler<FileWithPath<F>,
     change: FileListener<F> = this.emitChange;
 
     add: FileListener<FileWithPath<F>> =
-        (fileWithPath: FileWithPath<F>) => {
+        (fileWithPath) => {
             const pathSegments = splitPath(fileWithPath.path);
             const filename = pathSegments.pop();
 
@@ -25,7 +25,7 @@ export class FileManager<F> extends SingleInputFileEventHandler<FileWithPath<F>,
             this.emitAdd(fileWithPath.file);
         };
     remove: FileListener<FilePath> =
-        (path: FilePath) => {
+        (path) => {
             const pathSegments = splitPath(path);
             const filename = pathSegments.pop();
 
@@ -45,6 +45,7 @@ export class FileManager<F> extends SingleInputFileEventHandler<FileWithPath<F>,
 
             return file;
         };
+        
     getFile(path: FilePath): F | undefined {
         const pathSegments = splitPath(path);
         const filename = pathSegments.pop();
