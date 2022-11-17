@@ -8,6 +8,7 @@ import { getCurrentDocumentLocation, gotoDocumentLocation, gotoDocumentLocationS
 import { displayErrorMessage } from "../util/error";
 import { ClientHandler } from "./handler";
 import { createTaskFetchParams } from "../util/execute";
+import { ConfigSection, getConfigOption } from "./config";
 
 export const listFileHandler: ClientHandler = {
 	register(context) {
@@ -39,6 +40,9 @@ async function viewInList() {
 
 async function assembleAndViewInList() {
 
+	const waitTime: number = getConfigOption(ConfigSection.assembleGotoError)
+		? (getConfigOption(ConfigSection.assembleErrorWaitTime) ?? 300) : 0;
+
 	let location: DocumentLocation;
 
 	getCurrentDocumentLocation()
@@ -50,7 +54,7 @@ async function assembleAndViewInList() {
 		.then(runTask)
 
 		.then(() => sendViewInListFileRequest(location))
-		.then(gotoDocumentLocationStoppable)
+		.then(l => gotoDocumentLocationStoppable(l, waitTime))
 
 		.catch(displayErrorMessage);
 }

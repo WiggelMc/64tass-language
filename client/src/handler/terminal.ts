@@ -2,7 +2,7 @@ import { CancellationToken, DiagnosticSeverity, ExtensionTerminalOptions, langua
 import { Range } from "vscode-languageclient";
 import { DocumentLocation } from "../common/capabilities/list-file";
 import { gotoDocumentLocation } from "../util/document-location";
-import { getConfigOption } from "./config";
+import { ConfigSection, getConfigOption } from "./config";
 import { displayErrorMessage } from "../util/error";
 import { ClientHandler } from "./handler";
 
@@ -89,7 +89,7 @@ export function resetTaskLinterDiagnostics() {
 const onDidChangeDiagnostics: (e: DiagnosticChangeEvent) => any =
 	async function (e) {
 
-		if (!getConfigOption("assemble.goto-error")) {
+		if (!getConfigOption(ConfigSection.assembleGotoError)) {
 			errorShown = true;
 			return;
 		}

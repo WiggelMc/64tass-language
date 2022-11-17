@@ -2,7 +2,6 @@ import { Range, TextDocumentIdentifier } from "vscode-languageclient/node";
 import * as vscode from "vscode";
 import { DocumentLocation } from "../common/capabilities/list-file";
 import { sleep } from "./sleep";
-import { getConfigOption } from "../handler/config";
 
 export async function getCurrentDocumentLocation(): Promise<DocumentLocation> {
     const editor = vscode.window.activeTextEditor;
@@ -24,12 +23,11 @@ export async function getCurrentDocumentLocation(): Promise<DocumentLocation> {
 
 let currentRunning: object;
 
-export async function gotoDocumentLocationStoppable(location: DocumentLocation) {
+export async function gotoDocumentLocationStoppable(location: DocumentLocation, waitTime: number) {
 
     const instance = {};
     currentRunning = instance;
 
-    let waitTime: number = getConfigOption("assemble.error-wait-time") ?? 300;
     if (waitTime > 0) {
         await sleep(waitTime);
     }
