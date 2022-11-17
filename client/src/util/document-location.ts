@@ -74,7 +74,7 @@ function safeTranslate(pos: vscode.Position, lineDelta: number = 0, characterDel
     return new vscode.Position(line, character);
 }
 
-class NoOpenEditorError extends Error {
+export class NoOpenEditorError extends Error {
     constructor() {
 
         super(`The Editor is not open`);

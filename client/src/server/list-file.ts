@@ -7,7 +7,7 @@ export async function sendViewInListFileRequest(params: DocumentLocation): Promi
     const r: OptionalDocumentLocation = await client.sendRequest(ViewInListFileRequest.method, params);
 
     if (r === undefined || r === null) {
-        throw new Error("List File not Found");
+        throw new ListFileNotFoundError();
     }
 
     return r;
@@ -18,8 +18,24 @@ export async function sendViewInSourceFileRequest(params: DocumentLocation): Pro
     const r: OptionalDocumentLocation = await client.sendRequest(ViewInSourceFileRequest.method, params);
 
     if (r === undefined || r === null) {
-        throw new Error("Source File not Found");
+        throw new SourceFileNotFoundError();
     }
 
     return r;
 };
+
+
+export class ListFileNotFoundError extends Error {
+	constructor() {
+		
+		super(`The List File for the current Line could not be found`);
+		this.name = "ListFileNotFoundError";
+	}
+}
+export class SourceFileNotFoundError extends Error {
+	constructor() {
+		
+		super(`The Source for the current Line could not be found`);
+		this.name = "SourceFileNotFoundError";
+	}
+}

@@ -73,7 +73,7 @@ function validateCustomTaskInput(taskString: string) {
 	);
 }
 
-class InvalidCustomTaskArgumentError extends Error {
+export class InvalidCustomTaskArgumentError extends Error {
 	constructor(taskString: string) {
 		
 		super(`The Argument '${taskString}' is not a valid Number for a Custom Task`);

@@ -17,7 +17,7 @@ export async function sendTaskFetchRequest(params: TaskFetchParams): Promise<Tas
     const r: OptionalTaskIdentifier = await client.sendRequest(TaskFetchRequest.method, params);
 
     if (r === undefined || r === null) {
-        throw new Error("Task not defined");
+        throw new TaskNotConfiguredError();
     }
 
     return r;
@@ -28,8 +28,23 @@ export async function sendTaskCommandFetchRequest(params: TaskCommandFetchParams
     const r: OptionalTaskCommandIdentifier = await client.sendRequest(TaskCommandFetchRequest.method, params);
 
     if (r === undefined || r === null) {
-        throw new Error("Command could not be created");
+        throw new TaskCommandCreationError();
     }
 
     return r;
+}
+
+export class TaskNotConfiguredError extends Error {
+	constructor() {
+		
+		super(`The requested Task is not configured in any config file`);
+		this.name = "TaskNotConfiguredError";
+	}
+}
+export class TaskCommandCreationError extends Error {
+	constructor() {
+		
+		super(`The Command for the current config could not be created`);
+		this.name = "TaskCommandCreationError";
+	}
 }

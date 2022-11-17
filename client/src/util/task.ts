@@ -51,7 +51,7 @@ export async function runTask(task: Task): Promise<void> {
     });
 }
 
-class TaskNotDefinedError extends Error {
+export class TaskNotDefinedError extends Error {
 	constructor(task: string) {
 		
 		super(`The Task '${task}' is not defined`);
