@@ -3,6 +3,8 @@ import * as vscode from "vscode";
 import { DocumentLocation } from "../common/capabilities/list-file";
 import { sleep } from "./sleep";
 
+const EDITOR_RANGE_LINE_PADDING = 7;
+
 export async function getCurrentDocumentLocation(): Promise<DocumentLocation> {
     const editor = vscode.window.activeTextEditor;
 
@@ -63,7 +65,7 @@ async function showRangeInEditor(editor: vscode.TextEditor, range: Range) {
     const pos2 = new vscode.Position(range.end.line, range.end.character);
 
     editor.selection = new vscode.Selection(pos1, pos2);
-    editor.revealRange(new vscode.Range(safeTranslate(pos1, -7), safeTranslate(pos2, 7)), vscode.TextEditorRevealType.Default);
+    editor.revealRange(new vscode.Range(safeTranslate(pos1, -EDITOR_RANGE_LINE_PADDING), safeTranslate(pos2, EDITOR_RANGE_LINE_PADDING)), vscode.TextEditorRevealType.Default);
 }
 
 function safeTranslate(pos: vscode.Position, lineDelta: number = 0, characterDelta: number = 0) {
