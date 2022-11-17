@@ -1,6 +1,4 @@
 import { EventEmitter } from "events";
-import { integer } from "vscode-languageserver";
-import { enumValues } from "../enum";
 
 export enum FileEvent {
     add = 'AddFile',
