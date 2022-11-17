@@ -1,5 +1,5 @@
 import { FileEmitter } from "../file-event-handler";
-import { DirPathSegment } from "./file";
+import { DirPathSegment } from "../file";
 
 export class FileManagerNode<F> {
     files: Map<string, F> = new Map();

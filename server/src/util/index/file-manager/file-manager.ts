@@ -1,4 +1,4 @@
-import { DirPath, FilePath, Path, PathSegment } from "./file";
+import { DirPath, FilePath, FileWithPath, Path, PathSegment, splitPath } from "../file";
 import { SingleInputFileEventHandler, FileListener } from "../file-event-handler";
 import { FileManagerNode } from "./file-manager-node";
 
@@ -79,18 +79,4 @@ export class FileManager<F> extends SingleInputFileEventHandler<FileWithPath<F>,
             }
         });
     }
-}
-
-export class FileWithPath<F> {
-    file: F;
-    path: FilePath;
-
-    constructor(file: F, path: FilePath) {
-        this.file = file;
-        this.path = path;
-    }
-}
-
-function splitPath(path: Path): PathSegment[] {
-    return path.split("/");
 }
