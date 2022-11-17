@@ -2,7 +2,7 @@ import { CancellationToken, DiagnosticSeverity, ExtensionTerminalOptions, langua
 import { Range } from "vscode-languageclient";
 import { DocumentLocation } from "../common/capabilities/list-file";
 import { gotoDocumentLocation } from "../util/document-location";
-import { ConfigSection, getConfigOption } from "./config";
+import { ConfigSection, getConfigOption } from "../util/config";
 import { displayErrorMessage } from "../util/error";
 import { ClientHandler } from "./handler";
 

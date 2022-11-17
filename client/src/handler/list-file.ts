@@ -8,7 +8,7 @@ import { getCurrentDocumentLocation, gotoDocumentLocation, gotoDocumentLocationS
 import { displayErrorMessage } from "../util/error";
 import { ClientHandler } from "./handler";
 import { createTaskFetchParams } from "../util/execute";
-import { ConfigSection, getConfigOption } from "./config";
+import { ConfigSection, getConfigOption } from "../util/config";
 
 export const listFileHandler: ClientHandler = {
 	register(context) {
