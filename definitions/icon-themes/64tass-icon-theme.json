@@ -1553,7 +1553,7 @@
         "cls": "_salesforce",
         "apex": "_salesforce",
         //"asm": "_asm",            //EDIT HERE
-        "s": "_asm",
+        //"s": "_asm",              //EDIT HERE
         "bicep": "_bicep",
         "bzl": "_bazel",
         "bazel": "_bazel",
@@ -1954,7 +1954,7 @@
             "cls": "_salesforce_light",
             "apex": "_salesforce_light",
             //"asm": "_asm_light",              //EDIT HERE
-            "s": "_asm_light",
+            //"s": "_asm_light",                //EDIT HERE
             "bicep": "_bicep_light",
             "bzl": "_bazel_light",
             "bazel": "_bazel_light",
