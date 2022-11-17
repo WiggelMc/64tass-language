@@ -1,5 +1,7 @@
 import { Task, tasks } from "vscode";
 
+export const TASKS_CONFIG_CATEGORY = "tasks";
+
 const taskMap: Map<string, Task> = new Map();
 let isDirty: boolean = true;
 

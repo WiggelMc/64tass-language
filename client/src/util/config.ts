@@ -1,6 +1,9 @@
-import { workspace } from "vscode";
+import { workspace, WorkspaceConfiguration } from "vscode";
 
-let config = workspace.getConfiguration("64tass-language");
+export const TASS_CONFIG_CATEGORY = "64tass-language";
+
+let config: WorkspaceConfiguration;
+invalidateConfig();
 
 export enum ConfigSection {
 	assembleGotoError = "assemble.goto-error",
@@ -12,5 +15,5 @@ export function getConfigOption<T>(section: ConfigSection): T | undefined {
 }
 
 export function invalidateConfig() {
-	config = workspace.getConfiguration("64tass-language");
+	config = workspace.getConfiguration(TASS_CONFIG_CATEGORY);
 }
