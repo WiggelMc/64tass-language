@@ -1,5 +1,6 @@
 import { EventEmitter } from "events";
 import { Interface } from "readline";
+import { objectKeys } from "../object";
 
 export enum FileEvent {
     add = 'AddFile',
@@ -53,8 +54,21 @@ export class FileEventHandler2<C extends object> {
     emit<E extends keyof C>(event: E & string, file: C[E]): boolean {
         return this.eventEmitter.emit(event, file);
     }
+    on<E extends keyof C>(event: E & string, listener: FileListener<C[E]>): this {
+        this.eventEmitter.on(event, listener);
+        return this;
+    }
+    off<E extends keyof C>(event: E & string, listener: FileListener<C[E]>): this {
+        this.eventEmitter.off(event, listener);
+        return this;
+    }
 
     register<I extends FileEventListener<C>>(next: I): I {
+        for (const key of objectKeys(next)) {
+            if (typeof key === 'string' && typeof next[key] === 'function') {
+                this.eventEmitter.on(key, next[key]);
+            }
+        }
         return next;
     }
 }
