@@ -1,6 +1,12 @@
-import { FileListener, FileEventHandlerInput } from "../file-event-handler";
+import { FileListener, FileEventHandlerInput, FileEventListener } from "../file-event-handler";
 
-export class ProjectIndexManager<T> implements FileEventHandlerInput<T, T, T> {
+export interface ProjectIndexManagerMessages<F> {
+    add: F
+    remove: F
+    change: F
+}
+
+export class ProjectIndexManager<T> implements FileEventListener<ProjectIndexManagerMessages<T>> {
     add: FileListener<T> = f => { };
     remove: FileListener<T> = f => { };
     change: FileListener<T> = f => { };

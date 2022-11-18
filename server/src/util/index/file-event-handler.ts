@@ -1,4 +1,5 @@
 import { EventEmitter } from "events";
+import { Interface } from "readline";
 
 export enum FileEvent {
     add = 'AddFile',
@@ -45,6 +46,40 @@ export class FileEventHandler<EA, ER, EC> {
         return this.eventEmitter.emit(event, file);
     }
 }
+
+export class FileEventHandler2<C extends object> {
+    eventEmitter: EventEmitter = new EventEmitter();
+
+    emit<E extends keyof C>(event: E & string, file: C[E]): boolean {
+        return this.eventEmitter.emit(event, file);
+    }
+
+    register<I extends FileEventListener<C>>(next: I): I {
+        return next;
+    }
+}
+
+export type FileEventListener<T> = {
+    [K in keyof T]: FileListener<T[K]>;
+};
+
+class TestA {
+    add = undefined;
+}
+
+class TestR {
+    rem = "test";
+}
+
+type FileWatcherEvents = "Add" | "Remove" | "Change" | "TrackDir" | "UntrackDir";
+interface TTT {
+    add: TestA
+    remove: TestR
+};
+
+const x = new FileEventHandler2<TTT>();
+x.emit("add", new TestA());
+
 
 export abstract class SingleInputFileEventHandler<CA, CR, CC, EA, ER, EC> extends FileEventHandler<EA, ER, EC> implements FileEventHandlerInput<CA, CR, CC> {
     abstract add: FileListener<CA>;

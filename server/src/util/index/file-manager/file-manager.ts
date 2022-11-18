@@ -1,11 +1,20 @@
+import { DocumentIndexManager, DocumentIndexManagerMessages } from "../document-index-manager/file-index-manager";
 import { DirPath, FilePath, FileWithPath, Path, PathSegment, splitPath } from "../file";
-import { SingleInputFileEventHandler, FileListener } from "../file-event-handler";
+import { SingleInputFileEventHandler, FileListener, FileEventHandler2, FileEventListener } from "../file-event-handler";
 import { FileManagerNode } from "./file-manager-node";
 
-export class FileManager<F> extends SingleInputFileEventHandler<FileWithPath<F>, FilePath, F, F, F, F> {
+export interface FileManagerMessages<F> {
+    add: FileWithPath<F>
+    remove: FilePath
+    change: F
+    trackDir: DirPath
+    untrackDir: DirPath
+}
+
+export class FileManager<F> extends FileEventHandler2<DocumentIndexManagerMessages<F>> implements FileEventListener<FileManagerMessages<F>> {
     head: FileManagerNode<F> = new FileManagerNode();
 
-    change: FileListener<F> = this.emitChange;
+    change: FileListener<F> = f => this.emit("change", f);
 
     add: FileListener<FileWithPath<F>> =
         (fileWithPath) => {
@@ -19,7 +28,7 @@ export class FileManager<F> extends SingleInputFileEventHandler<FileWithPath<F>,
             this.head.createNodeAndDo(pathSegments, n => {
                 if (!n.files.has(filename)) {
                     n.files.set(filename, fileWithPath.file);
-                    this.emitAdd(fileWithPath.file);
+                    this.emit("add", fileWithPath.file);
                 }
             });
         };
@@ -39,7 +48,7 @@ export class FileManager<F> extends SingleInputFileEventHandler<FileWithPath<F>,
             });
 
             if (file !== undefined) {
-                this.emitRemove(file);
+                this.emit("remove", file);
             }
 
             return file;
@@ -74,7 +83,7 @@ export class FileManager<F> extends SingleInputFileEventHandler<FileWithPath<F>,
         this.head.getNodeAndDo(pathSegments, (n, t) => {
             n.isTracked = false;
             if (!t) {
-                n.untrackFiles(this.emitRemove);
+                n.untrackFiles(f => this.emit("remove", f));
             }
         });
     }

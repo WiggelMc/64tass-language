@@ -1,9 +1,7 @@
-import { SingleInputFileEventHandler, FileListener } from "../file-event-handler";
+import { DocumentIndexManagerMessages } from "../document-index-manager/file-index-manager";
+import { FileEventHandler2 } from "../file-event-handler";
 
-export class EditorManager<T> extends SingleInputFileEventHandler<T, T, T, T, T, T> {
-    add: FileListener<T> = this.emitAdd;
-    remove: FileListener<T> = this.emitRemove;
-    change: FileListener<T> = this.emitChange;
+export class EditorManager<T> extends FileEventHandler2<DocumentIndexManagerMessages<T>> {
 
     //manages files from the editor
 }
