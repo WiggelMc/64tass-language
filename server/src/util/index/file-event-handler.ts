@@ -21,7 +21,7 @@ export class FileEventEmitter<C extends object> {
 
     register<I extends FileEventListener<C>>(next: I): I {
         for (const key of objectKeys(next)) {
-            if (typeof key === 'string' && typeof next[key] === 'function') {
+            if (typeof next[key] === 'function') {
                 this.eventEmitter.on(key, next[key]);
             }
         }
