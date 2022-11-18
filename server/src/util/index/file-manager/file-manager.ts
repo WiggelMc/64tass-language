@@ -19,10 +19,9 @@ export class FileManager<F> extends SingleInputFileEventHandler<FileWithPath<F>,
             this.head.createNodeAndDo(pathSegments, n => {
                 if (!n.files.has(filename)) {
                     n.files.set(filename, fileWithPath.file);
+                    this.emitAdd(fileWithPath.file);
                 }
             });
-
-            this.emitAdd(fileWithPath.file);
         };
     remove: FileListener<FilePath> =
         (path) => {
