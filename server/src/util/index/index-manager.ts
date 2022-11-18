@@ -1,4 +1,4 @@
-import { DocumentIndexManager } from "./document-index-manager/file-index-manager";
+import { DocumentIndexManager } from "./document-index-manager/document-index-manager";
 import { EditorManager } from "./editor-manager/editor-manager";
 import { FileManager } from "./file-manager/file-manager";
 import { FileWatcher } from "./file-watcher/file-watcher";
@@ -30,6 +30,6 @@ export class IndexManager {
             .register(documentIndexManager.editor);
 
         documentIndexManager
-            .register(projectIndexManager);
+            .register(documentIndexManager.editor);
     }
 }

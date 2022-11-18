@@ -1,4 +1,4 @@
-import { DocumentIndexManagerMessages } from "../document-index-manager/file-index-manager";
+import { DocumentIndexManagerMessages } from "../document-index-manager/document-index-manager";
 import { DirPath, FilePath, FileWithPath, splitPath } from "../file";
 import { FileListener, FileEventEmitter, FileEventListener } from "../file-event-handler";
 import { FileManagerNode } from "./file-manager-node";
