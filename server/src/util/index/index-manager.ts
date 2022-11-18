@@ -30,6 +30,6 @@ export class IndexManager {
             .register(documentIndexManager.editor);
 
         documentIndexManager
-            .register(documentIndexManager.editor);
+            .register(projectIndexManager);
     }
 }
