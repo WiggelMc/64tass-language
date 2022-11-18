@@ -1,7 +1,7 @@
-import { FileEventHandler2 } from "../file-event-handler";
+import { FileEventEmitter } from "../file-event-handler";
 import { FileManagerMessages } from "../file-manager/file-manager";
 
-export class FileWatcher<F> extends FileEventHandler2<FileManagerMessages<F>> {
+export class FileWatcher<F> extends FileEventEmitter<FileManagerMessages<F>> {
 
     do() {
         this.emit("trackDir", "testDir/Peter");

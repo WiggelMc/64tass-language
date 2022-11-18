@@ -1,4 +1,4 @@
-import { FileListener, FileEventHandlerInput, FileEventListener } from "../file-event-handler";
+import { FileListener, FileEventListener } from "../file-event-handler";
 
 export interface ProjectIndexManagerMessages<F> {
     add: F

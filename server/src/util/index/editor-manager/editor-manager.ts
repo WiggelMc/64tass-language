@@ -1,7 +1,7 @@
 import { DocumentIndexManagerMessages } from "../document-index-manager/file-index-manager";
-import { FileEventHandler2 } from "../file-event-handler";
+import { FileEventEmitter } from "../file-event-handler";
 
-export class EditorManager<T> extends FileEventHandler2<DocumentIndexManagerMessages<T>> {
+export class EditorManager<T> extends FileEventEmitter<DocumentIndexManagerMessages<T>> {
 
     //manages files from the editor
 }

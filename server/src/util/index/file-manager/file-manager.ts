@@ -1,6 +1,6 @@
-import { DocumentIndexManager, DocumentIndexManagerMessages } from "../document-index-manager/file-index-manager";
-import { DirPath, FilePath, FileWithPath, Path, PathSegment, splitPath } from "../file";
-import { SingleInputFileEventHandler, FileListener, FileEventHandler2, FileEventListener } from "../file-event-handler";
+import { DocumentIndexManagerMessages } from "../document-index-manager/file-index-manager";
+import { DirPath, FilePath, FileWithPath, splitPath } from "../file";
+import { FileListener, FileEventEmitter, FileEventListener } from "../file-event-handler";
 import { FileManagerNode } from "./file-manager-node";
 
 export interface FileManagerMessages<F> {
@@ -11,7 +11,7 @@ export interface FileManagerMessages<F> {
     untrackDir: DirPath
 }
 
-export class FileManager<F> extends FileEventHandler2<DocumentIndexManagerMessages<F>> implements FileEventListener<FileManagerMessages<F>> {
+export class FileManager<F> extends FileEventEmitter<DocumentIndexManagerMessages<F>> implements FileEventListener<FileManagerMessages<F>> {
     head: FileManagerNode<F> = new FileManagerNode();
 
     change: FileListener<F> = f => this.emit("change", f);
