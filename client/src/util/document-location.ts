@@ -1,12 +1,12 @@
-import { Range, TextDocumentIdentifier } from "vscode-languageclient/node";
-import * as vscode from "vscode";
+import { Position, Range, Selection, TextDocument, TextEditor, TextEditorRevealType, Uri, ViewColumn, window, workspace } from "vscode";
+import { Range as ClientRange, TextDocumentIdentifier as ClientTextDocumentIdentifier } from "vscode-languageclient/node";
 import { DocumentLocation } from "../common/capabilities/list-file";
 import { sleep } from "./sleep";
 
 const EDITOR_RANGE_LINE_PADDING = 7;
 
 export async function getCurrentDocumentLocation(): Promise<DocumentLocation> {
-    const editor = vscode.window.activeTextEditor;
+    const editor = window.activeTextEditor;
 
     if (editor === undefined) {
         throw new NoOpenEditorError();
@@ -16,7 +16,7 @@ export async function getCurrentDocumentLocation(): Promise<DocumentLocation> {
         textDocument: {
             uri: editor.document.uri.toString()
         },
-        range: Range.create(editor.selection.start, editor.selection.end)
+        range: ClientRange.create(editor.selection.start, editor.selection.end)
     };
 
     return params;
@@ -47,33 +47,33 @@ export async function gotoDocumentLocation(location: DocumentLocation) {
         .then(editor => showRangeInEditor(editor, location.range));
 }
 
-async function openTextDocument(textDocument: TextDocumentIdentifier) {
+async function openTextDocument(textDocument: ClientTextDocumentIdentifier) {
 
-    return vscode.workspace.openTextDocument(
-        vscode.Uri.parse(textDocument.uri)
+    return workspace.openTextDocument(
+        Uri.parse(textDocument.uri)
     );
 }
 
-async function showTextDocument(document: vscode.TextDocument) {
+async function showTextDocument(document: TextDocument) {
 
-    return vscode.window.showTextDocument(document, vscode.ViewColumn.Active);
+    return window.showTextDocument(document, ViewColumn.Active);
 }
 
-async function showRangeInEditor(editor: vscode.TextEditor, range: Range) {
+async function showRangeInEditor(editor: TextEditor, range: ClientRange) {
 
-    const pos1 = new vscode.Position(range.start.line, range.start.character);
-    const pos2 = new vscode.Position(range.end.line, range.end.character);
+    const pos1 = new Position(range.start.line, range.start.character);
+    const pos2 = new Position(range.end.line, range.end.character);
 
-    editor.selection = new vscode.Selection(pos1, pos2);
-    editor.revealRange(new vscode.Range(safeTranslate(pos1, -EDITOR_RANGE_LINE_PADDING), safeTranslate(pos2, EDITOR_RANGE_LINE_PADDING)), vscode.TextEditorRevealType.Default);
+    editor.selection = new Selection(pos1, pos2);
+    editor.revealRange(new Range(safeTranslate(pos1, -EDITOR_RANGE_LINE_PADDING), safeTranslate(pos2, EDITOR_RANGE_LINE_PADDING)), TextEditorRevealType.Default);
 }
 
-function safeTranslate(pos: vscode.Position, lineDelta: number = 0, characterDelta: number = 0) {
+function safeTranslate(pos: Position, lineDelta = 0, characterDelta = 0) {
 
     const line = Math.max(0, pos.line + lineDelta);
     const character = Math.max(0, pos.character + characterDelta);
 
-    return new vscode.Position(line, character);
+    return new Position(line, character);
 }
 
 export class NoOpenEditorError extends Error {
