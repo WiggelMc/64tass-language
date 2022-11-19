@@ -470,6 +470,12 @@ Centralise global Vars ???
 
 
 
+Register Function:
+	keys => enforce interface implemented using keys
+	keys, properties => enforce interface not implemented in superclass (or just trust / ensure functionality only via tests) 
+
+
+
 Handlers
 
 
