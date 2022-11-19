@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import { objectKeys } from "../object";
+import { objectKeys, objectKeysAndProperties, objectProperties } from "../object";
 
 export type Emitter<F> = (f: F) => boolean;
 export type Listener<F> = (f: F) => void;
@@ -20,8 +20,8 @@ export class FileEventEmitter<E extends object> {
     }
 
     register<I extends FileEventListener<E>>(next: I): I {
-        for (const key of objectKeys(next)) {
-            if (typeof next[key] === 'function') {
+        for (const key of objectKeysAndProperties(next)) {
+            if (key !== 'constructor' && typeof next[key] === 'function') {
                 this.eventEmitter.on(key, next[key]);
             }
         }
