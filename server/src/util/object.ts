@@ -11,12 +11,12 @@ export function ownObjectProperties<E extends object>(e: E): (keyof E & string)[
 }
 
 export function objectProperties<E extends object>(e: E): (keyof E & string)[] {
-    const objectPrototype = ownObjectProperties(Object.prototype);
+    const objectPrototype: string[] = ownObjectProperties(Object.prototype);
     const properties: (keyof E & string)[] = [];
     let current = e;
     
     while (current !== null) {
-        const ownProperties = ownObjectProperties(current).filter(p => !(p in objectPrototype));
+        const ownProperties = ownObjectProperties(current).filter(p => !objectPrototype.includes(p));
         properties.push(...ownProperties);
         current = Object.getPrototypeOf(current);
     }
