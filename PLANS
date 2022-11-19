@@ -454,10 +454,12 @@ Stateful methods (need to be part of class globally instatiated)
 Static Methods
 	dont rely on any outside and are fundamentally pure
 
+Create Tests for all client classes and static methods
+
+
 
 
 figure out workspace.createFileSystemWatcher('**/.clientrc') in languageclient
-remove string literals from most places
 
 
 
