@@ -1,4 +1,4 @@
-import { FileEmitter } from "../file-event-handler";
+import { Emitter } from "../file-event-handler";
 import { DirPathSegment } from "../file";
 
 export class FileManagerNode<F> {
@@ -24,7 +24,7 @@ export class FileManagerNode<F> {
         return nextNode;
     }
 
-    untrackFiles(emitFileRemoved: FileEmitter<F>) {
+    untrackFiles(emitFileRemoved: Emitter<F>) {
         if (this.isTracked) {
             return;
         }

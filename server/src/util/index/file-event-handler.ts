@@ -1,25 +1,25 @@
 import { EventEmitter } from "events";
 import { objectKeys } from "../object";
 
-export type FileEmitter<F> = (file: F) => boolean;
-export type FileListener<F> = (file: F) => void;
+export type Emitter<F> = (f: F) => boolean;
+export type Listener<F> = (f: F) => void;
 
-export class FileEventEmitter<C extends object> {
+export class FileEventEmitter<E extends object> {
     eventEmitter: EventEmitter = new EventEmitter();
 
-    emit<E extends keyof C>(event: E & string, file: C[E]): boolean {
+    emit<K extends keyof E>(event: K & string, file: E[K]): boolean {
         return this.eventEmitter.emit(event, file);
     }
-    on<E extends keyof C>(event: E & string, listener: FileListener<C[E]>): this {
+    on<K extends keyof E>(event: K & string, listener: Listener<E[K]>): this {
         this.eventEmitter.on(event, listener);
         return this;
     }
-    off<E extends keyof C>(event: E & string, listener: FileListener<C[E]>): this {
+    off<K extends keyof E>(event: K & string, listener: Listener<E[K]>): this {
         this.eventEmitter.off(event, listener);
         return this;
     }
 
-    register<I extends FileEventListener<C>>(next: I): I {
+    register<I extends FileEventListener<E>>(next: I): I {
         for (const key of objectKeys(next)) {
             if (typeof next[key] === 'function') {
                 this.eventEmitter.on(key, next[key]);
@@ -30,7 +30,7 @@ export class FileEventEmitter<C extends object> {
 }
 
 export type FileEventListener<C> = {
-    [K in keyof C]: FileListener<C[K]>;
+    [K in keyof C]: Listener<C[K]>;
 };
 
 //provides

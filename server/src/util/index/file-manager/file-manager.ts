@@ -1,6 +1,6 @@
 import { DocumentIndexManagerMessages } from "../document-index-manager/document-index-manager";
 import { DirPath, FilePath, FileWithPath, splitPath } from "../file";
-import { FileListener, FileEventEmitter, FileEventListener } from "../file-event-handler";
+import { Listener, FileEventEmitter, FileEventListener } from "../file-event-handler";
 import { FileManagerNode } from "./file-manager-node";
 
 export interface FileManagerMessages<F> {
@@ -14,9 +14,9 @@ export interface FileManagerMessages<F> {
 export class FileManager<F> extends FileEventEmitter<DocumentIndexManagerMessages<F>> implements FileEventListener<FileManagerMessages<F>> {
     head: FileManagerNode<F> = new FileManagerNode();
 
-    change: FileListener<F> = f => this.emit("change", f);
+    change: Listener<F> = f => this.emit("change", f);
 
-    add: FileListener<FileWithPath<F>> =
+    add: Listener<FileWithPath<F>> =
         (fileWithPath) => {
             const pathSegments = splitPath(fileWithPath.path);
             const filename = pathSegments.pop();
@@ -32,7 +32,7 @@ export class FileManager<F> extends FileEventEmitter<DocumentIndexManagerMessage
                 }
             });
         };
-    remove: FileListener<FilePath> =
+    remove: Listener<FilePath> =
         (path) => {
             const pathSegments = splitPath(path);
             const filename = pathSegments.pop();

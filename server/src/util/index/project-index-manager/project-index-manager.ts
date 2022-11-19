@@ -1,4 +1,4 @@
-import { FileListener, FileEventListener } from "../file-event-handler";
+import { Listener, FileEventListener } from "../file-event-handler";
 
 export interface ProjectIndexManagerMessages<F> {
     add: F
@@ -7,9 +7,9 @@ export interface ProjectIndexManagerMessages<F> {
 }
 
 export class ProjectIndexManager<T> implements FileEventListener<ProjectIndexManagerMessages<T>> {
-    add: FileListener<T> = f => { };
-    remove: FileListener<T> = f => { };
-    change: FileListener<T> = f => { };
+    add: Listener<T> = f => { };
+    remove: Listener<T> = f => { };
+    change: Listener<T> = f => { };
 
     //Manages Files including
     //   their actual dependencies/dependents
