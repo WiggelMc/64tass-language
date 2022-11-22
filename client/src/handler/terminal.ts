@@ -2,8 +2,8 @@ import { CancellationToken, DiagnosticSeverity, ExtensionTerminalOptions, langua
 import { Range } from "vscode-languageclient";
 import { DocumentLocation } from "../common/capabilities/list-file";
 import { gotoDocumentLocation } from "../util/document-location";
-import { ConfigSection, getConfigOption } from "../util/config";
-import { displayErrorMessage } from "../util/error";
+import { ConfigSection, configUtil } from "../util/config";
+import { errorUtil } from "../util/error";
 import { ClientHandler } from "../handler";
 
 export const terminalHandler: ClientHandler = {
@@ -41,7 +41,7 @@ class TassTerminalLinkProvider implements TerminalLinkProvider<TassTerminalLink>
 
 	handleTerminalLink(link: TassTerminalLink): ProviderResult<void> {
 		gotoDocumentLocation(link.location)
-			.catch(displayErrorMessage);
+			.catch(errorUtil.displayErrorMessage);
 	}
 }
 
@@ -89,7 +89,7 @@ export function resetTaskLinterDiagnostics() {
 const onDidChangeDiagnostics: (e: DiagnosticChangeEvent) => any =
 	async function (e) {
 
-		if (!getConfigOption(ConfigSection.assembleGotoError)) {
+		if (!configUtil.getConfigOption(ConfigSection.assembleGotoError)) {
 			errorShown = true;
 			return;
 		}
@@ -117,7 +117,7 @@ const onDidChangeDiagnostics: (e: DiagnosticChangeEvent) => any =
 
 
 				gotoDocumentLocation(location)
-					.catch(displayErrorMessage);
+					.catch(errorUtil.displayErrorMessage);
 
 				errorShown = true;
 				return;

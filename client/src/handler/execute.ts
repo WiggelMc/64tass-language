@@ -1,9 +1,9 @@
 import { commands, window } from "vscode";
 import { TaskType } from "../common/capabilities/task";
-import { getTask, runTask } from "../util/task";
+import { taskUtil } from "../util/task";
 import { sendTaskFetchRequest } from "../server/task";
 import { getCurrentDocumentLocation } from "../util/document-location";
-import { displayErrorMessage } from "../util/error";
+import { errorUtil } from "../util/error";
 import { ClientHandler } from "../handler";
 import { createTaskFetchParams } from "../util/execute";
 
@@ -25,10 +25,10 @@ async function executeTaskType(type: TaskType) {
 		.then(x => createTaskFetchParams(x, type))
 
 		.then(sendTaskFetchRequest)
-		.then(r => getTask(r.task))
-		.then(runTask)
+		.then(r => taskUtil.getTask(r.task))
+		.then(taskUtil.runTask)
 
-		.catch(displayErrorMessage);
+		.catch(errorUtil.displayErrorMessage);
 }
 
 const runCustomTask: (...args: any[]) => Promise<void> =
@@ -36,7 +36,7 @@ const runCustomTask: (...args: any[]) => Promise<void> =
 
 		showCustomTaskInputBox(taskString)
 			.then(executeCustomTaskType)
-			.catch(displayErrorMessage);
+			.catch(errorUtil.displayErrorMessage);
 	};
 
 async function showCustomTaskInputBox(taskString: string): Promise<string> {

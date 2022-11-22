@@ -5,7 +5,7 @@ import { taskUtil } from "../util/task";
 import { sendTaskFetchRequest } from "../server/task";
 import { sendViewInListFileRequest, sendViewInSourceFileRequest } from "../server/list-file";
 import { getCurrentDocumentLocation, gotoDocumentLocation, gotoDocumentLocationStoppable } from "../util/document-location";
-import { displayErrorMessage } from "../util/error";
+import { errorUtil } from "../util/error";
 import { ClientHandler } from "../handler";
 import { createTaskFetchParams } from "../util/execute";
 import { ConfigSection, configUtil } from "../util/config";
@@ -26,7 +26,7 @@ async function viewInSource() {
 		.then(sendViewInSourceFileRequest)
 		.then(gotoDocumentLocation)
 
-		.catch(displayErrorMessage);
+		.catch(errorUtil.displayErrorMessage);
 }
 
 async function viewInList() {
@@ -35,7 +35,7 @@ async function viewInList() {
 		.then(sendViewInListFileRequest)
 		.then(gotoDocumentLocation)
 
-		.catch(displayErrorMessage);
+		.catch(errorUtil.displayErrorMessage);
 }
 
 async function assembleAndViewInList() {
@@ -56,5 +56,5 @@ async function assembleAndViewInList() {
 		.then(() => sendViewInListFileRequest(location))
 		.then(l => gotoDocumentLocationStoppable(l, waitTime))
 
-		.catch(displayErrorMessage);
+		.catch(errorUtil.displayErrorMessage);
 }
