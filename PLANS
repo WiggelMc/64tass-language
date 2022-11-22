@@ -445,7 +445,9 @@ util.task.taskMap						(local) (tasks [fetchTasks / onDidTaskEnd / ExecuteTask])
 util.config.config						(local) (workspace [getConfiguration])
 
 use wrapper Interfaces passed at Construction to make testing possible
-handlers will only use logic from util and dont need to be tested
+
+handlers put logic together and also need to be tested
+handlers are then registered (this is the only non testable part)
 
 Stateful methods (need to be part of class globally instatiated)
 	use global State
