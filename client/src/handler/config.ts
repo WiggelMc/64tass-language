@@ -1,7 +1,8 @@
 import { ConfigurationChangeEvent, Disposable, Event, ExtensionContext, workspace as VSworkspace } from "vscode";
-import { TASKS_CONFIG_CATEGORY, taskMapUtil } from "../util/task";
+import { TASKS_CONFIG_CATEGORY, taskUtil } from "../util/task";
 import { ClientHandler } from "../handler";
 import { configUtil, ConfigUtil, TASS_CONFIG_CATEGORY } from "../util/config";
+import { taskMapUtil } from "../util/task-map";
 interface TaskUtil { //Class TaskUtil will be used later
 	invalidateTasks: () => void
 }

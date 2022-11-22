@@ -1,11 +1,12 @@
 import { commands, window } from "vscode";
 import { TaskType } from "../common/capabilities/task";
-import { taskMapUtil, taskUtil } from "../util/task";
+import { taskUtil } from "../util/task";
 import { sendTaskFetchRequest } from "../server/task";
 import { getCurrentDocumentLocation } from "../util/document-location";
 import { errorUtil } from "../util/error";
 import { ClientHandler } from "../handler";
 import { createTaskFetchParams } from "../util/execute";
+import { taskMapUtil } from "../util/task-map";
 
 export const executeHandler: ClientHandler = {
 	register(context) {
