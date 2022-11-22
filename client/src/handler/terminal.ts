@@ -1,4 +1,4 @@
-import { CancellationToken, DiagnosticSeverity, languages as VSlanguages, ProviderResult, DiagnosticChangeEvent, TerminalLink, TerminalLinkProvider, TerminalLinkContext, window as VSwindow, ExtensionContext, Disposable, Event } from "vscode";
+import { CancellationToken, languages as VSlanguages, ProviderResult, DiagnosticChangeEvent, TerminalLink, TerminalLinkProvider, TerminalLinkContext, window as VSwindow, ExtensionContext, Disposable, Event } from "vscode";
 import { Range as ClientRange } from "vscode-languageclient";
 import { DocumentLocation } from "../common/capabilities/list-file";
 import { ConfigSection, ConfigUtil, configUtil } from "../util/config";
@@ -49,13 +49,13 @@ export class TerminalHandler implements ClientHandler {
 
 	async onDidChangeDiagnostics(e: DiagnosticChangeEvent) {
 
-		const isAllowed: boolean = configUtil.getConfigOption(ConfigSection.assembleGotoError);
+		const isAllowed: boolean = this.config.getConfigOption(ConfigSection.assembleGotoError);
 
-		const location = await errorPositionUtil.getErrorLocation(e.uris, isAllowed);
+		const location = await this.errorPosition.getErrorLocation(e.uris, isAllowed);
 
 		if (location !== undefined) {
-			gotoUtil.gotoDocumentLocation(location)
-					.catch(errorUtil.displayErrorMessage);
+			this.goto.gotoDocumentLocation(location)
+					.catch(this.error.displayErrorMessage);
 		}
 	}
 
@@ -68,7 +68,7 @@ export class TerminalHandler implements ClientHandler {
 		}
 
 		const relativePath = match.at(1);
-		const workspaceFolder = terminalUtil.getWorkspaceFolder(context.terminal.creationOptions, relativePath);
+		const workspaceFolder = this.terminal.getWorkspaceFolder(context.terminal.creationOptions, relativePath);
 
 		const path = workspaceFolder + "/" + relativePath;
 		const position = match.at(2).split(":").map(Number).map(n => n - 1);
@@ -83,12 +83,12 @@ export class TerminalHandler implements ClientHandler {
 	}
 
 	handleTerminalLink(link: TassTerminalLink): ProviderResult<void> {
-		gotoUtil.gotoDocumentLocation(link.location)
-			.catch(errorUtil.displayErrorMessage);
+		this.goto.gotoDocumentLocation(link.location)
+			.catch(this.error.displayErrorMessage);
 	}
 }
 
-export const terminalHandler = new TerminalHandler(VSlanguages, VSwindow);
+export const terminalHandler = new TerminalHandler(VSlanguages, VSwindow, configUtil, errorUtil, gotoUtil, terminalUtil, errorPositionUtil);
 
 class TassTerminalLink extends TerminalLink {
 	location: DocumentLocation;
