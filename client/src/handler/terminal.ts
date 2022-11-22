@@ -4,7 +4,7 @@ import { DocumentLocation } from "../common/capabilities/list-file";
 import { ConfigSection, configUtil } from "../util/config";
 import { errorUtil } from "../util/error";
 import { ClientHandler } from "../handler";
-import { documentLocationUtil } from "../util/document-location";
+import { gotoUtil } from "../util/goto";
 
 export const terminalHandler: ClientHandler = {
 	register(context) {
@@ -40,7 +40,7 @@ class TassTerminalLinkProvider implements TerminalLinkProvider<TassTerminalLink>
 	}
 
 	handleTerminalLink(link: TassTerminalLink): ProviderResult<void> {
-		documentLocationUtil.gotoDocumentLocation(link.location)
+		gotoUtil.gotoDocumentLocation(link.location)
 			.catch(errorUtil.displayErrorMessage);
 	}
 }
@@ -116,7 +116,7 @@ const onDidChangeDiagnostics: (e: DiagnosticChangeEvent) => any =
 				};
 
 
-				documentLocationUtil.gotoDocumentLocation(location)
+				gotoUtil.gotoDocumentLocation(location)
 					.catch(errorUtil.displayErrorMessage);
 
 				errorShown = true;

@@ -13,7 +13,7 @@ interface WindowAccessor {
     showTextDocument(document: TextDocument, column?: ViewColumn, preserveFocus?: boolean): Thenable<TextEditor>
 }
 
-export class DocumentLocationUtil {
+export class GotoUtil {
     private workspace: WorkspaceAccessor;
     private window: WindowAccessor;
 
@@ -59,7 +59,7 @@ export class DocumentLocationUtil {
     }
 }
 
-export const documentLocationUtil = new DocumentLocationUtil(VSworkspace, VSwindow);
+export const gotoUtil = new GotoUtil(VSworkspace, VSwindow);
 
 
 async function showRangeInEditor(editor: TextEditor, range: ClientRange) {

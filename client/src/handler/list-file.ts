@@ -9,7 +9,7 @@ import { ClientHandler } from "../handler";
 import { createTaskFetchParams } from "../util/execute";
 import { ConfigSection, configUtil } from "../util/config";
 import { taskMapUtil } from "../util/task-map";
-import { documentLocationUtil } from "../util/document-location";
+import { gotoUtil } from "../util/goto";
 import { currentDocumentLocationUtil } from "../util/current-document-location";
 
 export const listFileHandler: ClientHandler = {
@@ -26,7 +26,7 @@ async function viewInSource() {
 
 	currentDocumentLocationUtil.getCurrentDocumentLocation()
 		.then(sendViewInSourceFileRequest)
-		.then(documentLocationUtil.gotoDocumentLocation)
+		.then(gotoUtil.gotoDocumentLocation)
 
 		.catch(errorUtil.displayErrorMessage);
 }
@@ -35,7 +35,7 @@ async function viewInList() {
 
 	currentDocumentLocationUtil.getCurrentDocumentLocation()
 		.then(sendViewInListFileRequest)
-		.then(documentLocationUtil.gotoDocumentLocation)
+		.then(gotoUtil.gotoDocumentLocation)
 
 		.catch(errorUtil.displayErrorMessage);
 }
@@ -56,7 +56,7 @@ async function assembleAndViewInList() {
 		.then(taskUtil.runTask)
 
 		.then(() => sendViewInListFileRequest(location))
-		.then(l => documentLocationUtil.gotoDocumentLocationStoppable(l, waitTime))
+		.then(l => gotoUtil.gotoDocumentLocationStoppable(l, waitTime))
 
 		.catch(errorUtil.displayErrorMessage);
 }
