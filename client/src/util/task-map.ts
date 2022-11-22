@@ -2,8 +2,6 @@ import { Event, Task, TaskEndEvent, TaskExecution, TaskFilter, tasks as VStasks 
 
 interface TasksAccessor {
     fetchTasks(filter?: TaskFilter): Thenable<Task[]>
-	executeTask(task: Task): Thenable<TaskExecution>
-    onDidEndTask: Event<TaskEndEvent>
 }
 
 export class TaskMapUtil {

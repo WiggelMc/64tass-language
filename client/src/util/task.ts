@@ -3,7 +3,6 @@ import { Event, Task, TaskEndEvent, TaskExecution, TaskFilter, tasks as VStasks 
 export const TASKS_CONFIG_CATEGORY = "tasks";
 
 interface TasksAccessor {
-    fetchTasks(filter?: TaskFilter): Thenable<Task[]>
 	executeTask(task: Task): Thenable<TaskExecution>
     onDidEndTask: Event<TaskEndEvent>
 }
