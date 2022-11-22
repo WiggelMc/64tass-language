@@ -1,34 +1,48 @@
-import { TaskEndEvent, tasks, TaskStartEvent } from "vscode";
+import { Event, ExtensionContext, TaskEndEvent, tasks as VStasks, TaskStartEvent } from "vscode";
 import { TaskParams, TaskType } from "../common/capabilities/task";
 import { ClientHandler } from "../handler";
 import { sendTaskEndRequest, sendTaskStartRequest } from "../server/task";
-import { errorPositionUtil } from "../util/error-position";
-import { runningTaskUtil } from "../util/running-task";
+import { ErrorPositionUtil, errorPositionUtil } from "../util/error-position";
+import { RunningTaskUtil, runningTaskUtil } from "../util/running-task";
 
-export const taskHandler: ClientHandler = {
-	register(context) {
+
+
+interface TasksAccessor {
+	onDidStartTask: Event<TaskStartEvent>
+	onDidEndTask: Event<TaskEndEvent>
+}
+
+class TaskHandler implements ClientHandler {
+	private tasks: TasksAccessor;
+	private runningTask: RunningTaskUtil;
+	private errorPosition: ErrorPositionUtil;
+
+	constructor(tasks: TasksAccessor, runningTask: RunningTaskUtil, errorPosition: ErrorPositionUtil) {
+		this.tasks = tasks;
+		this.runningTask = runningTask;
+		this.errorPosition = errorPosition;
+	}
+
+	register(context: ExtensionContext) {
 		return [
-			tasks.onDidStartTask(onDidStartTask),
-			tasks.onDidEndTask(onDidEndTask),
+			this.tasks.onDidStartTask(this.onDidStartTask),
+			this.tasks.onDidEndTask(this.onDidEndTask),
 		];
-	},
-};
+	}
+	
+	async onDidStartTask(e: TaskStartEvent) {
 
-const onDidStartTask: (e: TaskStartEvent) => any =
-	async function (e) {
-
-		runningTaskUtil.registerStartedTask(e.execution.task);
+		this.runningTask.registerStartedTask(e.execution.task);
 
 		const params: TaskParams = {
 			task: e.execution.task.name
 		};
 		sendTaskStartRequest(params);
-	};
+	}
+	
+	async onDidEndTask(e: TaskEndEvent) {
 
-const onDidEndTask: (e: TaskEndEvent) => any =
-	async function (e) {
-
-		if (!runningTaskUtil.deregisterEndedTask(e.execution.task)) {
+		if (!this.runningTask.deregisterEndedTask(e.execution.task)) {
 			return;
 		}
 
@@ -40,7 +54,10 @@ const onDidEndTask: (e: TaskEndEvent) => any =
 			if (r.type === TaskType.assemble || r.type === TaskType.assembleAndStart) {
 				//this might reset errorShown after running if 'assembleAndStart' is an independent task
 				//however, as the program should not be run when errors are present, this does not pose a problem
-				errorPositionUtil.resetErrorJumping();
+				this.errorPosition.resetErrorJumping();
 			}
 		});
-	};
+	}
+}
+
+export const taskHandler = new TaskHandler(VStasks, runningTaskUtil, errorPositionUtil); 

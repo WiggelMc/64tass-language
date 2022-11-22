@@ -12,12 +12,12 @@ class ConfigHandler implements ClientHandler {
 
 	private workspace: WorkspaceAccessor;
 	private config: ConfigUtil;
-	private task: TaskMapUtil;
+	private taskMap: TaskMapUtil;
 
 	constructor(workspace: WorkspaceAccessor, config: ConfigUtil, task: TaskMapUtil) {
 		this.workspace = workspace;
 		this.config = config;
-		this.task = task;
+		this.taskMap = task;
 	}
 
 	register(context: ExtensionContext): Disposable[] {
@@ -29,7 +29,7 @@ class ConfigHandler implements ClientHandler {
 	async onDidChangeConfiguration(e: ConfigurationChangeEvent) {
 
 		if (e.affectsConfiguration(TASKS_CONFIG_CATEGORY)) {
-			this.task.invalidateTasks();
+			this.taskMap.invalidateTasks();
 		}
 
 		if (e.affectsConfiguration(TASS_CONFIG_CATEGORY)) {
