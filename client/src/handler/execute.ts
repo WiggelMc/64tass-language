@@ -4,7 +4,7 @@ import { getTask, runTask } from "../util/task";
 import { sendTaskFetchRequest } from "../server/task";
 import { getCurrentDocumentLocation } from "../util/document-location";
 import { displayErrorMessage } from "../util/error";
-import { ClientHandler } from "./handler";
+import { ClientHandler } from "../handler";
 import { createTaskFetchParams } from "../util/execute";
 
 export const executeHandler: ClientHandler = {

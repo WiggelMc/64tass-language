@@ -1,10 +1,10 @@
 import { Disposable, ExtensionContext } from "vscode";
-import { commandHandler } from "./command";
-import { configHandler } from "./config";
-import { executeHandler } from "./execute";
-import { listFileHandler } from "./list-file";
-import { taskHandler } from "./task";
-import { terminalHandler } from "./terminal";
+import { commandHandler } from "./handler/command";
+import { configHandler } from "./handler/config";
+import { executeHandler } from "./handler/execute";
+import { listFileHandler } from "./handler/list-file";
+import { taskHandler } from "./handler/task";
+import { terminalHandler } from "./handler/terminal";
 
 export interface ClientHandler {
     register: (context: ExtensionContext) => Disposable[];

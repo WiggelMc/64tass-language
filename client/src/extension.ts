@@ -1,6 +1,6 @@
 import { ExtensionContext } from 'vscode';
 
-import { registerClientHandlers } from './handler/handler';
+import { registerClientHandlers } from './handler';
 import { client, initClient } from './util/languageclient';
 
 export function activate(context: ExtensionContext) {

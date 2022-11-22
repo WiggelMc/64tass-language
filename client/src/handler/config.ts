@@ -1,7 +1,7 @@
 import { ConfigurationChangeEvent, workspace } from "vscode";
 import { invalidateTasks, TASKS_CONFIG_CATEGORY } from "../util/task";
 import { invalidateConfig, TASS_CONFIG_CATEGORY } from "../util/config";
-import { ClientHandler } from "./handler";
+import { ClientHandler } from "../handler";
 
 export const configHandler: ClientHandler = {
 	register(context) {

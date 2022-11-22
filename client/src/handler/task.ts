@@ -1,6 +1,6 @@
 import { Task, TaskEndEvent, tasks, TaskStartEvent } from "vscode";
 import { TaskParams, TaskType } from "../common/capabilities/task";
-import { ClientHandler } from "./handler";
+import { ClientHandler } from "../handler";
 import { resetTaskLinterDiagnostics } from "./terminal";
 import { sendTaskEndRequest, sendTaskStartRequest } from "../server/task";
 

@@ -3,7 +3,7 @@ import { TaskCommandType } from "../common/capabilities/task";
 import { sendTaskCommandFetchRequest } from "../server/task";
 import { getCurrentDocumentLocation } from "../util/document-location";
 import { displayErrorMessage } from "../util/error";
-import { ClientHandler } from "./handler";
+import { ClientHandler } from "../handler";
 import { createTaskCommandFetchParams } from "../util/execute";
 
 export const commandHandler: ClientHandler = {

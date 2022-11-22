@@ -4,7 +4,7 @@ import { DocumentLocation } from "../common/capabilities/list-file";
 import { gotoDocumentLocation } from "../util/document-location";
 import { ConfigSection, getConfigOption } from "../util/config";
 import { displayErrorMessage } from "../util/error";
-import { ClientHandler } from "./handler";
+import { ClientHandler } from "../handler";
 
 export const terminalHandler: ClientHandler = {
 	register(context) {

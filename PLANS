@@ -459,6 +459,11 @@ Static Methods
 Create Tests for all client classes and static methods
 
 
+Handlers and Utils will be instatiated somewhere
+Ideas:
+	instantiate handlers directly in list
+	utils are passed into constructor of handlers
+	utils are only instantiated in the handler class
 
 
 figure out workspace.createFileSystemWatcher('**/.clientrc') in languageclient

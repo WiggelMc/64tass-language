@@ -6,7 +6,7 @@ import { sendTaskFetchRequest } from "../server/task";
 import { sendViewInListFileRequest, sendViewInSourceFileRequest } from "../server/list-file";
 import { getCurrentDocumentLocation, gotoDocumentLocation, gotoDocumentLocationStoppable } from "../util/document-location";
 import { displayErrorMessage } from "../util/error";
-import { ClientHandler } from "./handler";
+import { ClientHandler } from "../handler";
 import { createTaskFetchParams } from "../util/execute";
 import { ConfigSection, getConfigOption } from "../util/config";
 
