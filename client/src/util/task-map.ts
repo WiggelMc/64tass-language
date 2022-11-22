@@ -7,10 +7,10 @@ interface TasksAccessor {
 }
 
 export class TaskMapUtil {
-    tasks: TasksAccessor;
+    private tasks: TasksAccessor;
 
-    taskMap: Map<string, Task> = new Map();
-    isDirty: boolean = true;
+    private taskMap: Map<string, Task> = new Map();
+    private isDirty: boolean = true;
 
     constructor(tasks: TasksAccessor) {
         this.tasks = tasks;
@@ -34,7 +34,7 @@ export class TaskMapUtil {
         return r;
     }
 
-    async reloadTasks(): Promise<void> {
+    private async reloadTasks(): Promise<void> {
 
         const taskList = await this.tasks.fetchTasks();
         this.taskMap.clear();

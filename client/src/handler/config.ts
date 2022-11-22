@@ -13,9 +13,9 @@ interface WorkspaceAccessor {
 
 class ConfigHandler implements ClientHandler {
 
-	workspace: WorkspaceAccessor;
-	config: ConfigUtil;
-	task: TaskUtil;
+	private workspace: WorkspaceAccessor;
+	private config: ConfigUtil;
+	private task: TaskUtil;
 
 	constructor(workspace: WorkspaceAccessor, config: ConfigUtil, task: TaskUtil) {
 		this.workspace = workspace;

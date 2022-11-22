@@ -9,7 +9,7 @@ interface TasksAccessor {
 }
 
 export class TaskUtil {
-    tasks: TasksAccessor;
+    private tasks: TasksAccessor;
 
     constructor(tasks: TasksAccessor) {
         this.tasks = tasks;
