@@ -1,9 +1,7 @@
 import { ConfigurationChangeEvent, Disposable, Event, ExtensionContext, workspace as VSworkspace } from "vscode";
-import { TASKS_CONFIG_CATEGORY } from "../util/task";
+import { TASKS_CONFIG_CATEGORY, taskUtil } from "../util/task";
 import { ClientHandler } from "../handler";
 import { configUtil, ConfigUtil, TASS_CONFIG_CATEGORY } from "../util/config";
-import * as task from "../util/task";
-
 interface TaskUtil { //Class TaskUtil will be used later
 	invalidateTasks: () => void
 }
@@ -42,4 +40,4 @@ class ConfigHandler implements ClientHandler {
 	};
 }
 
-export const configHandler = new ConfigHandler(VSworkspace, configUtil, task);
+export const configHandler = new ConfigHandler(VSworkspace, configUtil, taskUtil);

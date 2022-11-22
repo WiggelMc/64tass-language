@@ -1,7 +1,7 @@
 import { commands } from "vscode";
 import { DocumentLocation } from "../common/capabilities/list-file";
 import { TaskType } from "../common/capabilities/task";
-import { getTask, runTask } from "../util/task";
+import { taskUtil } from "../util/task";
 import { sendTaskFetchRequest } from "../server/task";
 import { sendViewInListFileRequest, sendViewInSourceFileRequest } from "../server/list-file";
 import { getCurrentDocumentLocation, gotoDocumentLocation, gotoDocumentLocationStoppable } from "../util/document-location";
@@ -50,8 +50,8 @@ async function assembleAndViewInList() {
 
 		.then(x => createTaskFetchParams(x, TaskType.assemble))
 		.then(sendTaskFetchRequest)
-		.then(r => getTask(r.task))
-		.then(runTask)
+		.then(r => taskUtil.getTask(r.task))
+		.then(taskUtil.runTask)
 
 		.then(() => sendViewInListFileRequest(location))
 		.then(l => gotoDocumentLocationStoppable(l, waitTime))

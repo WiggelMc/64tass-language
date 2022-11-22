@@ -1,55 +1,72 @@
-import { Task, tasks } from "vscode";
+import { Event, Task, TaskEndEvent, TaskExecution, TaskFilter, tasks as VStasks } from "vscode";
 
 export const TASKS_CONFIG_CATEGORY = "tasks";
 
-const taskMap: Map<string, Task> = new Map();
-let isDirty: boolean = true;
 
-export function invalidateTasks(): void {
-    isDirty = true;
+interface TasksAccessor {
+    fetchTasks(filter?: TaskFilter): Thenable<Task[]>
+	executeTask(task: Task): Thenable<TaskExecution>
+    onDidEndTask: Event<TaskEndEvent>
 }
 
-export async function getTask(task: string): Promise<Task> {
+export class TaskUtil {
+    tasks: TasksAccessor;
 
-    if (isDirty) {
-        await reloadTasks();
-        isDirty = false;
+    taskMap: Map<string, Task> = new Map();
+    isDirty: boolean = true;
+
+    constructor(tasks: TasksAccessor) {
+        this.tasks = tasks;
     }
-    const r = taskMap.get(task);
 
-    if (r === undefined) {
-        throw new TaskNotDefinedError(task);
+    invalidateTasks(): void {
+        this.isDirty = true;
     }
-    return r;
-}
 
-async function reloadTasks(): Promise<void> {
+    async getTask(task: string): Promise<Task> {
 
-    const taskList = await tasks.fetchTasks();
-    taskMap.clear();
+        if (this.isDirty) {
+            await this.reloadTasks();
+            this.isDirty = false;
+        }
+        const r = this.taskMap.get(task);
 
-    for (const task of taskList) {
+        if (r === undefined) {
+            throw new TaskNotDefinedError(task);
+        }
+        return r;
+    }
 
-        if (taskMap.get(task.name) === undefined) {
-            taskMap.set(task.name, task);
+    async reloadTasks(): Promise<void> {
+
+        const taskList = await this.tasks.fetchTasks();
+        this.taskMap.clear();
+
+        for (const task of taskList) {
+
+            if (this.taskMap.get(task.name) === undefined) {
+                this.taskMap.set(task.name, task);
+            }
         }
     }
-}
 
-export async function runTask(task: Task): Promise<void> {
+    async runTask(task: Task): Promise<void> {
 
-    return new Promise(async (resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
 
-        const listener = tasks.onDidEndTask((e) => {
-            if (task === e.execution.task) {
-                resolve();
-                listener?.dispose();
-            }
+            const listener = this.tasks.onDidEndTask((e) => {
+                if (task === e.execution.task) {
+                    resolve();
+                    listener?.dispose();
+                }
+            });
+
+            await this.tasks.executeTask(task);
         });
-
-        await tasks.executeTask(task);
-    });
+    }
 }
+
+export const taskUtil = new TaskUtil(VStasks);
 
 export class TaskNotDefinedError extends Error {
 	constructor(task: string) {
