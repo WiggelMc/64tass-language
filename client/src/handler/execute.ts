@@ -1,6 +1,6 @@
 import { commands, window } from "vscode";
 import { TaskType } from "../common/capabilities/task";
-import { taskUtil } from "../util/task";
+import { taskMapUtil, taskUtil } from "../util/task";
 import { sendTaskFetchRequest } from "../server/task";
 import { getCurrentDocumentLocation } from "../util/document-location";
 import { errorUtil } from "../util/error";
@@ -25,7 +25,7 @@ async function executeTaskType(type: TaskType) {
 		.then(x => createTaskFetchParams(x, type))
 
 		.then(sendTaskFetchRequest)
-		.then(r => taskUtil.getTask(r.task))
+		.then(r => taskMapUtil.getTask(r.task))
 		.then(taskUtil.runTask)
 
 		.catch(errorUtil.displayErrorMessage);

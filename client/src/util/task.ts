@@ -9,7 +9,7 @@ interface TasksAccessor {
     onDidEndTask: Event<TaskEndEvent>
 }
 
-export class TaskUtil {
+export class TaskMapUtil {
     tasks: TasksAccessor;
 
     taskMap: Map<string, Task> = new Map();
@@ -50,6 +50,22 @@ export class TaskUtil {
         }
     }
 
+    
+}
+
+interface TasksAccessor {
+    fetchTasks(filter?: TaskFilter): Thenable<Task[]>
+	executeTask(task: Task): Thenable<TaskExecution>
+    onDidEndTask: Event<TaskEndEvent>
+}
+
+export class TaskUtil {
+    tasks: TasksAccessor;
+
+    constructor(tasks: TasksAccessor) {
+        this.tasks = tasks;
+    }
+
     async runTask(task: Task): Promise<void> {
 
         return new Promise(async (resolve, reject) => {
@@ -66,6 +82,7 @@ export class TaskUtil {
     }
 }
 
+export const taskMapUtil = new TaskMapUtil(VStasks);
 export const taskUtil = new TaskUtil(VStasks);
 
 export class TaskNotDefinedError extends Error {
