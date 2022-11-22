@@ -2,10 +2,7 @@ import { ConfigurationChangeEvent, Disposable, Event, ExtensionContext, workspac
 import { TASKS_CONFIG_CATEGORY, taskUtil } from "../util/task";
 import { ClientHandler } from "../handler";
 import { configUtil, ConfigUtil, TASS_CONFIG_CATEGORY } from "../util/config";
-import { taskMapUtil } from "../util/task-map";
-interface TaskUtil { //Class TaskUtil will be used later
-	invalidateTasks: () => void
-}
+import { TaskMapUtil, taskMapUtil } from "../util/task-map";
 
 interface WorkspaceAccessor {
 	onDidChangeConfiguration: Event<ConfigurationChangeEvent>
@@ -15,9 +12,9 @@ class ConfigHandler implements ClientHandler {
 
 	private workspace: WorkspaceAccessor;
 	private config: ConfigUtil;
-	private task: TaskUtil;
+	private task: TaskMapUtil;
 
-	constructor(workspace: WorkspaceAccessor, config: ConfigUtil, task: TaskUtil) {
+	constructor(workspace: WorkspaceAccessor, config: ConfigUtil, task: TaskMapUtil) {
 		this.workspace = workspace;
 		this.config = config;
 		this.task = task;

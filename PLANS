@@ -436,7 +436,7 @@ What does the index need
 
 Globals
 
-handler.task.runningTasks				(local) (PUT RUNNING_TASKS INTO UTILS)
+handler.task.runningTasks				(local)
 handler.terminal.errorShown				(local) (PUT INTO UTILS)
 
 util.document-location.currentRunning	(local) (window [activeTextEditor / showTextDocument] / workspace [openTextDocument])
