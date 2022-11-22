@@ -5,6 +5,7 @@ import { ConfigSection, configUtil } from "../util/config";
 import { errorUtil } from "../util/error";
 import { ClientHandler } from "../handler";
 import { gotoUtil } from "../util/goto";
+import { terminalUtil } from "../util/terminal";
 
 export const terminalHandler: ClientHandler = {
 	register(context) {
@@ -25,7 +26,7 @@ class TassTerminalLinkProvider implements TerminalLinkProvider<TassTerminalLink>
 		}
 
 		const relativePath = match.at(1);
-		const workspaceFolder = getWorkspaceFolder(context.terminal.creationOptions, relativePath);
+		const workspaceFolder = terminalUtil.getWorkspaceFolder(context.terminal.creationOptions, relativePath);
 
 		const path = workspaceFolder + "/" + relativePath;
 		const position = match.at(2).split(":").map(Number).map(n => n - 1);
@@ -42,31 +43,6 @@ class TassTerminalLinkProvider implements TerminalLinkProvider<TassTerminalLink>
 	handleTerminalLink(link: TassTerminalLink): ProviderResult<void> {
 		gotoUtil.gotoDocumentLocation(link.location)
 			.catch(errorUtil.displayErrorMessage);
-	}
-}
-
-function getWorkspaceFolder(terminalOptions: Readonly<TerminalOptions | ExtensionTerminalOptions>, relativePath: string): string {
-
-	for (const folder of workspace.workspaceFolders) {
-
-		const diagnostics = languages.getDiagnostics(Uri.parse(folder.uri.toString() + "/" + relativePath))
-			.filter(
-				d => d.source === "64tass Assembler"
-			);
-
-		if (diagnostics.length > 0) {
-			return folder.uri.toString();
-		}
-	}
-
-	if ((<TerminalOptions>terminalOptions).cwd !== undefined) {
-		return (<TerminalOptions>terminalOptions).cwd.toString();
-
-	} else if (workspace.workspaceFolders.length > 0) {
-		return workspace.workspaceFolders[0].uri.toString();
-
-	} else {
-		return "";
 	}
 }
 
