@@ -10,7 +10,7 @@ import { createTaskFetchParams } from "../util/execute";
 import { ConfigSection, configUtil } from "../util/config";
 import { taskMapUtil } from "../util/task-map";
 import { gotoUtil } from "../util/goto";
-import { currentDocumentLocationUtil } from "../util/current-document-location";
+import { positionUtil } from "../util/position";
 
 export const listFileHandler: ClientHandler = {
 	register(context) {
@@ -24,7 +24,7 @@ export const listFileHandler: ClientHandler = {
 
 async function viewInSource() {
 
-	currentDocumentLocationUtil.getCurrentDocumentLocation()
+	positionUtil.getCurrentDocumentLocation()
 		.then(sendViewInSourceFileRequest)
 		.then(gotoUtil.gotoDocumentLocation)
 
@@ -33,7 +33,7 @@ async function viewInSource() {
 
 async function viewInList() {
 
-	currentDocumentLocationUtil.getCurrentDocumentLocation()
+	positionUtil.getCurrentDocumentLocation()
 		.then(sendViewInListFileRequest)
 		.then(gotoUtil.gotoDocumentLocation)
 
@@ -47,7 +47,7 @@ async function assembleAndViewInList() {
 
 	let location: DocumentLocation;
 
-	currentDocumentLocationUtil.getCurrentDocumentLocation()
+	positionUtil.getCurrentDocumentLocation()
 		.then(x => location = x)
 
 		.then(x => createTaskFetchParams(x, TaskType.assemble))

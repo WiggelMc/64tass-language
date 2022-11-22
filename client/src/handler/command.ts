@@ -4,7 +4,7 @@ import { sendTaskCommandFetchRequest } from "../server/task";
 import { errorUtil } from "../util/error";
 import { ClientHandler } from "../handler";
 import { createTaskCommandFetchParams } from "../util/execute";
-import { currentDocumentLocationUtil } from "../util/current-document-location";
+import { positionUtil } from "../util/position";
 
 export const commandHandler: ClientHandler = {
 	register(context) {
@@ -17,7 +17,7 @@ export const commandHandler: ClientHandler = {
 
 async function copyAssembleTask() {
 
-	currentDocumentLocationUtil.getCurrentDocumentLocation()
+	positionUtil.getCurrentDocumentLocation()
 		.then(x => createTaskCommandFetchParams(x, TaskCommandType.processTask))
 
 		.then(sendTaskCommandFetchRequest)
@@ -29,7 +29,7 @@ async function copyAssembleTask() {
 
 async function copyAssembleCommand() {
 
-	currentDocumentLocationUtil.getCurrentDocumentLocation()
+	positionUtil.getCurrentDocumentLocation()
 		.then(x => createTaskCommandFetchParams(x, TaskCommandType.commandLineCommand))
 
 		.then(sendTaskCommandFetchRequest)

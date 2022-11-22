@@ -6,7 +6,7 @@ interface WindowAccessor {
     readonly activeTextEditor: TextEditor | undefined
 }
 
-export class CurrentDocumentLocationUtil {
+export class PositionUtil {
     private window: WindowAccessor;
 
     constructor(window: WindowAccessor) {
@@ -33,7 +33,7 @@ export class CurrentDocumentLocationUtil {
     }
 }
 
-export const currentDocumentLocationUtil = new CurrentDocumentLocationUtil(VSwindow);
+export const positionUtil = new PositionUtil(VSwindow);
 
 export class NoOpenEditorError extends Error {
     constructor() {

@@ -6,7 +6,7 @@ import { errorUtil } from "../util/error";
 import { ClientHandler } from "../handler";
 import { createTaskFetchParams } from "../util/execute";
 import { taskMapUtil } from "../util/task-map";
-import { currentDocumentLocationUtil } from "../util/current-document-location";
+import { positionUtil } from "../util/position";
 
 export const executeHandler: ClientHandler = {
 	register(context) {
@@ -22,7 +22,7 @@ export const executeHandler: ClientHandler = {
 
 async function executeTaskType(type: TaskType) {
 
-	currentDocumentLocationUtil.getCurrentDocumentLocation()
+	positionUtil.getCurrentDocumentLocation()
 		.then(x => createTaskFetchParams(x, type))
 
 		.then(sendTaskFetchRequest)
