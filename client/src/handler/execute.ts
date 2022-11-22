@@ -2,11 +2,11 @@ import { commands, window } from "vscode";
 import { TaskType } from "../common/capabilities/task";
 import { taskUtil } from "../util/task";
 import { sendTaskFetchRequest } from "../server/task";
-import { getCurrentDocumentLocation } from "../util/document-location";
 import { errorUtil } from "../util/error";
 import { ClientHandler } from "../handler";
 import { createTaskFetchParams } from "../util/execute";
 import { taskMapUtil } from "../util/task-map";
+import { currentDocumentLocationUtil } from "../util/current-document-location";
 
 export const executeHandler: ClientHandler = {
 	register(context) {
@@ -22,7 +22,7 @@ export const executeHandler: ClientHandler = {
 
 async function executeTaskType(type: TaskType) {
 
-	getCurrentDocumentLocation()
+	currentDocumentLocationUtil.getCurrentDocumentLocation()
 		.then(x => createTaskFetchParams(x, type))
 
 		.then(sendTaskFetchRequest)

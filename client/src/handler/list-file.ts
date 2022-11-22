@@ -4,12 +4,13 @@ import { TaskType } from "../common/capabilities/task";
 import { taskUtil } from "../util/task";
 import { sendTaskFetchRequest } from "../server/task";
 import { sendViewInListFileRequest, sendViewInSourceFileRequest } from "../server/list-file";
-import { getCurrentDocumentLocation, gotoDocumentLocation, gotoDocumentLocationStoppable } from "../util/document-location";
 import { errorUtil } from "../util/error";
 import { ClientHandler } from "../handler";
 import { createTaskFetchParams } from "../util/execute";
 import { ConfigSection, configUtil } from "../util/config";
 import { taskMapUtil } from "../util/task-map";
+import { documentLocationUtil } from "../util/document-location";
+import { currentDocumentLocationUtil } from "../util/current-document-location";
 
 export const listFileHandler: ClientHandler = {
 	register(context) {
@@ -23,18 +24,18 @@ export const listFileHandler: ClientHandler = {
 
 async function viewInSource() {
 
-	getCurrentDocumentLocation()
+	currentDocumentLocationUtil.getCurrentDocumentLocation()
 		.then(sendViewInSourceFileRequest)
-		.then(gotoDocumentLocation)
+		.then(documentLocationUtil.gotoDocumentLocation)
 
 		.catch(errorUtil.displayErrorMessage);
 }
 
 async function viewInList() {
 
-	getCurrentDocumentLocation()
+	currentDocumentLocationUtil.getCurrentDocumentLocation()
 		.then(sendViewInListFileRequest)
-		.then(gotoDocumentLocation)
+		.then(documentLocationUtil.gotoDocumentLocation)
 
 		.catch(errorUtil.displayErrorMessage);
 }
@@ -46,7 +47,7 @@ async function assembleAndViewInList() {
 
 	let location: DocumentLocation;
 
-	getCurrentDocumentLocation()
+	currentDocumentLocationUtil.getCurrentDocumentLocation()
 		.then(x => location = x)
 
 		.then(x => createTaskFetchParams(x, TaskType.assemble))
@@ -55,7 +56,7 @@ async function assembleAndViewInList() {
 		.then(taskUtil.runTask)
 
 		.then(() => sendViewInListFileRequest(location))
-		.then(l => gotoDocumentLocationStoppable(l, waitTime))
+		.then(l => documentLocationUtil.gotoDocumentLocationStoppable(l, waitTime))
 
 		.catch(errorUtil.displayErrorMessage);
 }

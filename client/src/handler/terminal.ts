@@ -1,10 +1,10 @@
 import { CancellationToken, DiagnosticSeverity, ExtensionTerminalOptions, languages, ProviderResult, TerminalOptions, Uri, workspace, DiagnosticChangeEvent, TerminalLink, TerminalLinkProvider, TerminalLinkContext, window } from "vscode";
 import { Range } from "vscode-languageclient";
 import { DocumentLocation } from "../common/capabilities/list-file";
-import { gotoDocumentLocation } from "../util/document-location";
 import { ConfigSection, configUtil } from "../util/config";
 import { errorUtil } from "../util/error";
 import { ClientHandler } from "../handler";
+import { documentLocationUtil } from "../util/document-location";
 
 export const terminalHandler: ClientHandler = {
 	register(context) {
@@ -40,7 +40,7 @@ class TassTerminalLinkProvider implements TerminalLinkProvider<TassTerminalLink>
 	}
 
 	handleTerminalLink(link: TassTerminalLink): ProviderResult<void> {
-		gotoDocumentLocation(link.location)
+		documentLocationUtil.gotoDocumentLocation(link.location)
 			.catch(errorUtil.displayErrorMessage);
 	}
 }
@@ -116,7 +116,7 @@ const onDidChangeDiagnostics: (e: DiagnosticChangeEvent) => any =
 				};
 
 
-				gotoDocumentLocation(location)
+				documentLocationUtil.gotoDocumentLocation(location)
 					.catch(errorUtil.displayErrorMessage);
 
 				errorShown = true;

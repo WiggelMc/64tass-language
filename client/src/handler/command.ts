@@ -1,10 +1,10 @@
 import { commands, env, window } from "vscode";
 import { TaskCommandType } from "../common/capabilities/task";
 import { sendTaskCommandFetchRequest } from "../server/task";
-import { getCurrentDocumentLocation } from "../util/document-location";
 import { errorUtil } from "../util/error";
 import { ClientHandler } from "../handler";
 import { createTaskCommandFetchParams } from "../util/execute";
+import { currentDocumentLocationUtil } from "../util/current-document-location";
 
 export const commandHandler: ClientHandler = {
 	register(context) {
@@ -17,7 +17,7 @@ export const commandHandler: ClientHandler = {
 
 async function copyAssembleTask() {
 
-	getCurrentDocumentLocation()
+	currentDocumentLocationUtil.getCurrentDocumentLocation()
 		.then(x => createTaskCommandFetchParams(x, TaskCommandType.processTask))
 
 		.then(sendTaskCommandFetchRequest)
@@ -29,7 +29,7 @@ async function copyAssembleTask() {
 
 async function copyAssembleCommand() {
 
-	getCurrentDocumentLocation()
+	currentDocumentLocationUtil.getCurrentDocumentLocation()
 		.then(x => createTaskCommandFetchParams(x, TaskCommandType.commandLineCommand))
 
 		.then(sendTaskCommandFetchRequest)
