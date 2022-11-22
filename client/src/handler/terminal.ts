@@ -1,4 +1,4 @@
-import { CancellationToken, DiagnosticSeverity, ExtensionTerminalOptions, languages, ProviderResult, TerminalOptions, Uri, workspace, DiagnosticChangeEvent, TerminalLink, TerminalLinkProvider, TerminalLinkContext, window } from "vscode";
+import { CancellationToken, DiagnosticSeverity, languages as VSlanguages, ProviderResult, DiagnosticChangeEvent, TerminalLink, TerminalLinkProvider, TerminalLinkContext, window as VSwindow, ExtensionContext, Disposable, Event } from "vscode";
 import { Range } from "vscode-languageclient";
 import { DocumentLocation } from "../common/capabilities/list-file";
 import { ConfigSection, configUtil } from "../util/config";
@@ -6,12 +6,13 @@ import { errorUtil } from "../util/error";
 import { ClientHandler } from "../handler";
 import { gotoUtil } from "../util/goto";
 import { terminalUtil } from "../util/terminal";
+import { errorPositionUtil } from "../util/error-position";
 
 export const terminalHandler: ClientHandler = {
 	register(context) {
 		return [
-			languages.onDidChangeDiagnostics(onDidChangeDiagnostics),
-			window.registerTerminalLinkProvider(new TassTerminalLinkProvider()),
+			VSlanguages.onDidChangeDiagnostics(onDidChangeDiagnostics),
+			VSwindow.registerTerminalLinkProvider(new TassTerminalLinkProvider()),
 		];
 	},
 };
@@ -46,6 +47,31 @@ class TassTerminalLinkProvider implements TerminalLinkProvider<TassTerminalLink>
 	}
 }
 
+interface LanguagesAccessor {
+	onDidChangeDiagnostics: Event<DiagnosticChangeEvent>
+}
+
+interface WindowAccessor {
+	registerTerminalLinkProvider(provider: TerminalLinkProvider): Disposable
+}
+
+export class TerminalHandler implements ClientHandler {
+	private languages: LanguagesAccessor;
+	private window: WindowAccessor;
+
+	constructor(languages: LanguagesAccessor, window: WindowAccessor) {
+		this.languages = languages;
+		this.window = window;
+	}
+
+	register(context: ExtensionContext): Disposable[] {
+		return [
+			this.languages.onDidChangeDiagnostics(onDidChangeDiagnostics),
+			this.window.registerTerminalLinkProvider(new TassTerminalLinkProvider()),
+		];
+	}
+}
+
 class TassTerminalLink extends TerminalLink {
 	location: DocumentLocation;
 
@@ -65,38 +91,12 @@ export function resetTaskLinterDiagnostics() {
 const onDidChangeDiagnostics: (e: DiagnosticChangeEvent) => any =
 	async function (e) {
 
-		if (!configUtil.getConfigOption(ConfigSection.assembleGotoError)) {
-			errorShown = true;
-			return;
-		}
+		const isAllowed: boolean = configUtil.getConfigOption(ConfigSection.assembleGotoError);
 
-		if (errorShown) {
-			return;
-		}
+		const location = await errorPositionUtil.getErrorLocation(e.uris, isAllowed);
 
-		for (const uri of e.uris) {
-			const error = languages.getDiagnostics(uri)
-				.filter(
-					d => d.source === "64tass Assembler"
-						&& d.severity === DiagnosticSeverity.Error
-				)
-				.at(0);
-
-			if (error !== undefined) {
-
-				const location: DocumentLocation = {
-					textDocument: {
-						uri: uri.toString()
-					},
-					range: error.range
-				};
-
-
-				gotoUtil.gotoDocumentLocation(location)
+		if (location !== undefined) {
+			gotoUtil.gotoDocumentLocation(location)
 					.catch(errorUtil.displayErrorMessage);
-
-				errorShown = true;
-				return;
-			}
 		}
 	};

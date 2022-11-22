@@ -1,7 +1,7 @@
 import { Diagnostic, ExtensionTerminalOptions, languages as VSlanguages, TerminalOptions, Uri, workspace as VSworkspace, WorkspaceFolder } from "vscode";
 
 interface WorkspaceAccessor {
-    workspaceFolders: readonly WorkspaceFolder[] | undefined;
+    workspaceFolders: readonly WorkspaceFolder[] | undefined
 }
 
 interface LanguagesAccessor {
