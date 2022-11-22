@@ -1,24 +1,45 @@
-import { ConfigurationChangeEvent, workspace } from "vscode";
-import { invalidateTasks, TASKS_CONFIG_CATEGORY } from "../util/task";
-import { invalidateConfig, TASS_CONFIG_CATEGORY } from "../util/config";
+import { ConfigurationChangeEvent, Disposable, Event, ExtensionContext, workspace as VSworkspace } from "vscode";
+import { TASKS_CONFIG_CATEGORY } from "../util/task";
 import { ClientHandler } from "../handler";
+import { configUtil, ConfigUtil, TASS_CONFIG_CATEGORY } from "../util/config";
+import * as task from "../util/task";
 
-export const configHandler: ClientHandler = {
-	register(context) {
+interface TaskUtil { //Class TaskUtil will be used later
+	invalidateTasks: () => void
+}
+
+interface WorkspaceAccessor {
+	onDidChangeConfiguration: Event<ConfigurationChangeEvent>
+}
+
+class ConfigHandler implements ClientHandler {
+
+	workspace: WorkspaceAccessor;
+	config: ConfigUtil;
+	task: TaskUtil;
+
+	constructor(workspace: WorkspaceAccessor, config: ConfigUtil, task: TaskUtil) {
+		this.workspace = workspace;
+		this.config = config;
+		this.task = task;
+	}
+
+	register(context: ExtensionContext): Disposable[] {
 		return [
-			workspace.onDidChangeConfiguration(onDidChangeConfiguration),
+			this.workspace.onDidChangeConfiguration(this.onDidChangeConfiguration),
 		];
-	},
-};
+	}
 
-const onDidChangeConfiguration: (e: ConfigurationChangeEvent) => any =
-	async function (e) {
+	async onDidChangeConfiguration(e: ConfigurationChangeEvent) {
 
 		if (e.affectsConfiguration(TASKS_CONFIG_CATEGORY)) {
-			invalidateTasks();
+			this.task.invalidateTasks();
 		}
 
 		if (e.affectsConfiguration(TASS_CONFIG_CATEGORY)) {
-			invalidateConfig();
+			this.config.invalidateConfig();
 		}
 	};
+}
+
+export const configHandler = new ConfigHandler(VSworkspace, configUtil, task);
