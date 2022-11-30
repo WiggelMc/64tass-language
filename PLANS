@@ -478,6 +478,23 @@ Centralise global Vars ???
 Handlers
 
 
+Problem
+
+Utils should not import from each other
+Handlers use too many Utils
+
+Maybe add some layers (only lowest one can have state / only highest one gets registered)
+
+current:
+	handler
+	util
+
+maybe:
+	handler
+	util
+	state
+
+
 
 initializationHandler
 > 
