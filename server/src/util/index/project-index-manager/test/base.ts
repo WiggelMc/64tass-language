@@ -1,11 +1,27 @@
 interface TassSymbol {
-
+    isValid(position: Position): boolean
 }
 
-class Constant implements TassSymbol {}
-class Label implements TassSymbol {}
-class Macro implements TassSymbol {}
-class Variable implements TassSymbol {}
+class Constant implements TassSymbol {
+    isValid(position: Position): boolean {
+        throw new Error("Method not implemented.");
+    }
+}
+class Label implements TassSymbol {
+    isValid(position: Position): boolean {
+        throw new Error("Method not implemented.");
+    }
+}
+class Macro implements TassSymbol {
+    isValid(position: Position): boolean {
+        throw new Error("Method not implemented.");
+    }
+}
+class Variable implements TassSymbol {
+    isValid(position: Position): boolean {
+        throw new Error("Method not implemented.");
+    }
+}
 
 interface Position {
 
@@ -23,17 +39,19 @@ abstract class BlockScope implements Scope {
 
     getSymbolFromChildren(name: string, position: Position): TassSymbol | undefined {
         let symbol = this.symbols.get(name);
+        if (symbol?.isValid(position)) {
+            return symbol;
+        }
 
         for (const child of this.scopes) {
-            if (symbol !== undefined) {
-                break;
-            }
-
             if (!child.isBlock()) {
-                symbol = child.getSymbolFromChildren(name, position);
+                const symbol = child.getSymbolFromChildren(name, position);
+                if (symbol?.isValid(position)) {
+                    return symbol;
+                }
             }
         }
-        return symbol;
+        return undefined;
     }
 
     getSymbol(name: string, position: Position): TassSymbol | undefined {
@@ -46,6 +64,9 @@ abstract class BlockScope implements Scope {
 }
 
 abstract class NonBlockScope implements Scope {
+    getSymbolFromChildren(name: string, position: Position): TassSymbol | undefined {
+        throw new Error("Method not implemented.");
+    }
     getSymbol(name: string, position: Position): TassSymbol {
 
         throw new Error("Not Implemented");
